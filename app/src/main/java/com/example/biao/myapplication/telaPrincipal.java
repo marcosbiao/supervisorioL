@@ -124,12 +124,12 @@ public class telaPrincipal extends AppCompatActivity
         //getEspList();
         g.setVisibility(View.INVISIBLE);
 
-        final DateFormat dateTimeFormatter = DateFormat.getDateTimeInstance();
-        Calendar calendar = Calendar.getInstance();
-        final Date data = calendar.getTime();
-        final SimpleDateFormat formato = new SimpleDateFormat("mm:ss");
-        final long startTime = System.nanoTime() / 100000000;
-        long atualTime = System.currentTimeMillis();
+        //final DateFormat dateTimeFormatter = DateFormat.getDateTimeInstance();
+        //Calendar calendar = Calendar.getInstance();
+        //final Date data = calendar.getTime();
+        //final SimpleDateFormat formato = new SimpleDateFormat("mm:ss");
+        //final long startTime = System.nanoTime() / 100000000;
+        //long atualTime = System.currentTimeMillis();
 
 
         g.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
@@ -432,13 +432,13 @@ public class telaPrincipal extends AppCompatActivity
                 System.out.println("temp esp"+ espList.get(i).getTemperatura());
                 x1++;
 
-                ponto = new DataPoint(new Date().getTime(), temp);
+                ponto = new DataPoint(new Date(), temp);
                 espList.get(i).getSeries().appendData(ponto, true, 20);
 
-                DataPoint pontoAlarme;
-                pontoAlarme = new DataPoint(x1,espList.get(i).getAlerta());
-                espList.get(i).getSeriesAlarme().appendData(pontoAlarme,true,20);
-
+                //DataPoint pontoAlarme;
+                //pontoAlarme = new DataPoint(x1,espList.get(i).getAlerta());
+                //espList.get(i).getSeriesAlarme().appendData(pontoAlarme,true,20);
+                System.out.println("Preparando pra gravar");
                 salvarArquivo((int) ponto.getY(), espList.get(i).getMac());
             }catch (Exception e){
 
@@ -972,10 +972,11 @@ public class telaPrincipal extends AppCompatActivity
         //System.out.println(Environment.getExternalStorageDirectory().getAbsolutePath());
         try{
             FileOutputStream salvar = new FileOutputStream(arquivo,true);
-            String conteudo = i + ";" + c.get(Calendar.HOUR_OF_DAY)+ ";" + c.get(Calendar.MINUTE) +"\n";
+            String conteudo = i + ";" + new Date() +"\n"; //c.get(Calendar.HOUR_OF_DAY)+ ";" + c.get(Calendar.MINUTE)
             salvar.write(conteudo.getBytes());
             salvar.close();
-            //Toast.makeText(this, "",Toast.LENGTH_SHORT).show();
+            System.out.println("Gravando");
+            //Toast.makeText(this, "Gravando",Toast.LENGTH_SHORT).show();
         }catch (FileNotFoundException e){
             //Toast.makeText(this, "Arquivo não encontrado",Toast.LENGTH_SHORT).show();
         }catch (IOException ioe){
@@ -985,69 +986,7 @@ public class telaPrincipal extends AppCompatActivity
     }
 
 
-    public void sms(){
-        SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage("075991267012", null, "Mensagem que estou enviando", null, null);
-    }
 
 
-
-
-
-
-
-
-
-    class FazerScan extends AsyncTask<Void,Void,Void> {
-
-/*
-        @Override
-        protected void onPreExecute(){
-            //tv.setText("Task Starting...");
-            //limparArquivo("ips");
-        }
-*/
-        @Override
-        protected Void doInBackground(Void... voids) {
-            limparArquivo("ips");
-            byte[] ipBytes;
-            WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-            String ip2 = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-            String ip3 = ip2.replace(".",":");
-            System.out.println("ip2: "+ip2+ "   ip3: "+ ip3);
-            InetAddress ip = null;
-            try {
-                ip = InetAddress.getByName(ip2);
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
-            ipBytes = ip.getAddress();
-            String[] temp = ip3.split(":",4);
-
-            for (int i = 90; i <= 130; i++) {
-                ipBytes[3] = (byte) i;
-                try {
-                    InetAddress address = InetAddress.getByAddress(ipBytes);
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
-                }
-                String tentativa = getJSONFromAPI("http://"+temp[0]+"."+temp[1]+"."+temp[2]+"."+i);
-                System.out.println(temp[0]+"."+temp[1]+"."+temp[2]+"."+i + "\n");
-                if (!tentativa.equals("")) {
-                    salvarIps(temp[0]+"."+temp[1]+"."+temp[2]+"."+i);
-                    salvarIps(temp[0]+"."+temp[1]+"."+temp[2]+"."+i);
-                    //contador++;
-                    System.out.println(temp[0]+"."+temp[1]+"."+temp[2]+"."+i);
-                }
-
-            }
-            return null;
-        }
-
-
-
-
-
-    }
 
 }
