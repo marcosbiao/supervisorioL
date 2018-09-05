@@ -1,0 +1,4 @@
+include ':app', ':GraphView-4.2.1', ':gradle-wrapper', ':decoviewlib', ':MPChartExample', ':MPChartLib'
+project(':decoviewlib').projectDir = new File('app/libs/android-DecoView-charting-master/decoviewlib')
+project(':MPChartExample').projectDir = new File('app/libs/MPAndroidChart-master/MPChartExample')
+project(':MPChartLib').projectDir = new File('app/libs/MPAndroidChart-master/MPChartLib')
