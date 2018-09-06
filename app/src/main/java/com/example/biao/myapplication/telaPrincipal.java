@@ -127,7 +127,7 @@ public class telaPrincipal extends AppCompatActivity
         //final DateFormat dateTimeFormatter = DateFormat.getDateTimeInstance();
         //Calendar calendar = Calendar.getInstance();
         //final Date data = calendar.getTime();
-        //final SimpleDateFormat formato = new SimpleDateFormat("mm:ss");
+        final SimpleDateFormat formato = new SimpleDateFormat("HH:mm:ss");
         //final long startTime = System.nanoTime() / 100000000;
         //long atualTime = System.currentTimeMillis();
 
@@ -136,10 +136,12 @@ public class telaPrincipal extends AppCompatActivity
             @Override
             public String formatLabel(double value, boolean isValueX) {
                 if (isValueX) {
+                    Calendar c = Calendar.getInstance();
                     // show normal x values
+                    long d = new Date().getTime();
                     //return new SimpleDateFormat("hh:mm").format(tempo() - startTime);
-                    //return formato.format(value); // padrao
-
+                    return formato.format(d); // padrao
+/*
                     long totalSeconds = new Double(value).longValue();
                     long currentSecond = totalSeconds % 60;
 
@@ -159,13 +161,15 @@ public class telaPrincipal extends AppCompatActivity
                         return String.format("%d:%d", currentHour, currentMinute);
                     }
                     return String.format("%d:%d", currentHour, currentMinute);
-
+*/
                 } else {
                     // show currency for y values
                     return super.formatLabel(value, isValueX);
                 }
             }
         });
+
+
 
 
         //g.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this,new SimpleDateFormat("HH:mm:ss")));
@@ -432,9 +436,10 @@ public class telaPrincipal extends AppCompatActivity
                 System.out.println("temp esp"+ espList.get(i).getTemperatura());
                 x1++;
 
-                ponto = new DataPoint(new Date(), temp);
+                ponto = new DataPoint(x1, temp);
+                //DataPoint p2 = new DataPoint(getDateX(),temp);
                 espList.get(i).getSeries().appendData(ponto, true, 20);
-
+                System.out.println(espList.get(i).toString());
                 //DataPoint pontoAlarme;
                 //pontoAlarme = new DataPoint(x1,espList.get(i).getAlerta());
                 //espList.get(i).getSeriesAlarme().appendData(pontoAlarme,true,20);

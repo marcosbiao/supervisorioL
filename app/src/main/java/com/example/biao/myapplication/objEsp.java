@@ -65,9 +65,35 @@ public class objEsp {
 
     public DataPoint[] getDataPoint(){
         DataPoint[] dp = new DataPoint[]{
-                new DataPoint(new Date(),0 )
+                new DataPoint(0,0 )
         };
         return dp;
+    }
+
+    public void adicionar(){
+        series.appendData(new DataPoint(0,0),true,20);
+        Status=1;
+        indicador=0;
+        temperatura = "0";
+        sp = -70;
+        series.setDrawBackground(true);
+        series.setThickness(3);
+        seriesAlarme.setColor(Color.RED);
+        seriesAlarme.setThickness(3);
+
+    }
+
+    public static final Comparator<objEsp> POR_STATUS = new Comparator<objEsp>(){
+        public int compare(objEsp a1, objEsp a2) {
+            return compare(a1,a2);
+        }
+    };
+
+
+    @Override
+    public String toString(){
+        series.toString();
+        return "\n -> [AP: " + apelido+" | temp:" + temperatura + " | "+ series + "]";
     }
 
 
@@ -185,25 +211,6 @@ public class objEsp {
     public void setSeriesAlarme(LineGraphSeries<DataPoint> seriesAlarme) {
         this.seriesAlarme = seriesAlarme;
     }
-
-    public void adicionar(){
-        series.appendData(new DataPoint(new Date().getTime(),0),true,20);
-        Status=1;
-        indicador=0;
-        temperatura = "0";
-        sp = -70;
-        series.setDrawBackground(true);
-        series.setThickness(3);
-        seriesAlarme.setColor(Color.RED);
-        seriesAlarme.setThickness(3);
-
-    }
-
-    public static final Comparator<objEsp> POR_STATUS = new Comparator<objEsp>(){
-        public int compare(objEsp a1, objEsp a2) {
-            return compare(a1,a2);
-        }
-    };
 
 
 
