@@ -19,26 +19,14 @@
             android:id="@+id/buttonSalvarNumero"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/textView4"
-            android:layout_alignBottom="@+id/textView4"
-            android:layout_alignEnd="@+id/listViewTelefone"
-            android:layout_alignRight="@+id/listViewTelefone"
-            android:layout_marginEnd="44dp"
-            android:layout_marginRight="44dp"
+            android:layout_alignBaseline="@+id/editTextNumeroMensagem"
+            android:layout_alignBottom="@+id/editTextNumeroMensagem"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="49dp"
+            android:layout_marginRight="49dp"
             android:layout_weight="1"
             android:text="Salvar" />
-
-        <ListView
-            android:id="@+id/listViewTelefone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/buttonSalvarNumero"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginTop="33dp" />
 
         <EditText
             android:id="@+id/editTextNumeroMensagem"
@@ -78,8 +66,8 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/textView4"
             android:layout_alignBottom="@+id/textView4"
-            android:layout_marginEnd="29dp"
-            android:layout_marginRight="29dp"
+            android:layout_marginEnd="48dp"
+            android:layout_marginRight="48dp"
             android:layout_toLeftOf="@+id/editTextNomeTelefone"
             android:layout_toStartOf="@+id/editTextNomeTelefone"
             android:text="Nome:" />
@@ -96,6 +84,30 @@
             android:layout_marginRight="122dp"
             android:ems="10"
             android:inputType="textPersonName" />
+
+        <ViewStub
+            android:id="@+id/viewStubList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/buttonSalvarNumero"
+            android:layout_marginLeft="62dp"
+            android:layout_marginStart="62dp"
+            android:layout_marginTop="51dp"
+            android:layout_marginBottom="75dp"
+            android:layout="@layout/my_listview" />
+
+        <Button
+            android:id="@+id/buttonSalvarList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/buttonSalvarNumero"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/buttonSalvarNumero"
+            android:layout_marginBottom="21dp"
+
+            android:text="Button" />
 
     </RelativeLayout>
 

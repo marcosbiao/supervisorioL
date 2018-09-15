@@ -18,9 +18,11 @@ import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewStub;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -47,10 +49,15 @@ public class TelaMensagem extends AppCompatActivity {
     //static Switch tb;
     static boolean estadoSwitch = false;
     //static ToggleButton tb ;
-    Button btSalvar;
+    Button btSalvar, btList;
     EditText numeroMensagem,nomeTelefone;
-    static List<String> listaTelefone = new ArrayList<>();
+    //static List<String> listaTelefone = new ArrayList<>();
     ListView listViewTelefone;
+    ViewStub stubList;
+    static List<objTelefone> listaObjTelefone = new ArrayList<>();
+    ListViewAdapter listAdapter;
+    CheckBox cbConect;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,44 +69,16 @@ public class TelaMensagem extends AppCompatActivity {
         btSalvar = findViewById(R.id.buttonSalvarNumero);
         numeroMensagem = findViewById(R.id.editTextNumeroMensagem);
         nomeTelefone = findViewById((R.id.editTextNomeTelefone));
+        btList = findViewById(R.id.buttonSalvarList);
+
 
         //carregando ListView
-        listViewTelefone = findViewById(R.id.listViewTelefone);
-        listViewTelefone.setBackgroundColor(Color.rgb(255,255,255));
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(TelaMensagem.this,
-                android.R.layout.simple_list_item_1,listaTelefone);
-        listViewTelefone.setAdapter(adapter);
-        listViewTelefone.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final int p=position;
-                AlertDialog.Builder builder = new AlertDialog.Builder(TelaMensagem.this);
-                //define o titulo
-                builder.setTitle(listaTelefone.get(position).toString());
-                //define a mensagem
-                builder.setMessage("Deseja excluir esse número?");
-                builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        adapter.remove(adapter.getItem(p));
-                        adapter.notifyDataSetChanged();
-                        salvarArquivoTelefone(listaTelefone);
-                    }
-                });
-                builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                builder.create();
-                builder.show();
-            }
-        });//fim ListView
-
-
-
         lerNumero();
+        criarList();
+
+
+
+
 
 
 
@@ -108,9 +87,23 @@ public class TelaMensagem extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 salvarNumero(numeroMensagem.getText().toString(),nomeTelefone.getText().toString());
-                adapter.notifyDataSetChanged();
+                listAdapter = new ListViewAdapter(TelaMensagem.this,R.layout.list_item,listaObjTelefone);
+                listAdapter.notifyDataSetChanged();
+                //listViewTelefone.setAdapter(listAdapter);
+
             }
         });
+
+        btList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for(int i=0;i<listaObjTelefone.size();i++){
+                    System.out.println(listaObjTelefone.get(i).getNomeTelefone()+":"+listaObjTelefone.get(i).isConectividade()+" "+listaObjTelefone.get(i).isEnergia()+" "+listaObjTelefone.get(i).isTemperatura()+" ");
+                }
+            }
+
+        });
+
 
 
         permission();
@@ -121,6 +114,17 @@ public class TelaMensagem extends AppCompatActivity {
 
     }
 
+    private void criarList() {
+        if(listaObjTelefone.size()>0) {
+            stubList = findViewById(R.id.viewStubList);
+            stubList.inflate();
+            listViewTelefone = findViewById(R.id.mylistview);
+            listAdapter = new ListViewAdapter(this,R.layout.list_item,listaObjTelefone);
+            listViewTelefone.setAdapter(listAdapter);
+            listViewTelefone.setChoiceMode(listViewTelefone.CHOICE_MODE_MULTIPLE);
+
+        }
+    }
 
 
     public static void monitorar(List<objEsp> lista){
@@ -205,11 +209,10 @@ public class TelaMensagem extends AppCompatActivity {
     static public void mandarMensagem(String msg, String fone) {
         try {
             SmsManager sms = SmsManager.getDefault();
-            for(int i=0;i<listaTelefone.size();i++){
-                String[] temp = new String[2];
-                temp = listaTelefone.get(i).toString().split(":",2);
-                temp[1].trim();
-                sms.sendTextMessage(temp[1], null, msg, null, null);
+            for(int i=0;i<listaObjTelefone.size();i++){
+                String temp;
+                temp = listaObjTelefone.get(i).getNumero();
+                sms.sendTextMessage(temp, null, msg, null, null);
             }
         } catch (Exception e){
 
@@ -221,20 +224,44 @@ public class TelaMensagem extends AppCompatActivity {
 
     public void salvarNumero(String numb,String nome){
         try {
+            objTelefone objTemp = new objTelefone(nome,numb,false,false,false);
 
             byte[] dados;
             File arq = new File(Environment.getExternalStorageDirectory(), "/Controle_esp/telefones.txt");
             //arq.deleteOnExit();
             //arq.mkdir();
             FileOutputStream fos;
-            dados = (nome+": "+numb +"\n").getBytes();
+            dados = (objTemp.getNomeTelefone()+";"+objTemp.getNumero()+";"+objTemp.isConectividade()+";"+objTemp.isEnergia()+";"+objTemp.isTemperatura() +"\n").getBytes();
             fos = new FileOutputStream(arq,true);
             fos.write(dados);
             fos.flush();
             fos.close();
             System.out.println("Funcionei!!!!!");
             Log.i("teste: ", "Funcionei!!!!!");
-            listaTelefone.add(nome+": "+numb);
+            //listaTelefone.add(nome+": "+numb);
+            Toast.makeText(this, "Número salvo com sucesso",Toast.LENGTH_SHORT).show();
+        }catch (Exception e){
+            Toast.makeText(this, "Erro",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void salvarListaNumeros(){
+        try {
+            for(int i=0;i<listaObjTelefone.size();i++) {
+                byte[] dados;
+                File arq = new File(Environment.getExternalStorageDirectory(), "/Controle_esp/telefones.txt");
+                //arq.deleteOnExit();
+                //arq.mkdir();
+                FileOutputStream fos;
+                dados = (listaObjTelefone.get().getNomeTelefone() + ";" + objTemp.getNumero() + ";" + objTemp.isConectividade() + ";" + objTemp.isEnergia() + ";" + objTemp.isTemperatura() + "\n").getBytes();
+                fos = new FileOutputStream(arq, true);
+                fos.write(dados);
+                fos.flush();
+                fos.close();
+            }
+            System.out.println("Funcionei!!!!!");
+            Log.i("teste: ", "Funcionei!!!!!");
+            //listaTelefone.add(nome+": "+numb);
             Toast.makeText(this, "Número salvo com sucesso",Toast.LENGTH_SHORT).show();
         }catch (Exception e){
             Toast.makeText(this, "Erro",Toast.LENGTH_SHORT).show();
@@ -243,7 +270,7 @@ public class TelaMensagem extends AppCompatActivity {
 
     public void lerNumero(){
         try {
-            listaTelefone.clear();
+            listaObjTelefone.clear();
             System.out.println("LENDO ARQUIVO DE numero telefone");
             String nome = "telefones";
             String lstrlinha;
@@ -251,15 +278,18 @@ public class TelaMensagem extends AppCompatActivity {
             if(arq.exists()) {
                 BufferedReader br = new BufferedReader(new FileReader(arq));
                 while ((lstrlinha = br.readLine()) != null) {
-                    String[] temp = new String[2];
-                    temp = lstrlinha.split(":",2);
-                    listaTelefone.add(lstrlinha);
+                    String[] temp = new String[5];
+                    temp = lstrlinha.split(";",5);
+                    System.out.println("Meu nome é: "+temp[0]);
+                    objTelefone objtemp = new objTelefone(temp[0],temp[1],Boolean.parseBoolean(temp[2]),Boolean.parseBoolean(temp[3]),Boolean.parseBoolean(temp[4]));
+                    listaObjTelefone.add(objtemp);
                 }
             }
-            System.out.println("tamanho lista: "+listaTelefone.size());
-            for(int i=0;i<listaTelefone.size();i++){
-                System.out.println("listaaaa "+listaTelefone.get(i).toString());
+            System.out.println("tamanho lista: "+listaObjTelefone.size());
+            for(int i=0;i<listaObjTelefone.size();i++){
+                System.out.println("listaaaa "+listaObjTelefone.get(i).getNomeTelefone());
             }
+
         }catch (IOException e){
             e.printStackTrace();
         }

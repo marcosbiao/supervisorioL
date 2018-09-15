@@ -42,7 +42,7 @@ public class GridViewAdapter extends ArrayAdapter<objEsp> {
             v = inflater.inflate(R.layout.grid_item, null);
         }
         objEsp esp = getItem(position);
-        decoView = v.findViewById(R.id.dynamicArcView);
+        //decoView = v.findViewById(R.id.dynamicArcView);
         ImageView img = (ImageView) v.findViewById(R.id.imageView2);
         TextView txtTitle = (TextView) v.findViewById(R.id.textViewTeste);
         TextView txtDescription = (TextView) v.findViewById(R.id.textDescription);

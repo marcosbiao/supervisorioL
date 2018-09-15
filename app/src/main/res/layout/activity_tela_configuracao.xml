@@ -30,17 +30,17 @@
         android:layout_height="match_parent">
 
         <CheckBox
-            android:id="@+id/checkBox2"
+            android:id="@+id/checkBoxMin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/checkBox"
-            android:layout_alignBottom="@+id/checkBox"
+            android:layout_alignBaseline="@+id/checkBoxMax"
+            android:layout_alignBottom="@+id/checkBoxMax"
             android:layout_alignEnd="@+id/editTextAlerta"
             android:layout_alignRight="@+id/editTextAlerta"
             android:text="MIN." />
 
         <CheckBox
-            android:id="@+id/checkBox"
+            android:id="@+id/checkBoxMax"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/editTextAlerta"

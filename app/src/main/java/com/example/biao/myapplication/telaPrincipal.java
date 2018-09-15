@@ -84,7 +84,7 @@ public class telaPrincipal extends AppCompatActivity
     //ProgressBar pb;
     private final Handler mHandler01 = new Handler();
     private Runnable mTimer1;
-    private int tempoDeColeta=2000;//tempo em milisegundos
+    private int tempoDeColeta=60000;//tempo em milisegundos
     ArrayList<String> listaIps = new ArrayList<>();
     ArrayList<String> listaMacs = new ArrayList<>();
     boolean controleMonitoramento = true;
@@ -111,64 +111,37 @@ public class telaPrincipal extends AppCompatActivity
         setContentView(R.layout.activity_tela_principal);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //tv = findViewById(R.id.textViewConfirmacao);
-
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
         g = (GraphView) findViewById(R.id.graphTela);
+
         stubGrid = (ViewStub) findViewById(R.id.stubGrid);
         stubGrid.inflate();
+
         gridView = (GridView) findViewById(R.id.mygridview);
-        //getEspList();
         g.setVisibility(View.INVISIBLE);
 
-        //final DateFormat dateTimeFormatter = DateFormat.getDateTimeInstance();
-        //Calendar calendar = Calendar.getInstance();
-        //final Date data = calendar.getTime();
-        final SimpleDateFormat formato = new SimpleDateFormat("HH:mm:ss");
-        //final long startTime = System.nanoTime() / 100000000;
-        //long atualTime = System.currentTimeMillis();
+        SimpleDateFormat formato = new SimpleDateFormat("HH:mm:ss");
 
 
-        g.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+
+        g.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(telaPrincipal.this));
+        /*
+        g.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter(){
             @Override
             public String formatLabel(double value, boolean isValueX) {
                 if (isValueX) {
-                    Calendar c = Calendar.getInstance();
-                    // show normal x values
-                    long d = new Date().getTime();
-                    //return new SimpleDateFormat("hh:mm").format(tempo() - startTime);
-                    return formato.format(d); // padrao
-/*
-                    long totalSeconds = new Double(value).longValue();
-                    long currentSecond = totalSeconds % 60;
 
-                    long totalMinutes = totalSeconds / 60;
-                    long currentMinute = totalMinutes % 60;
-
-                    long totalHour = totalMinutes / 60;
-                    long currentHour = totalHour % 24;
-
-                    if (currentMinute < 10 && currentSecond < 10) {
-                        return String.format("%d:0%d", currentHour, currentMinute);
-                    }
-                    if (currentMinute < 10) {
-                        return String.format("%d:0%d", currentHour, currentMinute);
-                    }
-                    if (currentSecond < 10) {
-                        return String.format("%d:%d", currentHour, currentMinute);
-                    }
-                    return String.format("%d:%d", currentHour, currentMinute);
-*/
+                    return formato.format(value); // padrao
                 } else {
                     // show currency for y values
                     return super.formatLabel(value, isValueX);
                 }
             }
         });
-
+*/
 
 
 
@@ -182,14 +155,8 @@ public class telaPrincipal extends AppCompatActivity
             e.printStackTrace();
         }
 
-        //sms();
         carregarMacs();
 
-/*
-        lerIps();
-        criarObjetos();
-        criarGrid();
-*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -197,11 +164,6 @@ public class telaPrincipal extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-/*
-        MinhaTask mt = (MinhaTask) new MinhaTask();
-        mt.execute(10);
-        mt.doInBackground(4);
-*/
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -230,6 +192,8 @@ public class telaPrincipal extends AppCompatActivity
                             bundle.putFloat("alerta", espList.get(position).getAlerta());
                             bundle.putFloat("sp",espList.get(position).getSp());
                             bundle.putInt("position", position);
+                            bundle.putBoolean("max",espList.get(position).isLiMax());
+                            bundle.putBoolean("min",espList.get(position).isLiMin());
                             intent.putExtras(bundle);
                             startActivity(intent);
                         }
@@ -381,9 +345,22 @@ public class telaPrincipal extends AppCompatActivity
     }
 
     private void criarGrafico() {
+        Calendar calendar = Calendar.getInstance();
+        Date d1 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d2 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d3 = calendar.getTime();
+        g.getGridLabelRenderer().setNumHorizontalLabels(3);
+        g.getViewport().setMinX(d1.getTime());
+        g.getViewport().setMaxX(d3.getTime());
         g.getViewport().setXAxisBoundsManual(true);
-        g.getViewport().setMinX(0);
-        g.getViewport().setMaxX(4);
+
+        g.getGridLabelRenderer().setHumanRounding(false);
+
+        //g.getViewport().setXAxisBoundsManual(true);
+        //g.getViewport().setMinX(0);
+        //g.getViewport().setMaxX(4);
 
         // permite setar os limites do gráfico
         g.getViewport().setYAxisBoundsManual(true);
@@ -436,8 +413,12 @@ public class telaPrincipal extends AppCompatActivity
                 System.out.println("temp esp"+ espList.get(i).getTemperatura());
                 x1++;
 
-                ponto = new DataPoint(x1, temp);
-                //DataPoint p2 = new DataPoint(getDateX(),temp);
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.MINUTE,1);
+                Date da = calendar.getTime();
+
+                ponto = new DataPoint(da, temp);
+
                 espList.get(i).getSeries().appendData(ponto, true, 20);
                 System.out.println(espList.get(i).toString());
                 //DataPoint pontoAlarme;
@@ -569,7 +550,7 @@ public class telaPrincipal extends AppCompatActivity
                 controleMonitoramento = true;
             }
         }else if(id==R.id.nav_item){
-            Intent intent = new Intent(telaPrincipal.this, MainActivity.class);
+            Intent intent = new Intent(telaPrincipal.this, telaOpcao.class);
             startActivity(intent);
         }
 
@@ -825,6 +806,17 @@ public class telaPrincipal extends AppCompatActivity
             ativo.setAlerta(Float.parseFloat(lstrlinha));
             lstrlinha = br.readLine(); //SP
             ativo.setSp(Float.parseFloat(lstrlinha));
+            lstrlinha = br.readLine(); //se existe limite maximo
+            ativo.setLiMax(Boolean.parseBoolean(lstrlinha));
+            lstrlinha = br.readLine();  //se existe limite minimo
+            ativo.setLiMin(Boolean.parseBoolean(lstrlinha));
+
+            if(ativo.isLiMax()==true){
+                ativo.setLimiteMax(ativo.getSp() + ativo.getAlerta());
+            }
+            if(ativo.isLiMin()==true){
+                ativo.setLimiteMin(ativo.getSp() - ativo.getAlerta());
+            }
 
             ativo.setMac(ob.getMac());
             ativo.setIp(ob.getIp());
@@ -848,7 +840,7 @@ public class telaPrincipal extends AppCompatActivity
             FileOutputStream fos;
             limparArquivo(oe.getMac());
             System.out.println("Dados oe"+oe.getSp());
-            dados = (oe.getMac() +"\n" + oe.getIp()+"\n" + oe.getApelido() +"\n" + oe.getAlerta() +"\n"+oe.getSp()+"\n").getBytes();
+            dados = (oe.getMac() +"\n" + oe.getIp()+"\n" + oe.getApelido() +"\n" + oe.getAlerta() +"\n"+oe.getSp()+"\n"+oe.isLiMax()+"\n"+oe.isLiMin()+"\n").getBytes();
             fos = new FileOutputStream(arq,true);
             fos.write(dados);
             fos.flush();
@@ -902,7 +894,7 @@ public class telaPrincipal extends AppCompatActivity
                 ipBytes = ip.getAddress();
                 String[] temp = ip3.split(":",4);
 
-                for (int i = 95; i <= 110; i++) {
+                for (int i = 95; i <= 109; i++) {
                     ipBytes[3] = (byte) i;
                     try {
                         InetAddress address = InetAddress.getByAddress(ipBytes);
@@ -955,8 +947,15 @@ public class telaPrincipal extends AppCompatActivity
             }
             for(int i=0;i<listaMacs.size();i++){
                 preListaEsp.add(buscador(new objEsp(listaMacs.get(i))));
+
                 preListaEsp.get(i).setIp("");
             }
+            //objEsp aux = new objEsp();
+            //aux.setMac("18:FE:34:D8:28:BE");
+            //aux.setApelido("Vacina");
+            //aux.setSp(70);
+            //preListaEsp.add(aux);
+
             criarGrid(preListaEsp);
         }catch (IOException e){
             e.printStackTrace();

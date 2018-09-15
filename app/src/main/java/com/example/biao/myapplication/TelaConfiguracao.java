@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,6 +47,8 @@ public class TelaConfiguracao extends AppCompatActivity {
     String mac,ip,apelido;
     float alerta;
     int position;
+    CheckBox cbMax,cbMin;
+    objEsp ob = new objEsp();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,17 +62,31 @@ public class TelaConfiguracao extends AppCompatActivity {
         bt = findViewById(R.id.buttonSalvar);
         etSP = findViewById(R.id.editTextSP);
         tvLimite = findViewById(R.id.textViewValorLimite);
+        cbMax = findViewById(R.id.checkBoxMax);
+        cbMin = findViewById(R.id.checkBoxMin);
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         mac = bundle.getString("mac");
         ip = bundle.getString("ip");
         etApelido.setText(bundle.getString("apelido"));
-        //int temp = Integer.parseInt(bundle.getFloat("alerta"));
         System.out.println((int) bundle.getFloat("alerta"));
         etAlerta.setText(String.valueOf(bundle.getFloat("alerta")));
         position = bundle.getInt("position");
         etSP.setText(String.valueOf(bundle.getFloat("sp")));
+
+        ajustarLimites();
+        mostrarLImites();
+        if(bundle.getBoolean("max")){
+            cbMax.setChecked(true);
+        }else{
+            cbMax.setChecked(false);
+        }
+        if(bundle.getBoolean("min")){
+            cbMin.setChecked(true);
+        }else{
+            cbMin.setChecked(false);
+        }
 
 
         etAlerta.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -85,7 +102,8 @@ public class TelaConfiguracao extends AppCompatActivity {
         bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                objEsp ob = new objEsp();
+                ajustarLimites();
+                System.out.println("Limite max: "+ ob.isLiMax()+"  :"+ ob.getLimiteMax());
                 ob.setMac(mac);
                 ob.setIp(ip);
                 ob.setApelido(etApelido.getText().toString());
@@ -135,7 +153,7 @@ public class TelaConfiguracao extends AppCompatActivity {
             File arq = new File(Environment.getExternalStorageDirectory(), "/Controle_esp/"+oe.getMac() +".txt");
             FileOutputStream fos;
             limparArquivo(oe.getMac());
-            dados = (oe.getMac() +"\n" + oe.getIp()+"\n" + oe.getApelido() +"\n" + oe.getAlerta() +"\n"+oe.getSp()+"\n").getBytes();
+            dados = (oe.getMac() +"\n" + oe.getIp()+"\n" + oe.getApelido() +"\n" + oe.getAlerta() +"\n"+oe.getSp()+"\n"+oe.isLiMax()+"\n"+oe.isLiMin()+"\n").getBytes();
             fos = new FileOutputStream(arq,true);
             fos.write(dados);
             fos.flush();
@@ -169,6 +187,29 @@ public class TelaConfiguracao extends AppCompatActivity {
             Toast.makeText(this, "Erro",Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    public void ajustarLimites(){
+        if(cbMax.isChecked()){
+            ob.setLiMax(true);
+            ob.setLimiteMax(Float.parseFloat(etSP.getText().toString()) + Float.parseFloat(etAlerta.getText().toString()));
+        }else{
+            ob.setLiMax(false);
+        }
+
+        if(cbMin.isChecked()){
+            ob.setLiMin(true);
+            ob.setLimiteMax(Float.parseFloat(etSP.getText().toString()) - Float.parseFloat(etAlerta.getText().toString()));
+        }else{
+            ob.setLiMin(false);
+        }
+    }
+
+    public void mostrarLImites(){
+        String auxMax, auxMin;
+        auxMax =String.valueOf(  Float.parseFloat(etSP.getText().toString()) + Float.parseFloat(etAlerta.getText().toString())         );
+        auxMin = String.valueOf(  Float.parseFloat(etSP.getText().toString()) - Float.parseFloat(etAlerta.getText().toString())         );
+        tvLimite.setText(auxMin + " ou " + auxMax);
     }
 
 

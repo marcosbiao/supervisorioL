@@ -34,6 +34,7 @@
         <activity
             android:name=".TelaConfiguracao"
             android:label="Configuração do dispositivo"
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -57,7 +58,7 @@
         <activity
             android:name=".TelaMensagem"
             android:label="Configuração de SMS"
-
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="landscape"/>
         <activity
             android:name=".TelaHistorico"

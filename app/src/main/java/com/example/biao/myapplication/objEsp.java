@@ -34,6 +34,8 @@ public class objEsp {
     private int indicador; //0=não conectado, 1=conectado
     private float alerta;//valor limite para gerar alerta
     private float sp;
+    private float limiteMax,limiteMin;
+    private boolean liMax, liMin;
 
 
     private LineGraphSeries<DataPoint> series = new LineGraphSeries<>(getDataPoint());
@@ -64,8 +66,16 @@ public class objEsp {
     //Metodos
 
     public DataPoint[] getDataPoint(){
+        Calendar calendar = Calendar.getInstance();
+        Date d1 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d2 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d3 = calendar.getTime();
         DataPoint[] dp = new DataPoint[]{
-                new DataPoint(0,0 )
+                //new DataPoint(d1, 1),
+                //new DataPoint(d2, 0),
+                //new DataPoint(d3, 1)
         };
         return dp;
     }
@@ -80,6 +90,8 @@ public class objEsp {
         series.setThickness(3);
         seriesAlarme.setColor(Color.RED);
         seriesAlarme.setThickness(3);
+        setLiMax(false);
+        setLiMin(false);
 
     }
 
@@ -212,8 +224,37 @@ public class objEsp {
         this.seriesAlarme = seriesAlarme;
     }
 
+    public float getLimiteMax() {
+        return limiteMax;
+    }
 
+    public void setLimiteMax(float limiteMax) {
+        this.limiteMax = limiteMax;
+    }
 
+    public float getLimiteMin() {
+        return limiteMin;
+    }
+
+    public void setLimiteMin(float limiteMin) {
+        this.limiteMin = limiteMin;
+    }
+
+    public boolean isLiMax() {
+        return liMax;
+    }
+
+    public void setLiMax(boolean liMax) {
+        this.liMax = liMax;
+    }
+
+    public boolean isLiMin() {
+        return liMin;
+    }
+
+    public void setLiMin(boolean liMin) {
+        this.liMin = liMin;
+    }
 
 
 }
