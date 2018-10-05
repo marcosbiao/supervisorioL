@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
@@ -76,6 +77,25 @@ import com.example.biao.myapplication.Monitoramento;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.PointsGraphSeries;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.components.YAxis.AxisDependency;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.components.LimitLine;
+
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class telaPrincipal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -84,7 +104,7 @@ public class telaPrincipal extends AppCompatActivity
     //ProgressBar pb;
     private final Handler mHandler01 = new Handler();
     private Runnable mTimer1;
-    private int tempoDeColeta=60000;//tempo em milisegundos
+    private int tempoDeColeta = 3*1000;//tempo em milisegundos
     ArrayList<String> listaIps = new ArrayList<>();
     ArrayList<String> listaMacs = new ArrayList<>();
     boolean controleMonitoramento = true;
@@ -99,11 +119,29 @@ public class telaPrincipal extends AppCompatActivity
 
     DataPoint ponto;
     static List<objEsp> listaObj = new ArrayList<>();
-    GraphView g;
     int toogle=1, toogleAntes = 1, contador=0;
     static int flag=0,x1=0;
 
+    private LineChart mChart;
+    XAxis xAxis;
+    YAxis leftAxis;
 
+
+    Calendar calendario1 = Calendar.getInstance();
+
+    private double startingSample = 0;
+    LineData data;
+    int posicaoGeral=0;
+
+
+
+    public static String getDate(long milliSeconds, String dateFormat)
+    {
+        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(milliSeconds);
+        return formatter.format(calendar.getTime());
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,42 +153,26 @@ public class telaPrincipal extends AppCompatActivity
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        g = (GraphView) findViewById(R.id.graphTela);
+        // g = (GraphView) findViewById(R.id.graphTela);
+        mChart = (LineChart) findViewById(R.id.chart1);
+        xAxis = mChart.getXAxis();
+        leftAxis = mChart.getAxisLeft();
+        calendario1.set(2017,10,3,0,0,0);
+        startingSample = calendario1.getTimeInMillis();
 
         stubGrid = (ViewStub) findViewById(R.id.stubGrid);
         stubGrid.inflate();
 
         gridView = (GridView) findViewById(R.id.mygridview);
-        g.setVisibility(View.INVISIBLE);
-
-        SimpleDateFormat formato = new SimpleDateFormat("HH:mm:ss");
+       // g.setVisibility(View.INVISIBLE);
 
 
-
-        g.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(telaPrincipal.this));
-        /*
-        g.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter(){
-            @Override
-            public String formatLabel(double value, boolean isValueX) {
-                if (isValueX) {
-
-                    return formato.format(value); // padrao
-                } else {
-                    // show currency for y values
-                    return super.formatLabel(value, isValueX);
-                }
-            }
-        });
-*/
-
-
-
-        //g.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this,new SimpleDateFormat("HH:mm:ss")));
 
 
         try {
             System.out.println("FAZENDO SCAN");
             fazerScan3();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -214,7 +236,7 @@ public class telaPrincipal extends AppCompatActivity
                                     salvarMacs(listaMacs);
                                     espList.remove(position);
                                     criarGrid(espList);
-                                    g.setVisibility(View.INVISIBLE);
+                                   // g.setVisibility(View.INVISIBLE);
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
@@ -245,32 +267,6 @@ public class telaPrincipal extends AppCompatActivity
         });
 
 
-    }
-
-    public long tempo(){
-        return System.currentTimeMillis();
-    }
-
-    public void criarGrid(List<objEsp> lista){
-        System.out.println("CRIANDO GRID: "+lista.size());
-        if(lista.size()>0) {
-            gridViewAdapter = new GridViewAdapter2(this, R.layout.grid_item2, lista);
-            gridViewAdapter.notifyDataSetChanged();
-            gridView.setAdapter(gridViewAdapter);
-            //g.setVisibility(View.INVISIBLE);
-            gridView.setOnItemClickListener(onItemClick);
-            gridView.setVisibility(View.VISIBLE);
-            criarGrafico();
-
-            definirColunasGridView();
-        }
-    }
-
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
         mTimer1 = new Runnable() {
             @Override
             public void run() {
@@ -282,6 +278,15 @@ public class telaPrincipal extends AppCompatActivity
                 Collections.sort(espList,objEsp.POR_STATUS);
                 System.out.println("Controle monitoramento" +controleMonitoramento);
                 buscarDados();
+                if(flag==1){
+                    data = new LineData(espList.get(posicaoGeral).getDataset());
+                    mChart.setData(data);
+                    //mChart.resetZoom();
+                    mChart.invalidate();
+                    //mChart.setVisibleYRange(Float.parseFloat(espList.get(posicaoGeral).getTemperatura()) - 30, Float.parseFloat(espList.get(posicaoGeral).getTemperatura() + 30),YAxis);
+                    //mChart.fitScreen();
+                }
+
                 if(controleMonitoramento == true){
                     TelaMensagem.monitorar(espList);
                 }
@@ -292,8 +297,32 @@ public class telaPrincipal extends AppCompatActivity
 
         };
         mHandler01.postDelayed(mTimer1, tempoDeColeta);
-
     }
+
+    public long tempo(){
+        long time = System.currentTimeMillis();
+        // long timeSecs = (long)(time / 1000) * 1000;
+        System.out.println("Tempo (ms): " + time);
+        // System.out.println("Tempo (s): " + timeSecs);
+        return time;
+    }
+
+    public void criarGrid(List<objEsp> lista){
+        System.out.println("CRIANDO GRID: "+lista.size());
+        if(lista.size()>0) {
+            gridViewAdapter = new GridViewAdapter2(this, R.layout.grid_item2, lista);
+            gridViewAdapter.notifyDataSetChanged();
+            gridView.setAdapter(gridViewAdapter);
+            // mChart.setVisibility(View.INVISIBLE);
+            gridView.setOnItemClickListener(onItemClick);
+            gridView.setVisibility(View.VISIBLE);
+            // criarGrafico();
+
+            definirColunasGridView();
+        }
+    }
+
+
 
     private double getDateX() {
 
@@ -344,6 +373,10 @@ public class telaPrincipal extends AppCompatActivity
 
     }
 
+    protected float getRandom(float range, float startsfrom) {
+        return (float) (Math.random() * range) + startsfrom;
+    }
+
     private void criarGrafico() {
         Calendar calendar = Calendar.getInstance();
         Date d1 = calendar.getTime();
@@ -351,28 +384,71 @@ public class telaPrincipal extends AppCompatActivity
         Date d2 = calendar.getTime();
         calendar.add(Calendar.DATE, 1);
         Date d3 = calendar.getTime();
-        g.getGridLabelRenderer().setNumHorizontalLabels(3);
-        g.getViewport().setMinX(d1.getTime());
-        g.getViewport().setMaxX(d3.getTime());
-        g.getViewport().setXAxisBoundsManual(true);
 
-        g.getGridLabelRenderer().setHumanRounding(false);
+       mChart.getDescription().setEnabled(true);
 
-        //g.getViewport().setXAxisBoundsManual(true);
-        //g.getViewport().setMinX(0);
-        //g.getViewport().setMaxX(4);
+        // enable touch gestures
+        mChart.setTouchEnabled(true);
 
-        // permite setar os limites do gráfico
-        g.getViewport().setYAxisBoundsManual(true);
-        //g.getViewport().setMinY(-80);
-        //g.getViewport().setMaxY(-60);
+        mChart.setDragDecelerationFrictionCoef(0.9f);
 
-        g.setTitleColor(Color.GRAY);
-        g.setTitleTextSize(30);
-        g.getGridLabelRenderer().setGridColor(Color.GRAY);
+        // enable scaling and dragging
+        mChart.setDragEnabled(true);
+        mChart.setScaleEnabled(true);
+        mChart.setDrawGridBackground(false);
 
-        g.setBackgroundColor(Color.argb(50,255,255,255));
-        g.getViewport().setScrollable(true);// pode ir e voltar no grafico
+        mChart.setHighlightPerDragEnabled(true);
+
+
+        // set an alternative background color
+        mChart.setBackgroundColor(Color.WHITE);
+        mChart.setViewPortOffsets(0f, 0f, 0f, 0f);
+
+
+
+        // add data
+        // setData(100, 30);
+        mChart.invalidate();
+
+
+
+
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
+        xAxis.setTextSize(14f);
+        xAxis.setTextColor(Color.WHITE);
+        xAxis.setDrawAxisLine(false);
+        xAxis.setDrawGridLines(true);
+        xAxis.setTextColor(Color.rgb(255, 192, 56));
+        xAxis.setCenterAxisLabels(true);
+        // xAxis.setGranularity(1f); // one hour
+        xAxis.setValueFormatter(new IAxisValueFormatter() {
+
+            private SimpleDateFormat mFormat = new SimpleDateFormat("HH:mm:ss");
+
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                System.out.println("Valor formatado: " + value);
+                return mFormat.format(new Date((long) (value + startingSample)));
+            }
+        });
+
+
+        leftAxis.setTypeface(Typeface.DEFAULT);
+        leftAxis.setTextSize(14f);
+        leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+        leftAxis.setTextColor(ColorTemplate.getHoloBlue());
+        leftAxis.setDrawGridLines(true);
+        leftAxis.setGranularityEnabled(true);
+        leftAxis.setAxisMaxValue(100f);
+        leftAxis.setAxisMinValue(-10f);
+        leftAxis.setAxisMaximum(100f);
+        leftAxis.setAxisMinimum(-10f);
+        leftAxis.setGranularityEnabled(true);
+        leftAxis.setGranularity(1f);
+        leftAxis.setLabelCount(6);
+        leftAxis.setTextColor(Color.rgb(255, 192, 56));
+        //leftAxis.setCenterAxisLabels();
+
     }
 
 
@@ -380,14 +456,14 @@ public class telaPrincipal extends AppCompatActivity
 
 
         for(int i=0;i<espList.size();i++){
-            Log.i("teste: " + i, "Iniciando leitura do Objeto " + i);
+            // Log.i("teste: " + i, "Iniciando leitura do Objeto " + i);
             String temperatura;
             int tensao;
             try {
                 String url = ("http://" + espList.get(i).getIp());
                 temperatura = getJSONFromAPI(url);
                 Log.i("teste url: " + i, "http://" + espList.get(i).getIp());
-                System.out.println(temperatura);
+                // System.out.println(temperatura);
                 if (temperatura.equals("")) {
                     temperatura = "0";
                     espList.get(i).setStatus(3);//se não tiver conexão
@@ -395,8 +471,8 @@ public class telaPrincipal extends AppCompatActivity
                     String[] aux2 = new String[4];
                     aux2 = temperatura.split(";",3);
                     temperatura = aux2[0].toString();
-                    System.out.println("aux 2"+aux2);
-                    System.out.println("temperatura"+ temperatura);
+                    // System.out.println("aux 2"+aux2);
+                    // System.out.println("temperatura"+ temperatura);
                     tensao = Integer.parseInt(aux2[1]);
                     espList.get(i).setStatus(0);
                     espList.get(i).setTensao(tensao);
@@ -407,25 +483,52 @@ public class telaPrincipal extends AppCompatActivity
                         espList.get(i).setStatus(2);// temperatura elevada
                     }
                 }
-                System.out.println("valor temperatura: " + temperatura);
-                int temp = (int) Float.parseFloat(temperatura);
+                // System.out.println("valor temperatura: " + temperatura);
+                float temp = (Float) Float.parseFloat(temperatura);
                 espList.get(i).setTemperatura(temperatura);
-                System.out.println("temp esp"+ espList.get(i).getTemperatura());
+                // System.out.println("temp esp"+ espList.get(i).getTemperatura());
                 x1++;
 
                 Calendar calendar = Calendar.getInstance();
-                calendar.add(Calendar.MINUTE,1);
+                // calendar.add(Calendar.MINUTE,1);
                 Date da = calendar.getTime();
+                long sampleTime = tempo();
+                if (startingSample == 0.0) {
+                    startingSample = sampleTime;
+                }
 
-                ponto = new DataPoint(da, temp);
+                System.out.println("Sample time: " + sampleTime);
+                ponto = new DataPoint((double) sampleTime, temp);
+                Random gerador = new Random();
+                // System.out.println("Time: " + da.getTime());
+                int samples = 20;
+                // espList.get(i).getSeries().appendData(ponto, true, samples);
+                Entry entry = new Entry((float) (sampleTime - startingSample), temp + gerador.nextInt(10));
+                espList.get(i).getDataset().addEntry(entry);
 
-                espList.get(i).getSeries().appendData(ponto, true, 20);
-                System.out.println(espList.get(i).toString());
+                if (espList.get(i).getDataset().getEntryCount() > samples) {
+                    Entry first = espList.get(i).getDataset().getEntryForIndex(0);
+                    espList.get(i).getDataset().removeEntry(first);
+                }
+
+
+                System.out.println(espList.get(i).getDataset().getValues());
+                mChart.setData(data);
+                mChart.setVisibleYRange(-50,50,AxisDependency.LEFT);
+                mChart.invalidate();
+
+
+                //// g.getViewport().setMinX(sampleTime - samples * 0.5 * tempoDeColeta);
+                //// g.getViewport().setMaxX(sampleTime);
+
+                //// g.onDataChanged(false, false);
+
+                // System.out.println(espList.get(i).toString());
                 //DataPoint pontoAlarme;
                 //pontoAlarme = new DataPoint(x1,espList.get(i).getAlerta());
                 //espList.get(i).getSeriesAlarme().appendData(pontoAlarme,true,20);
-                System.out.println("Preparando pra gravar");
-                salvarArquivo((int) ponto.getY(), espList.get(i).getMac());
+                // System.out.println("Preparando pra gravar");
+                salvarArquivo((float) (sampleTime - startingSample), temp + gerador.nextInt(10), espList.get(i).getMac());
             }catch (Exception e){
 
             }
@@ -444,15 +547,19 @@ public class telaPrincipal extends AppCompatActivity
 
             if(espList.size()>0) {
                 if(toogleAntes==1){
-                    g.setVisibility(View.VISIBLE);
+                    mChart.setVisibility(View.VISIBLE);
                     toogleAntes=2;
                 }else{
-                    g.setVisibility(View.INVISIBLE);
+                    mChart.setVisibility(View.INVISIBLE);
                     toogleAntes=1;
                 }
+                posicaoGeral = position;
 
-                g.getViewport().setMinY((int) (Double.parseDouble(espList.get(position).getTemperatura()) -15)   );
-                g.getViewport().setMaxY((int) (Double.parseDouble(espList.get(position).getTemperatura()) +15)   );
+
+
+
+               // g.getViewport().setMinY((int) (Double.parseDouble(espList.get(position).getTemperatura()) -15)   );
+               // g.getViewport().setMaxY((int) (Double.parseDouble(espList.get(position).getTemperatura()) +15)   );
                 if (espList.get(position).getStatus() == 2) {
                     Toast.makeText(getApplicationContext(), espList.get(position).getApelido() + " está com temperatura elevada", Toast.LENGTH_SHORT).show();
                 } else if (espList.get(position).getStatus() == 3) {
@@ -462,11 +569,13 @@ public class telaPrincipal extends AppCompatActivity
                 }
 
                 if (espList.size() > 0) {
+                    // mChart.setVisibility(View.VISIBLE);
                     //g.setVisibility(View.VISIBLE);
-                    g.setTitle(espList.get(position).getApelido());
-                    g.removeAllSeries();
-                    g.addSeries(espList.get(position).getSeries());
-                    g.addSeries(espList.get(position).getSeriesAlarme());
+                   // g.setTitle(espList.get(position).getApelido());
+                   // g.removeAllSeries();
+                   // g.addSeries(espList.get(position).getSeries());
+                   // g.addSeries(espList.get(position).getSeriesAlarme());
+                    // setData(100, 30);
                 }
 
             }
@@ -589,7 +698,7 @@ public class telaPrincipal extends AppCompatActivity
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getApplicationContext(), "Erro",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Erro ao limpar arquivo",Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -600,23 +709,27 @@ public class telaPrincipal extends AppCompatActivity
     public void salvarIps(String ip){
         try {
             byte[] dados;
+
             File arq = new File(Environment.getExternalStorageDirectory(), "/Controle_esp/ips.txt");
+            if(!arq.exists()) {
+                arq.createNewFile();
+            }
             FileOutputStream fos;
             dados = (ip +"\n").getBytes();
-            fos = new FileOutputStream(arq,true);
+            fos = new FileOutputStream(arq, true);
             fos.write(dados);
             fos.flush();
             fos.close();
-            System.out.println("Funcionei!!!!!");
-            Log.i("teste: ", "Funcionei!!!!!");
-        }catch (Exception e){
+            // System.out.println("Funcionei !!!!!");
+            // Log.i("teste: ", "Funcionei !!!!!");
+        } catch (Exception e) {
+            e.printStackTrace();
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(telaPrincipal.this, "Erro",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(telaPrincipal.this, "Erro ao salvar IP",Toast.LENGTH_SHORT).show();
                 }
             });
-
         }
     }
 
@@ -635,13 +748,13 @@ public class telaPrincipal extends AppCompatActivity
                 fos.close();
             }
 
-            System.out.println("Funcionei!!!!!");
-            Log.i("teste: ", "Funcionei!!!!!");
+            // System.out.println("Funcionei!!!!!");
+            // Log.i("teste: ", "Funcionei!!!!!");
         }catch (Exception e){
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getParent().getBaseContext(), "Erro",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getParent().getBaseContext(), "Erro ao salvar MAC",Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -697,17 +810,17 @@ public class telaPrincipal extends AppCompatActivity
                 //preListaEsp.get(a).setIp("192.100.100.100");
             }
             //limparArquivo("macs");
-            System.out.println("Antes: "+espList.size());
+            // System.out.println("Antes: "+espList.size());
             espList.clear();
-            System.out.println("Durante: "+espList.size());
+            // System.out.println("Durante: "+espList.size());
             espList = listaTemporariaObj;
-            System.out.println("depois: "+espList.size());
+            // System.out.println("depois: "+espList.size());
             if(espList.size()==0){
                 espList = preListaEsp;
             }
 
             for(int a1=0;a1<espList.size();a1++){
-                System.out.println(a1+" EspList: "+espList.get(a1).getMac());
+                // System.out.println(a1+" EspList: "+espList.get(a1).getMac());
                 for(int b1=0;b1<preListaEsp.size();b1++){
                     System.out.println(b1+" preList: "+preListaEsp.get(b1).getMac());
                     if(espList.get(a1).getMac().equals(preListaEsp.get(b1).getMac())){
@@ -715,12 +828,12 @@ public class telaPrincipal extends AppCompatActivity
                     }else{
                         preListaEsp.get(b1).setIp("192.168.100.100");
                         espList.add(preListaEsp.get(b1));
-                        System.out.println("Diferente, adicionar");
+                        // System.out.println("Diferente, adicionar");
                     }
                 }
             }
-            System.out.println("Bem depois: "+espList.size());
-            System.out.println("Prelista: "+preListaEsp.size());
+            // System.out.println("Bem depois: "+espList.size());
+            // System.out.println("Prelista: "+preListaEsp.size());
 
 
             for (int k = 0; k < espList.size(); k++) {
@@ -851,7 +964,7 @@ public class telaPrincipal extends AppCompatActivity
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getParent().getBaseContext(), "Erro",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getParent().getBaseContext(), "Erro ao salvar medicao",Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -876,6 +989,7 @@ public class telaPrincipal extends AppCompatActivity
                             espList.get(a).setStatus(1);
                         }
                         criarGrid(espList);
+                        criarGrafico();
                     }
                 });
                 flag=0;
@@ -894,7 +1008,7 @@ public class telaPrincipal extends AppCompatActivity
                 ipBytes = ip.getAddress();
                 String[] temp = ip3.split(":",4);
 
-                for (int i = 95; i <= 109; i++) {
+                for (int i = 96; i <= 115; i++) {
                     ipBytes[3] = (byte) i;
                     try {
                         InetAddress address = InetAddress.getByAddress(ipBytes);
@@ -962,7 +1076,7 @@ public class telaPrincipal extends AppCompatActivity
         }
     }
 
-    private void salvarArquivo(double i, String nome){
+    private void salvarArquivo(double time, double temperatura, String nome){
         //criar pasta
         Calendar c =  Calendar.getInstance();
         File folder = new File(Environment.getExternalStorageDirectory() + "/Controle_esp/Dados");
@@ -976,7 +1090,7 @@ public class telaPrincipal extends AppCompatActivity
         //System.out.println(Environment.getExternalStorageDirectory().getAbsolutePath());
         try{
             FileOutputStream salvar = new FileOutputStream(arquivo,true);
-            String conteudo = i + ";" + new Date() +"\n"; //c.get(Calendar.HOUR_OF_DAY)+ ";" + c.get(Calendar.MINUTE)
+            String conteudo = temperatura + ";" + time +"\n"; //c.get(Calendar.HOUR_OF_DAY)+ ";" + c.get(Calendar.MINUTE)
             salvar.write(conteudo.getBytes());
             salvar.close();
             System.out.println("Gravando");

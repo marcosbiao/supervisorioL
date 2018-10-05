@@ -3,12 +3,17 @@ package com.example.biao.myapplication;
 import android.app.AlertDialog;
 import android.graphics.Color;
 
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
@@ -36,6 +41,7 @@ public class objEsp {
     private float sp;
     private float limiteMax,limiteMin;
     private boolean liMax, liMin;
+    private LineDataSet dataset;
 
 
     private LineGraphSeries<DataPoint> series = new LineGraphSeries<>(getDataPoint());
@@ -92,6 +98,19 @@ public class objEsp {
         seriesAlarme.setThickness(3);
         setLiMax(false);
         setLiMin(false);
+
+        dataset = new LineDataSet(new ArrayList<Entry>(), "Temperatura");
+        dataset.setAxisDependency(YAxis.AxisDependency.LEFT);
+        dataset.setColor(ColorTemplate.getHoloBlue());
+        dataset.setValueTextColor(ColorTemplate.getHoloBlue());
+        dataset.setLineWidth(1.5f);
+        dataset.setDrawCircles(true);
+        dataset.setDrawValues(false);
+        dataset.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+        dataset.setFillAlpha(65);
+        dataset.setFillColor(ColorTemplate.getHoloBlue());
+        dataset.setHighLightColor(Color.rgb(244, 117, 117));
+        dataset.setDrawCircleHole(false);
 
     }
 
@@ -256,5 +275,11 @@ public class objEsp {
         this.liMin = liMin;
     }
 
+    public LineDataSet getDataset() {
+        return dataset;
+    }
 
+    public void setDataset(LineDataSet dataset) {
+        this.dataset = dataset;
+    }
 }

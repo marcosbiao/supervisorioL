@@ -1,6 +1,8 @@
 package com.example.biao.myapplication;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +10,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+
+import static com.example.biao.myapplication.TelaMensagem.listaObjTelefone;
 
 /**
  * Created by biao on 13/09/2018.
@@ -35,6 +40,7 @@ public class ListViewAdapter extends ArrayAdapter<objTelefone> {
             final CheckBox cbConect = v.findViewById(R.id.checkBoxConec);
             CheckBox cbEnergia = v.findViewById(R.id.checkBoxEnergia);
             CheckBox cbTemperatura = v.findViewById(R.id.checkBoxTemperatura);
+            ImageButton btExcluir = v.findViewById(R.id.imageButtonExcluir);
 
             tvTelefone.setText(telef.getNomeTelefone()+": "+telef.getNumero());
 
@@ -76,6 +82,48 @@ public class ListViewAdapter extends ArrayAdapter<objTelefone> {
                     telef.setTemperatura(isChecked);
                 }
             });
+
+            final int posicao = position;
+
+            btExcluir.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final int p=posicao;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                    //define o titulo
+                    builder.setTitle(listaObjTelefone.get(posicao).getNomeTelefone());
+                    //define a mensagem
+                    builder.setMessage("Deseja excluir esse número?");
+                    builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            listaObjTelefone.remove(posicao);
+                            TelaMensagem.salvarListFora();
+                        }
+                    });
+                    builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    builder.create();
+                    builder.show();
+                }
+            });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         }
 

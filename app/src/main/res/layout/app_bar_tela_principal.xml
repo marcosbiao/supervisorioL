@@ -77,13 +77,23 @@
             android:scrollbars="vertical"
             android:orientation="horizontal">
 
-            <com.jjoe64.graphview.GraphView
+      <!--      <com.jjoe64.graphview.GraphView
                 android:id="@+id/graphTela"
                 android:layout_marginVertical="220dp"
                 android:layout_width="match_parent"
                 android:scrollbars="vertical"
                 
                 android:layout_height="300dip"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp"/>  -->
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chart1"
+                android:layout_marginVertical="220dp"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
                 android:paddingBottom="15dp"

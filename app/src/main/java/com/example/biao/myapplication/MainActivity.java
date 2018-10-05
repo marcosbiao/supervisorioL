@@ -268,27 +268,6 @@ public class MainActivity extends AppCompatActivity {
         mChart.setAutoScaleMinMaxEnabled(false);
 
 
-        //HourAxisValueFormatter axisFormatter = new HourAxisValueFormatter(timeReference);
-        //mChart.getXAxis().setValueFormatter(axisFormatter);
-
-
-
-/*
-        x1.setValueFormatter(new IAxisValueFormatter() {
-
-            private SimpleDateFormat mFormat = new SimpleDateFormat("HH:mm:ss");
-
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-
-                long millis = TimeUnit.SECONDS.toMillis((long) value);
-                //Calendar calendar = Calendar.getInstance();
-                //long millis = calendar.getTimeInMillis();
-                return mFormat.format(new Date(millis));
-            }
-        });
-*/
-
         YAxis leftAxis = mChart.getAxisLeft();
         //leftAxis.setTypeface(Typeface.DEFAULT);
         leftAxis.setUseAutoScaleMaxRestriction(false);

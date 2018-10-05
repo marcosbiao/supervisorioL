@@ -43,7 +43,7 @@ import static android.Manifest.permission.SEND_SMS;
 
 public class TelaMensagem extends AppCompatActivity {
 
-    static String mensagem = "Carai", numeroFone="075991267012";
+
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0 ;
     static int cont=0;
     //static Switch tb;
@@ -52,10 +52,10 @@ public class TelaMensagem extends AppCompatActivity {
     Button btSalvar, btList;
     EditText numeroMensagem,nomeTelefone;
     //static List<String> listaTelefone = new ArrayList<>();
-    ListView listViewTelefone;
+    static ListView listViewTelefone;
     ViewStub stubList;
     static List<objTelefone> listaObjTelefone = new ArrayList<>();
-    ListViewAdapter listAdapter;
+    static ListViewAdapter listAdapter;
     CheckBox cbConect;
 
 
@@ -87,9 +87,7 @@ public class TelaMensagem extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 salvarNumero(numeroMensagem.getText().toString(),nomeTelefone.getText().toString());
-                listAdapter = new ListViewAdapter(TelaMensagem.this,R.layout.list_item,listaObjTelefone);
                 listAdapter.notifyDataSetChanged();
-                //listViewTelefone.setAdapter(listAdapter);
 
             }
         });
@@ -100,11 +98,74 @@ public class TelaMensagem extends AppCompatActivity {
                 for(int i=0;i<listaObjTelefone.size();i++){
                     System.out.println(listaObjTelefone.get(i).getNomeTelefone()+":"+listaObjTelefone.get(i).isConectividade()+" "+listaObjTelefone.get(i).isEnergia()+" "+listaObjTelefone.get(i).isTemperatura()+" ");
                 }
+                listAdapter.notifyDataSetChanged();
+                salvarListaNumeros();
+
             }
 
         });
 
+        if(listaObjTelefone.size()>0) {
+            listViewTelefone.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    final int p = position;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(TelaMensagem.this);
+                    //define o titulo
+                    builder.setTitle(listaObjTelefone.get(position).toString());
+                    //define a mensagem
+                    builder.setMessage("Deseja excluir esse número?");
+                    builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            listAdapter.remove(listAdapter.getItem(p));
+                            listAdapter.notifyDataSetChanged();
+                            salvarListaNumeros();
+                        }
+                    });
+                    builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
+                        }
+                    });
+                    builder.create();
+                    builder.show();
+                }
+            });
+        }
+
+        /*
+        listViewTelefone.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final int p=position;
+                AlertDialog.Builder builder = new AlertDialog.Builder(TelaMensagem.this);
+                //define o titulo
+                builder.setTitle(listaObjTelefone.get(position).toString());
+                //define a mensagem
+                builder.setMessage("Deseja excluir esse número?");
+                builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        listAdapter.remove(listAdapter.getItem(p));
+                        listAdapter.notifyDataSetChanged();
+                        salvarListaNumeros();
+                    }
+                });
+                builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.create();
+                builder.show();
+
+                return false;
+            }
+        });
+*/
 
         permission();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.SEND_SMS)!= PackageManager.PERMISSION_GRANTED){
@@ -128,6 +189,7 @@ public class TelaMensagem extends AppCompatActivity {
 
 
     public static void monitorar(List<objEsp> lista){
+        lerNumero();
         List<objEsp> auxTemperatura = new ArrayList<>();
         List<objEsp> auxTensao = new ArrayList<>();
         List<objEsp> auxConectividade = new ArrayList<>();
@@ -153,35 +215,37 @@ public class TelaMensagem extends AppCompatActivity {
                 cont++;
                 if ((cont == 1)) {
                     System.out.println("Valor do cont depois: "+cont);
-                    //if (estadoSwitch == false) {
-                        if (lista.size() > auxTemperatura.size()) {
-                            for (int j = 0; j < auxTemperatura.size(); j++) {
-                                mandarMensagem("O freeze " + auxTemperatura.get(j).getApelido() + " está com temperatura elevada", numeroFone);
+                    if(auxConectividade.size()>0){
+                        for(int a=0;a<listaObjTelefone.size();a++){
+                            System.out.println(listaObjTelefone.get(a).getNomeTelefone()+" - "+ listaObjTelefone.get(a).isConectividade());
+                            if(listaObjTelefone.get(a).isConectividade()==true){
+                                System.out.println(listaObjTelefone.get(a).getNomeTelefone()+" - "+ listaObjTelefone.get(a).isConectividade());
+                                mandarMensagem("Alguns freezes estão sem conexão",listaObjTelefone.get(a).getNumero());
                             }
-                        } else {
-                            for (int a = 0; a < auxTemperatura.size(); a++) {
-                                mandarMensagem("Os freeze estão com temperatura elevada", numeroFone);
+                        }//fim da verificação da conecção
+                    }else{
+                        if(auxTemperatura.size()>0){
+                            for(int a=0;a<auxTemperatura.size();a++){
+                                for(int b=0;b<listaObjTelefone.size();b++){
+                                    if(listaObjTelefone.get(b).isTemperatura()==true){
+                                        mandarMensagem("O freeze "+auxTemperatura.get(a).getApelido()+" está com problemas de temperatura",listaObjTelefone.get(b).getNumero());
+                                    }
+                                }
                             }
-                        }//fim da analise de temperatura
+                        } //fim do monitoramento de temperatura
 
-                        if(auxTensao.size()<lista.size()){
-                            for (int j = 0; j < auxTemperatura.size(); j++) {
-                                mandarMensagem("O freeze " + auxTemperatura.get(j).getApelido() + " está sem energia", numeroFone);
+                        if(auxTensao.size()>0){
+                            for(int a=0;a<auxTensao.size();a++){
+                                for(int b=0;b<listaObjTelefone.size();b++){
+                                    if(listaObjTelefone.get(b).isEnergia()==true){
+                                        mandarMensagem("O freeze "+auxTensao.get(a).getApelido()+" está com problemas de energia",listaObjTelefone.get(b).getNumero());
+                                    }
+                                }
                             }
-                        }else{
-                            mandarMensagem("Os freeze estão sem energia", numeroFone);
-                        }//fim da analise de tensao
+                        } //fim do monitoramento de temperatura
 
-                        if (auxConectividade.size() < lista.size()) {
-                            mandarMensagem("Alguns freezes estão sem conexão", numeroFone);
-                        }else if(auxConectividade.size() == lista.size()){
-                            mandarMensagem("Todos os freezes estão sem conexão", numeroFone);
-                        }//fim da analise de conectividade
+                    }
 
-
-                        //estadoSwitch = true;
-
-                    //}
                 } else if (cont == 10) {
                     cont = 0;
                     estadoSwitch = false;
@@ -208,12 +272,9 @@ public class TelaMensagem extends AppCompatActivity {
 
     static public void mandarMensagem(String msg, String fone) {
         try {
+            System.out.println("MANDANDO MSG");
             SmsManager sms = SmsManager.getDefault();
-            for(int i=0;i<listaObjTelefone.size();i++){
-                String temp;
-                temp = listaObjTelefone.get(i).getNumero();
-                sms.sendTextMessage(temp, null, msg, null, null);
-            }
+            sms.sendTextMessage(fone, null, msg, null, null);
         } catch (Exception e){
 
         }
@@ -225,7 +286,7 @@ public class TelaMensagem extends AppCompatActivity {
     public void salvarNumero(String numb,String nome){
         try {
             objTelefone objTemp = new objTelefone(nome,numb,false,false,false);
-
+            listaObjTelefone.add(objTemp);
             byte[] dados;
             File arq = new File(Environment.getExternalStorageDirectory(), "/Controle_esp/telefones.txt");
             //arq.deleteOnExit();
@@ -236,8 +297,6 @@ public class TelaMensagem extends AppCompatActivity {
             fos.write(dados);
             fos.flush();
             fos.close();
-            System.out.println("Funcionei!!!!!");
-            Log.i("teste: ", "Funcionei!!!!!");
             //listaTelefone.add(nome+": "+numb);
             Toast.makeText(this, "Número salvo com sucesso",Toast.LENGTH_SHORT).show();
         }catch (Exception e){
@@ -247,13 +306,14 @@ public class TelaMensagem extends AppCompatActivity {
 
     public void salvarListaNumeros(){
         try {
+            limparArquivo("telefones");
+            byte[] dados;
+            File arq = new File(Environment.getExternalStorageDirectory(), "/Controle_esp/telefones.txt");
+            arq.deleteOnExit();
+            FileOutputStream fos;
             for(int i=0;i<listaObjTelefone.size();i++) {
-                byte[] dados;
-                File arq = new File(Environment.getExternalStorageDirectory(), "/Controle_esp/telefones.txt");
-                //arq.deleteOnExit();
-                //arq.mkdir();
-                FileOutputStream fos;
-                dados = (listaObjTelefone.get().getNomeTelefone() + ";" + objTemp.getNumero() + ";" + objTemp.isConectividade() + ";" + objTemp.isEnergia() + ";" + objTemp.isTemperatura() + "\n").getBytes();
+
+                dados = (listaObjTelefone.get(i).getNomeTelefone() + ";" + listaObjTelefone.get(i).getNumero() + ";" + listaObjTelefone.get(i).isConectividade() + ";" + listaObjTelefone.get(i).isEnergia() + ";" + listaObjTelefone.get(i).isTemperatura() + "\n").getBytes();
                 fos = new FileOutputStream(arq, true);
                 fos.write(dados);
                 fos.flush();
@@ -262,13 +322,40 @@ public class TelaMensagem extends AppCompatActivity {
             System.out.println("Funcionei!!!!!");
             Log.i("teste: ", "Funcionei!!!!!");
             //listaTelefone.add(nome+": "+numb);
-            Toast.makeText(this, "Número salvo com sucesso",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Dados salvos com sucesso",Toast.LENGTH_SHORT).show();
         }catch (Exception e){
             Toast.makeText(this, "Erro",Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void lerNumero(){
+    static public void salvarListFora(){
+        try {
+            limparArquivo("telefones");
+            byte[] dados;
+            File arq = new File(Environment.getExternalStorageDirectory(), "/Controle_esp/telefones.txt");
+            arq.deleteOnExit();
+            FileOutputStream fos;
+            for(int i=0;i<listaObjTelefone.size();i++) {
+
+                dados = (listaObjTelefone.get(i).getNomeTelefone() + ";" + listaObjTelefone.get(i).getNumero() + ";" + listaObjTelefone.get(i).isConectividade() + ";" + listaObjTelefone.get(i).isEnergia() + ";" + listaObjTelefone.get(i).isTemperatura() + "\n").getBytes();
+                fos = new FileOutputStream(arq, true);
+                fos.write(dados);
+                fos.flush();
+                fos.close();
+            }
+            System.out.println("Funcionei!!!!!");
+            Log.i("teste: ", "Funcionei!!!!!");
+            listAdapter.notifyDataSetChanged();
+            listViewTelefone.setAdapter(listAdapter);
+            //listaTelefone.add(nome+": "+numb);
+            //Toast.makeText(this, "Número salvo com sucesso",Toast.LENGTH_SHORT).show();
+        }catch (Exception e){
+            //Toast.makeText(this, "Erro",Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    static public void lerNumero(){
         try {
             listaObjTelefone.clear();
             System.out.println("LENDO ARQUIVO DE numero telefone");
@@ -347,7 +434,7 @@ public class TelaMensagem extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     SmsManager smsManager = SmsManager.getDefault();
-                    smsManager.sendTextMessage(numeroFone, null, mensagem, null, null);
+                    //smsManager.sendTextMessage(numeroFone, null, mensagem, null, null);
                     Toast.makeText(getApplicationContext(), "SMS sent.", Toast.LENGTH_LONG).show();
                 } else {
                     //Toast.makeText(getApplicationContext(),"SMS faild, please try again.", Toast.LENGTH_LONG).show();
@@ -386,7 +473,7 @@ public class TelaMensagem extends AppCompatActivity {
     }
 
 
-    private void limparArquivo(String t){
+    private static void limparArquivo(String t){
         //criar pasta
         File folder = new File(Environment.getExternalStorageDirectory() + "/Controle_esp");
         if(!folder.exists()){
@@ -403,20 +490,10 @@ public class TelaMensagem extends AppCompatActivity {
             salvar.close();
             //Toast.makeText(this, "",Toast.LENGTH_SHORT).show();
         }catch (FileNotFoundException e){
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getApplicationContext(), "Arquivo não encontrado",Toast.LENGTH_SHORT).show();
-                }
-            });
+
 
         }catch (IOException ioe){
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getApplicationContext(), "Erro",Toast.LENGTH_SHORT).show();
-                }
-            });
+
 
         }
 

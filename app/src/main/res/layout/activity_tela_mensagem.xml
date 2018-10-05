@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:screenOrientation="landscape"
     android:background="#D8D8D8"
+    android:screenOrientation="landscape"
     tools:context="com.example.biao.myapplication.TelaMensagem">
 
 
@@ -23,10 +23,13 @@
             android:layout_alignBottom="@+id/editTextNumeroMensagem"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginEnd="49dp"
-            android:layout_marginRight="49dp"
+            android:layout_marginEnd="60dp"
+            android:layout_marginRight="60dp"
             android:layout_weight="1"
-            android:text="Salvar" />
+            android:background="#FFFFFF"
+            android:text="Salvar"
+            tools:layout_editor_absoluteX="929dp"
+            tools:layout_editor_absoluteY="38dp" />
 
         <EditText
             android:id="@+id/editTextNumeroMensagem"
@@ -92,10 +95,10 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/buttonSalvarNumero"
+            android:layout_marginBottom="75dp"
             android:layout_marginLeft="62dp"
             android:layout_marginStart="62dp"
             android:layout_marginTop="51dp"
-            android:layout_marginBottom="75dp"
             android:layout="@layout/my_listview" />
 
         <Button
@@ -106,8 +109,8 @@
             android:layout_alignParentBottom="true"
             android:layout_alignRight="@+id/buttonSalvarNumero"
             android:layout_marginBottom="21dp"
-
-            android:text="Button" />
+            android:background="#FFFFFF"
+            android:text="Salvar dados" />
 
     </RelativeLayout>
 
