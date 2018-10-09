@@ -12,7 +12,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -28,12 +27,12 @@ public class ListViewAdapter extends ArrayAdapter<objTelefone> {
         super(context, resource, objects);
     }
 
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
 
-        if(null == v){
-            LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inflater.inflate(R.layout.list_item,null);
+        if (null == v) {
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            v = inflater.inflate(R.layout.list_item, null);
 
             final objTelefone telef = getItem(position);
             TextView tvTelefone = v.findViewById(R.id.textViewTelefone);
@@ -42,23 +41,23 @@ public class ListViewAdapter extends ArrayAdapter<objTelefone> {
             CheckBox cbTemperatura = v.findViewById(R.id.checkBoxTemperatura);
             ImageButton btExcluir = v.findViewById(R.id.imageButtonExcluir);
 
-            tvTelefone.setText(telef.getNomeTelefone()+": "+telef.getNumero());
+            tvTelefone.setText(telef.getNomeTelefone() + ": " + telef.getNumero());
 
-            if(telef.isConectividade()==true){
+            if (telef.isConectividade() == true) {
                 cbConect.setChecked(true);
-            }else{
+            } else {
                 cbConect.setChecked(false);
             }
 
-            if(telef.isEnergia()==true){
+            if (telef.isEnergia() == true) {
                 cbEnergia.setChecked(true);
-            }else{
+            } else {
                 cbEnergia.setChecked(false);
             }
 
-            if(telef.isTemperatura()==true){
+            if (telef.isTemperatura() == true) {
                 cbTemperatura.setChecked(true);
-            }else{
+            } else {
                 cbTemperatura.setChecked(false);
             }
 
@@ -88,7 +87,7 @@ public class ListViewAdapter extends ArrayAdapter<objTelefone> {
             btExcluir.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final int p=posicao;
+                    final int p = posicao;
                     AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                     //define o titulo
                     builder.setTitle(listaObjTelefone.get(posicao).getNomeTelefone());
@@ -113,27 +112,10 @@ public class ListViewAdapter extends ArrayAdapter<objTelefone> {
             });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
         }
 
         return v;
     }
-
-
-
-
-
 
 
 }

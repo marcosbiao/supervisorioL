@@ -1,14 +1,10 @@
 package com.github.mikephil.charting.components;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.RelativeLayout;
 
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.data.Entry;
@@ -45,21 +41,10 @@ public class MarkerImage implements IMarker {
     public MarkerImage(Context context, int drawableResourceId) {
         mContext = context;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-        {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mDrawable = mContext.getResources().getDrawable(drawableResourceId, null);
-        }
-        else
-        {
+        } else {
             mDrawable = mContext.getResources().getDrawable(drawableResourceId);
-        }
-    }
-
-    public void setOffset(MPPointF offset) {
-        mOffset = offset;
-
-        if (mOffset == null) {
-            mOffset = new MPPointF();
         }
     }
 
@@ -73,6 +58,18 @@ public class MarkerImage implements IMarker {
         return mOffset;
     }
 
+    public void setOffset(MPPointF offset) {
+        mOffset = offset;
+
+        if (mOffset == null) {
+            mOffset = new MPPointF();
+        }
+    }
+
+    public FSize getSize() {
+        return mSize;
+    }
+
     public void setSize(FSize size) {
         mSize = size;
 
@@ -81,16 +78,12 @@ public class MarkerImage implements IMarker {
         }
     }
 
-    public FSize getSize() {
-        return mSize;
+    public Chart getChartView() {
+        return mWeakChart == null ? null : mWeakChart.get();
     }
 
     public void setChartView(Chart chart) {
         mWeakChart = new WeakReference<>(chart);
-    }
-
-    public Chart getChartView() {
-        return mWeakChart == null ? null : mWeakChart.get();
     }
 
     @Override
@@ -113,13 +106,13 @@ public class MarkerImage implements IMarker {
         }
 
         if (posX + mOffset2.x < 0) {
-            mOffset2.x = - posX;
+            mOffset2.x = -posX;
         } else if (chart != null && posX + width + mOffset2.x > chart.getWidth()) {
             mOffset2.x = chart.getWidth() - posX - width;
         }
 
         if (posY + mOffset2.y < 0) {
-            mOffset2.y = - posY;
+            mOffset2.y = -posY;
         } else if (chart != null && posY + height + mOffset2.y > chart.getHeight()) {
             mOffset2.y = chart.getHeight() - posY - height;
         }
@@ -153,8 +146,8 @@ public class MarkerImage implements IMarker {
         mDrawable.setBounds(
                 mDrawableBoundsCache.left,
                 mDrawableBoundsCache.top,
-                mDrawableBoundsCache.left + (int)width,
-                mDrawableBoundsCache.top + (int)height);
+                mDrawableBoundsCache.left + (int) width,
+                mDrawableBoundsCache.top + (int) height);
 
         int saveId = canvas.save();
         // translate to the correct position and draw

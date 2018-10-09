@@ -1,4 +1,3 @@
-
 package com.github.mikephil.charting.data;
 
 import java.util.ArrayList;
@@ -158,7 +157,6 @@ public abstract class DataSet<T extends Entry> extends BaseDataSet<T> {
     public abstract DataSet<T> copy();
 
     /**
-     *
      * @param dataSet
      */
     protected void copy(DataSet dataSet) {

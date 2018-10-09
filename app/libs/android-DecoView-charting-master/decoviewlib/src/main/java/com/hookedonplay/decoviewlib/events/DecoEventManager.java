@@ -22,13 +22,14 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.TextView;
+
 import com.hookedonplay.decoviewlib.charts.DecoDrawEffect;
 
 /**
  * Event manager for processing {@link DecoEvent} at the scheduled time (or immediately if no
  * delay is set). This class is also responsible for processing the hide/show fade effects of linked
  * views.
- *
+ * <p>
  * Each {@link com.hookedonplay.decoviewlib.DecoView} contains one DecoEventManager, which can
  * handle any number of {@link DecoEvent}
  */

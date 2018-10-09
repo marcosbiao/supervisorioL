@@ -1,4 +1,3 @@
-
 package com.xxmassdeveloper.mpchartexample;
 
 import android.graphics.Color;
@@ -12,7 +11,6 @@ import android.widget.Toast;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.Legend.LegendPosition;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.XAxis.XAxisPosition;
 import com.github.mikephil.charting.components.YAxis;
@@ -20,8 +18,8 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
@@ -57,7 +55,7 @@ public class StackedBarActivityNegative extends DemoBase implements
         mChart.setDrawBarShadow(false);
         mChart.setDrawValueAboveBar(true);
         mChart.setHighlightFullBarEnabled(false);
-        
+
         mChart.getAxisLeft().setEnabled(false);
         mChart.getAxisRight().setAxisMaximum(25f);
         mChart.getAxisRight().setAxisMinimum(-25f);
@@ -98,30 +96,30 @@ public class StackedBarActivityNegative extends DemoBase implements
 
         // IMPORTANT: When using negative values in stacked bars, always make sure the negative values are in the array first
         ArrayList<BarEntry> yValues = new ArrayList<BarEntry>();
-        yValues.add(new BarEntry(5, new float[]{ -10, 10 }));
-        yValues.add(new BarEntry(15, new float[]{ -12, 13 }));
-        yValues.add(new BarEntry(25, new float[]{ -15, 15 }));
-        yValues.add(new BarEntry(35, new float[]{ -17, 17 }));
-        yValues.add(new BarEntry(45, new float[]{ -19, 20 }));
-        yValues.add(new BarEntry(45, new float[]{ -19, 20 }, getResources().getDrawable(R.drawable.star)));
-        yValues.add(new BarEntry(55, new float[]{ -19, 19 }));
-        yValues.add(new BarEntry(65, new float[]{ -16, 16 }));
-        yValues.add(new BarEntry(75, new float[]{ -13, 14 }));
-        yValues.add(new BarEntry(85, new float[]{ -10, 11 }));
-        yValues.add(new BarEntry(95, new float[]{ -5, 6 }));
-        yValues.add(new BarEntry(105, new float[]{ -1, 2 }));
+        yValues.add(new BarEntry(5, new float[]{-10, 10}));
+        yValues.add(new BarEntry(15, new float[]{-12, 13}));
+        yValues.add(new BarEntry(25, new float[]{-15, 15}));
+        yValues.add(new BarEntry(35, new float[]{-17, 17}));
+        yValues.add(new BarEntry(45, new float[]{-19, 20}));
+        yValues.add(new BarEntry(45, new float[]{-19, 20}, getResources().getDrawable(R.drawable.star)));
+        yValues.add(new BarEntry(55, new float[]{-19, 19}));
+        yValues.add(new BarEntry(65, new float[]{-16, 16}));
+        yValues.add(new BarEntry(75, new float[]{-13, 14}));
+        yValues.add(new BarEntry(85, new float[]{-10, 11}));
+        yValues.add(new BarEntry(95, new float[]{-5, 6}));
+        yValues.add(new BarEntry(105, new float[]{-1, 2}));
 
         BarDataSet set = new BarDataSet(yValues, "Age Distribution");
         set.setDrawIcons(false);
         set.setValueFormatter(new CustomFormatter());
         set.setValueTextSize(7f);
         set.setAxisDependency(YAxis.AxisDependency.RIGHT);
-        set.setColors(new int[] {Color.rgb(67,67,72), Color.rgb(124,181,236)});
+        set.setColors(new int[]{Color.rgb(67, 67, 72), Color.rgb(124, 181, 236)});
         set.setStackLabels(new String[]{
                 "Men", "Women"
         });
 
-        String []xLabels = new String[]{"0-10", "10-20", "20-30", "30-40", "40-50", "50-60", "60-70", "70-80", "80-90", "90-100", "100+"};
+        String[] xLabels = new String[]{"0-10", "10-20", "20-30", "30-40", "40-50", "50-60", "60-70", "70-80", "80-90", "90-100", "100+"};
 
         BarData data = new BarData(set);
         data.setBarWidth(8.5f);
@@ -166,7 +164,7 @@ public class StackedBarActivityNegative extends DemoBase implements
                 break;
             }
             case R.id.actionToggleHighlight: {
-                if(mChart.getData() != null) {
+                if (mChart.getData() != null) {
                     mChart.getData().setHighlightEnabled(!mChart.getData().isHighlightEnabled());
                     mChart.invalidate();
                 }
@@ -188,7 +186,7 @@ public class StackedBarActivityNegative extends DemoBase implements
             }
             case R.id.actionToggleBarBorders: {
                 for (IBarDataSet set : mChart.getData().getDataSets())
-                    ((BarDataSet)set).setBarBorderWidth(set.getBarBorderWidth() == 1.f ? 0.f : 1.f);
+                    ((BarDataSet) set).setBarBorderWidth(set.getBarBorderWidth() == 1.f ? 0.f : 1.f);
 
                 mChart.invalidate();
                 break;
@@ -233,8 +231,7 @@ public class StackedBarActivityNegative extends DemoBase implements
         Log.i("NOTING SELECTED", "");
     }
 
-    private class CustomFormatter implements IValueFormatter, IAxisValueFormatter
-    {
+    private class CustomFormatter implements IValueFormatter, IAxisValueFormatter {
 
         private DecimalFormat mFormat;
 

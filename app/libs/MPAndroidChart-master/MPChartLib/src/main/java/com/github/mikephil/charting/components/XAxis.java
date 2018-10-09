@@ -1,4 +1,3 @@
-
 package com.github.mikephil.charting.components;
 
 import com.github.mikephil.charting.utils.Utils;
@@ -51,13 +50,6 @@ public class XAxis extends AxisBase {
      * the position of the x-labels relative to the chart
      */
     private XAxisPosition mPosition = XAxisPosition.TOP;
-
-    /**
-     * enum for the position of the x-labels relative to the chart
-     */
-    public enum XAxisPosition {
-        TOP, BOTTOM, BOTH_SIDED, TOP_INSIDE, BOTTOM_INSIDE
-    }
 
     public XAxis() {
         super();
@@ -114,5 +106,12 @@ public class XAxis extends AxisBase {
      */
     public boolean isAvoidFirstLastClippingEnabled() {
         return mAvoidFirstLastClipping;
+    }
+
+    /**
+     * enum for the position of the x-labels relative to the chart
+     */
+    public enum XAxisPosition {
+        TOP, BOTTOM, BOTH_SIDED, TOP_INSIDE, BOTTOM_INSIDE
     }
 }

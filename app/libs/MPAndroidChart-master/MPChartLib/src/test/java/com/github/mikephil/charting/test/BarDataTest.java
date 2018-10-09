@@ -25,7 +25,7 @@ public class BarDataTest {
         List<BarEntry> values1 = new ArrayList<>();
         List<BarEntry> values2 = new ArrayList<>();
 
-        for(int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             values1.add(new BarEntry(i, 50));
             values2.add(new BarEntry(i, 60));
         }

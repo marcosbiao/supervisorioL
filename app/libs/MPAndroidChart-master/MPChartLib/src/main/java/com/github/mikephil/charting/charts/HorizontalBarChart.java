@@ -28,6 +28,9 @@ import com.github.mikephil.charting.utils.Utils;
  */
 public class HorizontalBarChart extends BarChart {
 
+    protected float[] mGetPositionBuffer = new float[2];
+    private RectF mOffsetsBuffer = new RectF();
+
     public HorizontalBarChart(Context context) {
         super(context);
     }
@@ -57,8 +60,6 @@ public class HorizontalBarChart extends BarChart {
         mAxisRendererRight = new YAxisRendererHorizontalBarChart(mViewPortHandler, mAxisRight, mRightAxisTransformer);
         mXAxisRenderer = new XAxisRendererHorizontalBarChart(mViewPortHandler, mXAxis, mLeftAxisTransformer, this);
     }
-
-    private RectF mOffsetsBuffer = new RectF();
 
     @Override
     public void calculateOffsets() {
@@ -164,8 +165,6 @@ public class HorizontalBarChart extends BarChart {
         getTransformer(set.getAxisDependency()).rectValueToPixel(bounds);
 
     }
-
-    protected float[] mGetPositionBuffer = new float[2];
 
     /**
      * Returns a recyclable MPPointF instance.

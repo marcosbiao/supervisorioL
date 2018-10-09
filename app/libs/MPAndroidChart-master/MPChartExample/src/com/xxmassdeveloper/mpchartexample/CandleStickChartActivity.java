@@ -1,4 +1,3 @@
-
 package com.xxmassdeveloper.mpchartexample;
 
 import android.graphics.Color;
@@ -66,12 +65,12 @@ public class CandleStickChartActivity extends DemoBase implements OnSeekBarChang
         xAxis.setPosition(XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
 
-        YAxis leftAxis = mChart.getAxisLeft();  
+        YAxis leftAxis = mChart.getAxisLeft();
 //        leftAxis.setEnabled(false);
         leftAxis.setLabelCount(7, false);
         leftAxis.setDrawGridLines(false);
         leftAxis.setDrawAxisLine(false);
-        
+
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setEnabled(false);
 //        rightAxis.setStartAtZero(false);
@@ -79,7 +78,7 @@ public class CandleStickChartActivity extends DemoBase implements OnSeekBarChang
         // setting data
         mSeekBarX.setProgress(40);
         mSeekBarY.setProgress(100);
-        
+
         mChart.getLegend().setEnabled(false);
     }
 
@@ -108,7 +107,7 @@ public class CandleStickChartActivity extends DemoBase implements OnSeekBarChang
                 break;
             }
             case R.id.actionToggleHighlight: {
-                if(mChart.getData() != null) {
+                if (mChart.getData() != null) {
                     mChart.getData().setHighlightEnabled(!mChart.getData().isHighlightEnabled());
                     mChart.invalidate();
                 }
@@ -130,7 +129,7 @@ public class CandleStickChartActivity extends DemoBase implements OnSeekBarChang
             }
             case R.id.actionToggleMakeShadowSameColorAsCandle: {
                 for (ICandleDataSet set : mChart.getData().getDataSets()) {
-                   //TODO: set.setShadowColorSameAsCandle(!set.getShadowColorSameAsCandle());
+                    //TODO: set.setShadowColorSameAsCandle(!set.getShadowColorSameAsCandle());
                 }
 
                 mChart.invalidate();
@@ -164,12 +163,12 @@ public class CandleStickChartActivity extends DemoBase implements OnSeekBarChang
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        
+
         int prog = (mSeekBarX.getProgress() + 1);
 
         tvX.setText("" + prog);
         tvY.setText("" + (mSeekBarY.getProgress()));
-        
+
         mChart.resetTracking();
 
         ArrayList<CandleEntry> yVals1 = new ArrayList<CandleEntry>();
@@ -177,10 +176,10 @@ public class CandleStickChartActivity extends DemoBase implements OnSeekBarChang
         for (int i = 0; i < prog; i++) {
             float mult = (mSeekBarY.getProgress() + 1);
             float val = (float) (Math.random() * 40) + mult;
-            
+
             float high = (float) (Math.random() * 9) + 8f;
             float low = (float) (Math.random() * 9) + 8f;
-            
+
             float open = (float) (Math.random() * 6) + 1f;
             float close = (float) (Math.random() * 6) + 1f;
 
@@ -210,7 +209,7 @@ public class CandleStickChartActivity extends DemoBase implements OnSeekBarChang
         //set1.setHighlightLineWidth(1f);
 
         CandleData data = new CandleData(set1);
-        
+
         mChart.setData(data);
         mChart.invalidate();
     }

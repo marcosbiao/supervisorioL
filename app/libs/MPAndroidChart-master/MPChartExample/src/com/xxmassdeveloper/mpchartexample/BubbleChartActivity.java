@@ -1,4 +1,3 @@
-
 package com.xxmassdeveloper.mpchartexample;
 
 import android.graphics.Color;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BubbleChart;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.Legend.LegendPosition;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BubbleData;
@@ -36,7 +34,7 @@ public class BubbleChartActivity extends DemoBase implements OnSeekBarChangeList
     private BubbleChart mChart;
     private SeekBar mSeekBarX, mSeekBarY;
     private TextView tvX, tvY;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +82,7 @@ public class BubbleChartActivity extends DemoBase implements OnSeekBarChangeList
         yl.setSpaceTop(30f);
         yl.setSpaceBottom(30f);
         yl.setDrawZeroLine(false);
-        
+
         mChart.getAxisRight().setEnabled(false);
 
         XAxis xl = mChart.getXAxis();
@@ -117,7 +115,7 @@ public class BubbleChartActivity extends DemoBase implements OnSeekBarChangeList
                 break;
             }
             case R.id.actionToggleHighlight: {
-                if(mChart.getData() != null) {
+                if (mChart.getData() != null) {
                     mChart.getData().setHighlightEnabled(!mChart.getData().isHighlightEnabled());
                     mChart.invalidate();
                 }

@@ -1,4 +1,3 @@
-
 package com.xxmassdeveloper.mpchartexample;
 
 import android.graphics.Color;
@@ -23,6 +22,7 @@ import java.util.ArrayList;
 
 public class DynamicalAddingActivity extends DemoBase implements OnChartValueSelectedListener {
 
+    int[] mColors = ColorTemplate.VORDIPLOM_COLORS;
     private LineChart mChart;
 
     @Override
@@ -44,8 +44,6 @@ public class DynamicalAddingActivity extends DemoBase implements OnChartValueSel
 
         mChart.invalidate();
     }
-
-    int[] mColors = ColorTemplate.VORDIPLOM_COLORS;
 
     private void addEntry() {
 

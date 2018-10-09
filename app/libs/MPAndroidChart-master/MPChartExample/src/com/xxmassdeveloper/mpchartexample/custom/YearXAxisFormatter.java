@@ -6,8 +6,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 /**
  * Created by Philipp Jahoda on 14/09/15.
  */
-public class YearXAxisFormatter implements IAxisValueFormatter
-{
+public class YearXAxisFormatter implements IAxisValueFormatter {
 
     protected String[] mMonths = new String[]{
             "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"

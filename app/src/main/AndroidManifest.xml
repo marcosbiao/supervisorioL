@@ -25,8 +25,7 @@
             android:name=".MainActivity"
             android:label="Teste de gráfico"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".testeTela"
             android:label="@string/title_activity_teste_tela"
@@ -34,9 +33,9 @@
         <activity
             android:name=".TelaConfiguracao"
             android:label="Configuração do dispositivo"
-            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".TelaScan"
             android:label="TelaScan"
@@ -50,21 +49,20 @@
             android:label="Supervisório Limatec"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar">
-                <intent-filter>
-                     <action android:name="android.intent.action.MAIN" />
-                     <category android:name="android.intent.category.LAUNCHER" />
-                </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".TelaMensagem"
             android:label="Configuração de SMS"
-            android:windowSoftInputMode="stateHidden"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".TelaHistorico"
             android:label="Histórico"
-            android:screenOrientation="landscape">
-        </activity>
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>

@@ -1,4 +1,5 @@
 package com.xxmassdeveloper.mpchartexample.fragments;
+
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,48 +22,48 @@ import com.xxmassdeveloper.mpchartexample.custom.MyMarkerView;
 
 public class BarChartFrag extends SimpleFragment implements OnChartGestureListener {
 
+    private BarChart mChart;
+
     public static Fragment newInstance() {
         return new BarChartFrag();
     }
 
-    private BarChart mChart;
-    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.frag_simple_bar, container, false);
-        
+
         // create a new chart object
         mChart = new BarChart(getActivity());
         mChart.getDescription().setEnabled(false);
         mChart.setOnChartGestureListener(this);
-        
+
         MyMarkerView mv = new MyMarkerView(getActivity(), R.layout.custom_marker_view);
         mv.setChartView(mChart); // For bounds control
         mChart.setMarker(mv);
 
         mChart.setDrawGridBackground(false);
         mChart.setDrawBarShadow(false);
-        
-        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(),"OpenSans-Light.ttf");
-        
+
+        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "OpenSans-Light.ttf");
+
         mChart.setData(generateBarData(1, 20000, 12));
-        
+
         Legend l = mChart.getLegend();
         l.setTypeface(tf);
-        
+
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setTypeface(tf);
         leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 
         mChart.getAxisRight().setEnabled(false);
-        
+
         XAxis xAxis = mChart.getXAxis();
         xAxis.setEnabled(false);
-        
+
         // programatically add the chart
         FrameLayout parent = v.findViewById(R.id.parentLayout);
         parent.addView(mChart);
-        
+
         return v;
     }
 
@@ -96,15 +97,15 @@ public class BarChartFrag extends SimpleFragment implements OnChartGestureListen
     public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
         Log.i("Fling", "Chart flinged. VeloX: " + velocityX + ", VeloY: " + velocityY);
     }
-   
+
     @Override
     public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
         Log.i("Scale / Zoom", "ScaleX: " + scaleX + ", ScaleY: " + scaleY);
     }
 
-	@Override
-	public void onChartTranslate(MotionEvent me, float dX, float dY) {
-		Log.i("Translate / Move", "dX: " + dX + ", dY: " + dY);
-	}
+    @Override
+    public void onChartTranslate(MotionEvent me, float dX, float dY) {
+        Log.i("Translate / Move", "dX: " + dX + ", dY: " + dY);
+    }
 
 }

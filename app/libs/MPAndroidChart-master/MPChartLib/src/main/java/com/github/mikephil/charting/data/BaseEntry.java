@@ -7,13 +7,19 @@ import android.graphics.drawable.Drawable;
  */
 public abstract class BaseEntry {
 
-    /** the y value */
+    /**
+     * the y value
+     */
     private float y = 0f;
 
-    /** optional spot for additional data this Entry represents */
+    /**
+     * optional spot for additional data this Entry represents
+     */
     private Object mData = null;
 
-    /** optional icon image */
+    /**
+     * optional icon image
+     */
     private Drawable mIcon = null;
 
     public BaseEntry() {
@@ -50,12 +56,12 @@ public abstract class BaseEntry {
     }
 
     /**
-     * Sets the icon drawable
+     * Sets the y-value for the Entry.
      *
-     * @param icon
+     * @param y
      */
-    public void setIcon(Drawable icon) {
-        this.mIcon = icon;
+    public void setY(float y) {
+        this.y = y;
     }
 
     /**
@@ -68,12 +74,12 @@ public abstract class BaseEntry {
     }
 
     /**
-     * Sets the y-value for the Entry.
+     * Sets the icon drawable
      *
-     * @param y
+     * @param icon
      */
-    public void setY(float y) {
-        this.y = y;
+    public void setIcon(Drawable icon) {
+        this.mIcon = icon;
     }
 
     /**

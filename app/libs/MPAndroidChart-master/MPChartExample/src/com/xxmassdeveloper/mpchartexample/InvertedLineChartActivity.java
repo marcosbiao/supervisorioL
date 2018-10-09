@@ -1,4 +1,3 @@
-
 package com.xxmassdeveloper.mpchartexample;
 
 import android.os.Bundle;
@@ -59,7 +58,7 @@ public class InvertedLineChartActivity extends DemoBase implements OnSeekBarChan
         mChart = findViewById(R.id.chart1);
         mChart.setOnChartValueSelectedListener(this);
         mChart.setDrawGridBackground(false);
-        
+
         // no description text
         mChart.getDescription().setEnabled(false);
 
@@ -81,15 +80,15 @@ public class InvertedLineChartActivity extends DemoBase implements OnSeekBarChan
         MyMarkerView mv = new MyMarkerView(this, R.layout.custom_marker_view);
         mv.setChartView(mChart); // For bounds control
         mChart.setMarker(mv); // Set the marker to the chart
-        
+
         XAxis xl = mChart.getXAxis();
         xl.setAvoidFirstLastClipping(true);
         xl.setAxisMinimum(0f);
-        
+
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setInverted(true);
         leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
-        
+
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setEnabled(false);
 
@@ -136,7 +135,7 @@ public class InvertedLineChartActivity extends DemoBase implements OnSeekBarChan
                 break;
             }
             case R.id.actionToggleHighlight: {
-                if(mChart.getData() != null) {
+                if (mChart.getData() != null) {
                     mChart.getData().setHighlightEnabled(!mChart.getData().isHighlightEnabled());
                     mChart.invalidate();
                 }

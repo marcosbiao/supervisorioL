@@ -1,4 +1,3 @@
-
 package com.github.mikephil.charting.utils;
 
 import android.graphics.Matrix;
@@ -33,6 +32,17 @@ public class Transformer {
     protected Matrix mMatrixOffset = new Matrix();
 
     protected ViewPortHandler mViewPortHandler;
+    protected float[] valuePointsForGenerateTransformedValuesScatter = new float[1];
+    protected float[] valuePointsForGenerateTransformedValuesBubble = new float[1];
+    protected float[] valuePointsForGenerateTransformedValuesLine = new float[1];
+    protected float[] valuePointsForGenerateTransformedValuesCandle = new float[1];
+    protected Matrix mPixelToValueMatrixBuffer = new Matrix();
+    /**
+     * buffer for performance
+     */
+    float[] ptsBuffer = new float[2];
+    private Matrix mMBuffer1 = new Matrix();
+    private Matrix mMBuffer2 = new Matrix();
 
     public Transformer(ViewPortHandler viewPortHandler) {
         this.mViewPortHandler = viewPortHandler;
@@ -86,8 +96,6 @@ public class Transformer {
         }
     }
 
-    protected float[] valuePointsForGenerateTransformedValuesScatter = new float[1];
-
     /**
      * Transforms an List of Entry into a float array containing the x and
      * y values transformed with all matrices for the SCATTERCHART.
@@ -123,8 +131,6 @@ public class Transformer {
         return valuePoints;
     }
 
-    protected float[] valuePointsForGenerateTransformedValuesBubble = new float[1];
-
     /**
      * Transforms an List of Entry into a float array containing the x and
      * y values transformed with all matrices for the BUBBLECHART.
@@ -158,8 +164,6 @@ public class Transformer {
 
         return valuePoints;
     }
-
-    protected float[] valuePointsForGenerateTransformedValuesLine = new float[1];
 
     /**
      * Transforms an List of Entry into a float array containing the x and
@@ -196,8 +200,6 @@ public class Transformer {
 
         return valuePoints;
     }
-
-    protected float[] valuePointsForGenerateTransformedValuesCandle = new float[1];
 
     /**
      * Transforms an List of Entry into a float array containing the x and
@@ -354,8 +356,6 @@ public class Transformer {
             m.mapRect(rects.get(i));
     }
 
-    protected Matrix mPixelToValueMatrixBuffer = new Matrix();
-
     /**
      * Transforms the given array of touch positions (pixels) (x, y, x, y, ...)
      * into values on the chart.
@@ -377,11 +377,6 @@ public class Transformer {
         mMatrixValueToPx.invert(tmp);
         tmp.mapPoints(pixels);
     }
-
-    /**
-     * buffer for performance
-     */
-    float[] ptsBuffer = new float[2];
 
     /**
      * Returns a recyclable MPPointD instance.
@@ -441,16 +436,12 @@ public class Transformer {
         return mMatrixOffset;
     }
 
-    private Matrix mMBuffer1 = new Matrix();
-
     public Matrix getValueToPixelMatrix() {
         mMBuffer1.set(mMatrixValueToPx);
         mMBuffer1.postConcat(mViewPortHandler.mMatrixTouch);
         mMBuffer1.postConcat(mMatrixOffset);
         return mMBuffer1;
     }
-
-    private Matrix mMBuffer2 = new Matrix();
 
     public Matrix getPixelToValueMatrix() {
         getValueToPixelMatrix().invert(mMBuffer2);

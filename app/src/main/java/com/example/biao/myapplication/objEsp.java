@@ -1,6 +1,5 @@
 package com.example.biao.myapplication;
 
-import android.app.AlertDialog;
 import android.graphics.Color;
 
 import com.github.mikephil.charting.components.YAxis;
@@ -11,14 +10,10 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
-
-import static android.app.PendingIntent.getActivity;
 
 
 /**
@@ -27,6 +22,11 @@ import static android.app.PendingIntent.getActivity;
 
 public class objEsp {
 
+    public static final Comparator<objEsp> POR_STATUS = new Comparator<objEsp>() {
+        public int compare(objEsp a1, objEsp a2) {
+            return compare(a1, a2);
+        }
+    };
     private String mac;
     private String ip;
     private String apelido;
@@ -39,39 +39,37 @@ public class objEsp {
     private int indicador; //0=não conectado, 1=conectado
     private float alerta;//valor limite para gerar alerta
     private float sp;
-    private float limiteMax,limiteMin;
+    private float limiteMax, limiteMin;
     private boolean liMax, liMin;
     private LineDataSet dataset;
-
-
     private LineGraphSeries<DataPoint> series = new LineGraphSeries<>(getDataPoint());
     private LineGraphSeries<DataPoint> seriesAlarme = new LineGraphSeries<>(getDataPoint());
 
     //Construtores
-    public objEsp(){
+    public objEsp() {
         adicionar();
     }
 
-    public objEsp(String mac){
+    public objEsp(String mac) {
         this.mac = mac;
         adicionar();
     }
 
-    public objEsp(String apelido, GraphView g ){
-        this.apelido=apelido;
-        this.g=g;
-        adicionar();
-    }
-
-    public objEsp(String apelido, String temperatura){
-        this.apelido=apelido;
-        this.temperatura=temperatura;
+    public objEsp(String apelido, GraphView g) {
+        this.apelido = apelido;
+        this.g = g;
         adicionar();
     }
 
     //Metodos
 
-    public DataPoint[] getDataPoint(){
+    public objEsp(String apelido, String temperatura) {
+        this.apelido = apelido;
+        this.temperatura = temperatura;
+        adicionar();
+    }
+
+    public DataPoint[] getDataPoint() {
         Calendar calendar = Calendar.getInstance();
         Date d1 = calendar.getTime();
         calendar.add(Calendar.DATE, 1);
@@ -86,10 +84,10 @@ public class objEsp {
         return dp;
     }
 
-    public void adicionar(){
-        series.appendData(new DataPoint(0,0),true,20);
-        Status=1;
-        indicador=0;
+    public void adicionar() {
+        series.appendData(new DataPoint(0, 0), true, 20);
+        Status = 1;
+        indicador = 0;
         temperatura = "0";
         sp = -70;
         series.setDrawBackground(true);
@@ -114,19 +112,11 @@ public class objEsp {
 
     }
 
-    public static final Comparator<objEsp> POR_STATUS = new Comparator<objEsp>(){
-        public int compare(objEsp a1, objEsp a2) {
-            return compare(a1,a2);
-        }
-    };
-
-
     @Override
-    public String toString(){
+    public String toString() {
         series.toString();
-        return "\n -> [AP: " + apelido+" | temp:" + temperatura + " | "+ series + "]";
+        return "\n -> [AP: " + apelido + " | temp:" + temperatura + " | " + series + "]";
     }
-
 
 
     //Set e Get

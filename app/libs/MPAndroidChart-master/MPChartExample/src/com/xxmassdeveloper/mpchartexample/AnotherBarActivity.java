@@ -1,4 +1,3 @@
-
 package com.xxmassdeveloper.mpchartexample;
 
 import android.os.Bundle;
@@ -62,7 +61,7 @@ public class AnotherBarActivity extends DemoBase implements OnSeekBarChangeListe
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
-        
+
         mChart.getAxisLeft().setDrawGridLines(false);
 
         // setting data
@@ -71,7 +70,7 @@ public class AnotherBarActivity extends DemoBase implements OnSeekBarChangeListe
 
         // add a nice and smooth animation
         mChart.animateY(2500);
-        
+
         mChart.getLegend().setEnabled(false);
     }
 
@@ -95,7 +94,7 @@ public class AnotherBarActivity extends DemoBase implements OnSeekBarChangeListe
             }
             case R.id.actionToggleHighlight: {
 
-                if(mChart.getData() != null) {
+                if (mChart.getData() != null) {
                     mChart.getData().setHighlightEnabled(!mChart.getData().isHighlightEnabled());
                     mChart.invalidate();
                 }
@@ -117,7 +116,7 @@ public class AnotherBarActivity extends DemoBase implements OnSeekBarChangeListe
             }
             case R.id.actionToggleBarBorders: {
                 for (IBarDataSet set : mChart.getData().getDataSets())
-                    ((BarDataSet)set).setBarBorderWidth(set.getBarBorderWidth() == 1.f ? 0.f : 1.f);
+                    ((BarDataSet) set).setBarBorderWidth(set.getBarBorderWidth() == 1.f ? 0.f : 1.f);
 
                 mChart.invalidate();
                 break;
@@ -166,7 +165,7 @@ public class AnotherBarActivity extends DemoBase implements OnSeekBarChangeListe
 
         if (mChart.getData() != null &&
                 mChart.getData().getDataSetCount() > 0) {
-            set1 = (BarDataSet)mChart.getData().getDataSetByIndex(0);
+            set1 = (BarDataSet) mChart.getData().getDataSetByIndex(0);
             set1.setValues(yVals1);
             mChart.getData().notifyDataChanged();
             mChart.notifyDataSetChanged();

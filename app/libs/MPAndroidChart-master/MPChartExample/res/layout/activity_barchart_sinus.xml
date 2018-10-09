@@ -13,12 +13,12 @@
         android:id="@+id/seekbarValues"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
         android:layout_margin="8dp"
+        android:layout_marginRight="5dp"
         android:layout_marginBottom="35dp"
         android:layout_toLeftOf="@+id/tvValueCount"
-        android:layout_marginRight="5dp"
         android:max="8000"
         android:paddingBottom="12dp" />
 
@@ -28,10 +28,10 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/seekbarValues"
         android:layout_alignParentRight="true"
-        android:text="0"
-        android:layout_marginBottom="15dp"
         android:layout_marginRight="10dp"
+        android:layout_marginBottom="15dp"
         android:gravity="right"
+        android:text="0"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

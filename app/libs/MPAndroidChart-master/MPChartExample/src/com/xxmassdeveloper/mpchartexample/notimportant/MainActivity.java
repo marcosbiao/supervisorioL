@@ -1,4 +1,3 @@
-
 package com.xxmassdeveloper.mpchartexample.notimportant;
 
 import android.app.Activity;

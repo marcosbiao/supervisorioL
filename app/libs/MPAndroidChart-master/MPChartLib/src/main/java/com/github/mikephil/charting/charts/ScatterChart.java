@@ -1,4 +1,3 @@
-
 package com.github.mikephil.charting.charts;
 
 import android.content.Context;
@@ -65,13 +64,13 @@ public class ScatterChart extends BarLineChartBase<ScatterData> implements Scatt
             this.shapeIdentifier = shapeIdentifier;
         }
 
+        public static ScatterShape[] getAllDefaultShapes() {
+            return new ScatterShape[]{SQUARE, CIRCLE, TRIANGLE, CROSS, X, CHEVRON_UP, CHEVRON_DOWN};
+        }
+
         @Override
         public String toString() {
             return shapeIdentifier;
-        }
-
-        public static ScatterShape[] getAllDefaultShapes() {
-            return new ScatterShape[]{SQUARE, CIRCLE, TRIANGLE, CROSS, X, CHEVRON_UP, CHEVRON_DOWN};
         }
     }
 }

@@ -33,12 +33,12 @@ import com.hookedonplay.decoviewlib.events.DecoEvent;
 import com.hookedonplay.decoviewlib.events.DecoEvent.EventType;
 
 public class SamplePeopleFragment extends SampleFragment {
+    final float mSeriesMax = 100f;
     final private int COLOR_BLUE = Color.parseColor("#1D76D2");
     final private int COLOR_PINK = Color.parseColor("#FF4081");
     final private int COLOR_YELLOW = Color.parseColor("#FFC107");
     final private int COLOR_EDGE = Color.parseColor("#22000000");
     final private int COLOR_BACK = Color.parseColor("#0166BB66");
-    final float mSeriesMax = 100f;
     private int mSeries1Index;
     private int mSeries2Index;
     private int mSeries3Index;
@@ -94,7 +94,7 @@ public class SamplePeopleFragment extends SampleFragment {
                 .setLineWidth(getDimension(46))
                 .setSeriesLabel(new SeriesLabel.Builder("Women").build())
                 .setCapRounded(false)
-                        //.setChartStyle(SeriesItem.ChartStyle.STYLE_PIE)
+                //.setChartStyle(SeriesItem.ChartStyle.STYLE_PIE)
                 .addEdgeDetail(new EdgeDetail(EdgeDetail.EdgeType.EDGE_INNER, COLOR_EDGE, 0.3f))
                 .setShowPointWhenEmpty(false)
                 .build();
@@ -107,7 +107,7 @@ public class SamplePeopleFragment extends SampleFragment {
                 .setLineWidth(getDimension(46))
                 .setSeriesLabel(new SeriesLabel.Builder("Children").build())
                 .setCapRounded(false)
-                        //.setChartStyle(SeriesItem.ChartStyle.STYLE_PIE)
+                //.setChartStyle(SeriesItem.ChartStyle.STYLE_PIE)
                 .addEdgeDetail(new EdgeDetail(EdgeDetail.EdgeType.EDGE_INNER, COLOR_EDGE, 0.3f))
                 .setShowPointWhenEmpty(false)
                 .build();

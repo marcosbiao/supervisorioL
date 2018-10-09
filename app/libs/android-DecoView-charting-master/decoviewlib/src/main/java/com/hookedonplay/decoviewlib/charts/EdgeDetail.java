@@ -23,7 +23,7 @@ import android.support.annotation.NonNull;
  * added to the inner or outer edge and the usual approach would be to have a semi-transparent shade
  * as the effect. This requires on old versions of Android 4.0-4.3 that Hardware acceleration is
  * turned off for the view.
- *
+ * <p>
  * NOTE: It is possible to apply any number of edge detail to each series. If you so desired you
  * could apply a rainbow effect by applying many different colors at different widths
  */

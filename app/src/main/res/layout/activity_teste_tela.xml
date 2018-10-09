@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:screenOrientation="landscape"
     android:fitsSystemWindows="true"
+    android:screenOrientation="landscape"
     tools:context="com.example.biao.myapplication.testeTela">
 
     <android.support.design.widget.AppBarLayout

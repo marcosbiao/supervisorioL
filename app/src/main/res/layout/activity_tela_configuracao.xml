@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:screenOrientation="landscape"
     android:background="#D8D8D8"
+    android:screenOrientation="landscape"
     tools:context="com.example.biao.myapplication.TelaConfiguracao">
 
     <android.support.design.widget.AppBarLayout
@@ -18,8 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_alignBottom="@+id/textViewNome"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
@@ -34,18 +34,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/checkBoxMax"
-            android:layout_alignBottom="@+id/checkBoxMax"
             android:layout_alignEnd="@+id/editTextAlerta"
             android:layout_alignRight="@+id/editTextAlerta"
+            android:layout_alignBottom="@+id/checkBoxMax"
             android:text="MIN." />
 
         <CheckBox
             android:id="@+id/checkBoxMax"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/editTextAlerta"
-            android:layout_alignStart="@+id/editTextAlerta"
             android:layout_below="@+id/editTextAlerta"
+            android:layout_alignStart="@+id/editTextAlerta"
+            android:layout_alignLeft="@+id/editTextAlerta"
             android:layout_marginTop="39dp"
             android:text="MAX." />
 
@@ -54,8 +54,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="48dp"
             android:layout_marginStart="48dp"
+            android:layout_marginLeft="48dp"
             android:layout_marginTop="71dp"
             android:layout_toEndOf="@+id/editTextAlerta"
             android:layout_toRightOf="@+id/editTextAlerta"
@@ -65,9 +65,9 @@
             android:id="@+id/editTextApelido"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/editTextAlerta"
-            android:layout_alignStart="@+id/editTextAlerta"
             android:layout_below="@+id/buttonSalvar"
+            android:layout_alignStart="@+id/editTextAlerta"
+            android:layout_alignLeft="@+id/editTextAlerta"
             android:layout_marginTop="26dp"
             android:ems="10"
             android:inputType="textPersonName"
@@ -79,8 +79,8 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/editTextAlerta"
             android:layout_alignBottom="@+id/editTextAlerta"
-            android:layout_marginLeft="194dp"
             android:layout_marginStart="194dp"
+            android:layout_marginLeft="194dp"
             android:text="Alarme (DIF):" />
 
         <EditText
@@ -88,8 +88,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/editTextSP"
-            android:layout_marginLeft="30dp"
             android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
             android:layout_marginTop="21dp"
             android:layout_toEndOf="@+id/textView7"
             android:layout_toRightOf="@+id/textView7"
@@ -102,18 +102,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/editTextSP"
-            android:layout_alignBottom="@+id/editTextSP"
             android:layout_alignEnd="@+id/textView8"
             android:layout_alignRight="@+id/textView8"
+            android:layout_alignBottom="@+id/editTextSP"
             android:text="SP:" />
 
         <EditText
             android:id="@+id/editTextSP"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/editTextApelido"
-            android:layout_alignStart="@+id/editTextApelido"
             android:layout_below="@+id/editTextApelido"
+            android:layout_alignStart="@+id/editTextApelido"
+            android:layout_alignLeft="@+id/editTextApelido"
             android:layout_marginTop="15dp"
             android:ems="10"
             android:inputType="number|numberSigned"
@@ -124,9 +124,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/editTextApelido"
-            android:layout_alignBottom="@+id/editTextApelido"
             android:layout_alignEnd="@+id/textView7"
             android:layout_alignRight="@+id/textView7"
+            android:layout_alignBottom="@+id/editTextApelido"
             android:text="Apelido:" />
 
         <TextView
@@ -134,8 +134,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/textView7"
-            android:layout_marginLeft="30dp"
             android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
             android:layout_toEndOf="@+id/editTextAlerta"
             android:layout_toRightOf="@+id/editTextAlerta"
             android:text="TextView" />

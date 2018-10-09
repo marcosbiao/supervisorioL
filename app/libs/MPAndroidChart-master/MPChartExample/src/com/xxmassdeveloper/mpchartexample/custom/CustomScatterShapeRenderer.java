@@ -11,8 +11,7 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
  * Custom shape renderer that draws a single line.
  * Created by philipp on 26/06/16.
  */
-public class CustomScatterShapeRenderer implements IShapeRenderer
-{
+public class CustomScatterShapeRenderer implements IShapeRenderer {
 
     @Override
     public void renderShape(Canvas c, IScatterDataSet dataSet, ViewPortHandler viewPortHandler,

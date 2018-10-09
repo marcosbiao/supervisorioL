@@ -1,11 +1,7 @@
-
 package com.github.mikephil.charting.data;
 
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IPieDataSet;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A PieData object can only represent one DataSet. Unlike all other charts, the
@@ -26,6 +22,16 @@ public class PieData extends ChartData<IPieDataSet> {
     }
 
     /**
+     * Returns the DataSet this PieData object represents. A PieData object can
+     * only contain one DataSet.
+     *
+     * @return
+     */
+    public IPieDataSet getDataSet() {
+        return mDataSets.get(0);
+    }
+
+    /**
      * Sets the PieDataSet this data object should represent.
      *
      * @param dataSet
@@ -34,16 +40,6 @@ public class PieData extends ChartData<IPieDataSet> {
         mDataSets.clear();
         mDataSets.add(dataSet);
         notifyDataChanged();
-    }
-
-    /**
-     * Returns the DataSet this PieData object represents. A PieData object can
-     * only contain one DataSet.
-     *
-     * @return
-     */
-    public IPieDataSet getDataSet() {
-        return mDataSets.get(0);
     }
 
     /**

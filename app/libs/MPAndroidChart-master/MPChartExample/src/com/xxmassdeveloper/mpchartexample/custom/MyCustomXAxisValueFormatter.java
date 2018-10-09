@@ -9,8 +9,7 @@ import java.text.DecimalFormat;
 /**
  * Created by Philipp Jahoda on 14/09/15.
  */
-public class MyCustomXAxisValueFormatter implements IAxisValueFormatter
-{
+public class MyCustomXAxisValueFormatter implements IAxisValueFormatter {
 
     private DecimalFormat mFormat;
     private ViewPortHandler mViewPortHandler;

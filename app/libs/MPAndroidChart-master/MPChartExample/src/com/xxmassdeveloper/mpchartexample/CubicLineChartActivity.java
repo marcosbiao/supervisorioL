@@ -1,4 +1,3 @@
-
 package com.xxmassdeveloper.mpchartexample;
 
 import android.graphics.Color;
@@ -70,10 +69,10 @@ public class CubicLineChartActivity extends DemoBase implements OnSeekBarChangeL
 
         mChart.setDrawGridBackground(false);
         mChart.setMaxHighlightDistance(300);
-        
+
         XAxis x = mChart.getXAxis();
         x.setEnabled(false);
-        
+
         YAxis y = mChart.getAxisLeft();
         y.setTypeface(mTfLight);
         y.setLabelCount(6, false);
@@ -81,14 +80,14 @@ public class CubicLineChartActivity extends DemoBase implements OnSeekBarChangeL
         y.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
         y.setDrawGridLines(false);
         y.setAxisLineColor(Color.WHITE);
-        
+
         mChart.getAxisRight().setEnabled(false);
 
         // add data
         setData(45, 100);
-        
+
         mChart.getLegend().setEnabled(false);
-        
+
         mChart.animateXY(2000, 2000);
 
         // dont forget to refresh the drawing
@@ -113,7 +112,7 @@ public class CubicLineChartActivity extends DemoBase implements OnSeekBarChangeL
                 break;
             }
             case R.id.actionToggleHighlight: {
-                if(mChart.getData() != null) {
+                if (mChart.getData() != null) {
                     mChart.getData().setHighlightEnabled(!mChart.getData().isHighlightEnabled());
                     mChart.invalidate();
                 }
@@ -160,7 +159,7 @@ public class CubicLineChartActivity extends DemoBase implements OnSeekBarChangeL
                     LineDataSet set = (LineDataSet) iSet;
                     set.setMode(set.getMode() == LineDataSet.Mode.CUBIC_BEZIER
                             ? LineDataSet.Mode.LINEAR
-                            :  LineDataSet.Mode.CUBIC_BEZIER);
+                            : LineDataSet.Mode.CUBIC_BEZIER);
                 }
                 mChart.invalidate();
                 break;
@@ -174,7 +173,7 @@ public class CubicLineChartActivity extends DemoBase implements OnSeekBarChangeL
                     LineDataSet set = (LineDataSet) iSet;
                     set.setMode(set.getMode() == LineDataSet.Mode.STEPPED
                             ? LineDataSet.Mode.LINEAR
-                            :  LineDataSet.Mode.STEPPED);
+                            : LineDataSet.Mode.STEPPED);
                 }
                 mChart.invalidate();
                 break;
@@ -188,7 +187,7 @@ public class CubicLineChartActivity extends DemoBase implements OnSeekBarChangeL
                     LineDataSet set = (LineDataSet) iSet;
                     set.setMode(set.getMode() == LineDataSet.Mode.HORIZONTAL_BEZIER
                             ? LineDataSet.Mode.LINEAR
-                            :  LineDataSet.Mode.HORIZONTAL_BEZIER);
+                            : LineDataSet.Mode.HORIZONTAL_BEZIER);
                 }
                 mChart.invalidate();
                 break;
@@ -265,8 +264,8 @@ public class CubicLineChartActivity extends DemoBase implements OnSeekBarChangeL
         for (int i = 0; i < count; i++) {
             float mult = (range + 1);
             float val = (float) (Math.random() * mult) + 20;// + (float)
-                                                           // ((mult *
-                                                           // 0.1) / 10);
+            // ((mult *
+            // 0.1) / 10);
             yVals.add(new Entry(i, val));
         }
 
@@ -274,7 +273,7 @@ public class CubicLineChartActivity extends DemoBase implements OnSeekBarChangeL
 
         if (mChart.getData() != null &&
                 mChart.getData().getDataSetCount() > 0) {
-            set1 = (LineDataSet)mChart.getData().getDataSetByIndex(0);
+            set1 = (LineDataSet) mChart.getData().getDataSetByIndex(0);
             set1.setValues(yVals);
             mChart.getData().notifyDataChanged();
             mChart.notifyDataSetChanged();

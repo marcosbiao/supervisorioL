@@ -9,6 +9,7 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/libs/android-DecoView-charting-master/decoviewlib/decoviewlib.iml" filepath="$PROJECT_DIR$/app/libs/android-DecoView-charting-master/decoviewlib/decoviewlib.iml" />
       <module fileurl="file://$PROJECT_DIR$/gradle-wrapper/gradle-wrapper.iml" filepath="$PROJECT_DIR$/gradle-wrapper/gradle-wrapper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/supervisorioL.iml" filepath="$PROJECT_DIR$/supervisorioL.iml" />
     </modules>
   </component>
 </project>

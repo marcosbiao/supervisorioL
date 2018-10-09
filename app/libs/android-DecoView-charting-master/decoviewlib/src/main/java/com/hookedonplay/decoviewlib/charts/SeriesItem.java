@@ -38,19 +38,6 @@ import java.util.ArrayList;
 @SuppressWarnings("unused")
 public class SeriesItem {
     /**
-     * Main color of the arc
-     */
-    private int mColor;
-    /**
-     * Secondary Color of the arc used to create gradient for arc. This is only used if the
-     * alpha component is > 0
-     */
-    private int mColorSecondary;
-    /**
-     * The width of the line used to draw the arc
-     */
-    private float mLineWidth;
-    /**
      * Duration taken to animate a 360 degree animation of an arc
      */
     private final long mSpinDuration;
@@ -99,6 +86,19 @@ public class SeriesItem {
      */
     private final boolean mShowPointWhenEmpty;
     /**
+     * Main color of the arc
+     */
+    private int mColor;
+    /**
+     * Secondary Color of the arc used to create gradient for arc. This is only used if the
+     * alpha component is > 0
+     */
+    private int mColorSecondary;
+    /**
+     * The width of the line used to draw the arc
+     */
+    private float mLineWidth;
+    /**
      * Draw the arc at an amount inset from the outside of the view
      */
     private PointF mInset;
@@ -113,7 +113,7 @@ public class SeriesItem {
     /**
      * Set the shadow size for the series. This is drawn as a fade around the series that goes from
      * the color set mShadowColor and fades for mShadowSize pixels until it is transparent
-     *
+     * <p>
      * IMPORTANT: If you set this you need to call DecoView.disableHardwareAccelerationForDecoView()
      * as drawing of this shadow cannot be done with hardware acceleration enabled
      */
@@ -239,28 +239,28 @@ public class SeriesItem {
         mEdgeDetail.add(new EdgeDetail(edgeDetail));
     }
 
-    public void setSeriesLabel(SeriesLabel label) {
-        mSeriesLabel = label;
-    }
-
     public SeriesLabel getSeriesLabel() {
         return mSeriesLabel;
     }
 
-    public void setShadowSize(float shadowSize) {
-        mShadowSize = shadowSize;
+    public void setSeriesLabel(SeriesLabel label) {
+        mSeriesLabel = label;
     }
 
     public float getShadowSize() {
         return mShadowSize;
     }
 
-    public void setShadowColor(int shadowColor) {
-        mShadowColor = shadowColor;
+    public void setShadowSize(float shadowSize) {
+        mShadowSize = shadowSize;
     }
 
     public int getShadowColor() {
         return mShadowColor;
+    }
+
+    public void setShadowColor(int shadowColor) {
+        mShadowColor = shadowColor;
     }
 
     /**
@@ -425,6 +425,7 @@ public class SeriesItem {
             mShadowColor = shadowColor;
             return this;
         }
+
         /**
          * Creates a {@link SeriesItem} with the arguments supplied to this builder.
          */
