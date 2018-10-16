@@ -1,17 +1,10 @@
 package com.example.biao.myapplication;
 
-import android.content.Intent;
-import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import com.hookedonplay.decoviewlib.DecoView;
-import com.hookedonplay.decoviewlib.charts.SeriesItem;
+import android.support.v7.app.AppCompatActivity;
+
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
@@ -32,7 +25,6 @@ public class telaOpcao extends AppCompatActivity {
         g = findViewById(R.id.grafico);
 
 
-
         Calendar calendar = Calendar.getInstance();
         Date d1 = calendar.getTime();
         calendar.add(Calendar.DATE, 1);
@@ -40,7 +32,7 @@ public class telaOpcao extends AppCompatActivity {
         calendar.add(Calendar.DATE, 1);
         Date d3 = calendar.getTime();
 
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[]{
                 new DataPoint(d1, 1),
                 new DataPoint(d2, 5),
                 new DataPoint(d3, 3)
@@ -49,7 +41,7 @@ public class telaOpcao extends AppCompatActivity {
 
         //g.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(telaOpcao.this));
         final SimpleDateFormat formato = new SimpleDateFormat("HH:mm:ss");
-        g.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter(){
+        g.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
             @Override
             public String formatLabel(double value, boolean isValueX) {
                 if (isValueX) {
@@ -70,10 +62,6 @@ public class telaOpcao extends AppCompatActivity {
         g.getViewport().setXAxisBoundsManual(true);
 
         g.getGridLabelRenderer().setHumanRounding(false);
-
-
-
-
 
 
     }

@@ -26,11 +26,6 @@ public class ColorAnimate {
     static public final int ANIMATE_GREEN = 0x04;
     static public final int ANIMATE_BLUE = 0x08;
     static public final int ANIMATE_ALL = ANIMATE_ALPHA | ANIMATE_RED | ANIMATE_GREEN | ANIMATE_BLUE;
-
-    /**
-     * Mask to determine which color values to animate
-     */
-    private int mMask;
     /**
      * Color at 0% complete
      */
@@ -39,6 +34,10 @@ public class ColorAnimate {
      * Color at 100% complete
      */
     private final int mColorEnd;
+    /**
+     * Mask to determine which color values to animate
+     */
+    private int mMask;
     /**
      * Current calculated color
      */

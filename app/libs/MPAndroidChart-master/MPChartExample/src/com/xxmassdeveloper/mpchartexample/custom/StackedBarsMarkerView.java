@@ -1,4 +1,3 @@
-
 package com.xxmassdeveloper.mpchartexample.custom;
 
 import android.content.Context;
@@ -14,7 +13,7 @@ import com.xxmassdeveloper.mpchartexample.R;
 
 /**
  * Custom implementation of the MarkerView.
- * 
+ *
  * @author Philipp Jahoda
  */
 public class StackedBarsMarkerView extends MarkerView {
@@ -36,7 +35,7 @@ public class StackedBarsMarkerView extends MarkerView {
 
             BarEntry be = (BarEntry) e;
 
-            if(be.getYVals() != null) {
+            if (be.getYVals() != null) {
 
                 // draw the stack value
                 tvContent.setText("" + Utils.formatNumber(be.getYVals()[highlight.getStackIndex()], 0, true));

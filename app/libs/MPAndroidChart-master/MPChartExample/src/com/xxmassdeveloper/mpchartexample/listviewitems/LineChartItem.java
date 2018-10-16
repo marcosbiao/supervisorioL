@@ -1,4 +1,3 @@
-
 package com.xxmassdeveloper.mpchartexample.listviewitems;
 
 import android.content.Context;
@@ -63,7 +62,7 @@ public class LineChartItem extends ChartItem {
         leftAxis.setTypeface(mTf);
         leftAxis.setLabelCount(5, false);
         leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
-        
+
         YAxis rightAxis = holder.chart.getAxisRight();
         rightAxis.setTypeface(mTf);
         rightAxis.setLabelCount(5, false);

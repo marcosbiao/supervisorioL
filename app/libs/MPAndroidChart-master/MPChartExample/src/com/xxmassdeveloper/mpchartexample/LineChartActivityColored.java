@@ -1,4 +1,3 @@
-
 package com.xxmassdeveloper.mpchartexample;
 
 import android.graphics.Color;
@@ -19,6 +18,12 @@ public class LineChartActivityColored extends DemoBase {
 
     private LineChart[] mCharts = new LineChart[4];
     private Typeface mTf;
+    private int[] mColors = new int[]{
+            Color.rgb(137, 230, 81),
+            Color.rgb(240, 240, 30),
+            Color.rgb(89, 199, 250),
+            Color.rgb(250, 104, 104)
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,20 +49,13 @@ public class LineChartActivityColored extends DemoBase {
         }
     }
 
-    private int[] mColors = new int[] {
-            Color.rgb(137, 230, 81), 
-            Color.rgb(240, 240, 30), 
-            Color.rgb(89, 199, 250),
-            Color.rgb(250, 104, 104)
-    };
-
     private void setupChart(LineChart chart, LineData data, int color) {
 
         ((LineDataSet) data.getDataSetByIndex(0)).setCircleHoleColor(color);
 
         // no description text
         chart.getDescription().setEnabled(false);
-        
+
         // mChart.setDrawHorizontalGrid(false);
         //
         // enable / disable grid background
@@ -75,7 +73,7 @@ public class LineChartActivityColored extends DemoBase {
         chart.setPinchZoom(false);
 
         chart.setBackgroundColor(color);
-        
+
         // set custom chart offsets (automatic offset calculation is hereby disabled)
         chart.setViewPortOffsets(10, 0, 10, 0);
 
@@ -96,7 +94,7 @@ public class LineChartActivityColored extends DemoBase {
         // animate calls invalidate()...
         chart.animateX(2500);
     }
-    
+
     private LineData getData(int count, float range) {
 
         ArrayList<Entry> yVals = new ArrayList<Entry>();

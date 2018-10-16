@@ -2,7 +2,6 @@ package com.example.biao.myapplication;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +19,8 @@ import java.util.List;
 public class GridViewAdapter2 extends ArrayAdapter<objEsp> {
 
 
-    public GridViewAdapter2(Context context, int resouce, List<objEsp> objects){
-        super(context, resouce,objects);
+    public GridViewAdapter2(Context context, int resouce, List<objEsp> objects) {
+        super(context, resouce, objects);
     }
 
     @NonNull
@@ -29,8 +28,8 @@ public class GridViewAdapter2 extends ArrayAdapter<objEsp> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
 
-        if(null == v) {
-            LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if (null == v) {
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = inflater.inflate(R.layout.grid_item2, null);
         }
         objEsp esp = getItem(position);
@@ -46,26 +45,26 @@ public class GridViewAdapter2 extends ArrayAdapter<objEsp> {
         TextView txtSP = v.findViewById(R.id.textViewSP);
         TextView txtAL = v.findViewById(R.id.textViewAlarme);
 
-        txtSP.setText("SP: "+String.valueOf(esp.getSp())+"ºC");
-        txtAL.setText("AL: "+String.valueOf(esp.getAlerta())+"ºC");
+        txtSP.setText("SP: " + String.valueOf(esp.getSp()) + "ºC");
+        txtAL.setText("AL: " + String.valueOf(esp.getAlerta()) + "ºC");
 
-        if(esp.getIndicador()==0){
+        if (esp.getIndicador() == 0) {
             //lamp.setImageResource(R.mipmap.ic_lamp_off);
-        }else if(esp.getIndicador()==1){
+        } else if (esp.getIndicador() == 1) {
             //lamp.setImageResource(R.mipmap.ic_lamp_on);
         }
 
-        if(esp.getStatus()==0){
+        if (esp.getStatus() == 0) {
             circulo.setImageResource(R.mipmap.ic_circule_green);
-        }else if(esp.getStatus()==1){
+        } else if (esp.getStatus() == 1) {
             circulo.setImageResource(R.mipmap.ic_circule_yellow);
-        }else {
+        } else {
             circulo.setImageResource(R.mipmap.ic_circule_red);
         }
 
         //img.setImageResource(esp.getImageId());
         txtApelido.setText(esp.getApelido());
-        txtTemperatura.setText(esp.getTemperatura()+"ºC");
+        txtTemperatura.setText(esp.getTemperatura() + "ºC");
 
         return v;
     }

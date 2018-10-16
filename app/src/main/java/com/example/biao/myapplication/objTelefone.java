@@ -10,18 +10,19 @@ public class objTelefone {
     private String numero;
     private boolean conectividade, energia, temperatura;
 
-    public objTelefone(){}
+    public objTelefone() {
+    }
+
+    public objTelefone(String nomeTelefone, String numero, boolean conectividade, boolean energia, boolean temperatura) {
+        this.nomeTelefone = nomeTelefone;
+        this.numero = numero;
+        this.conectividade = conectividade;
+        this.energia = energia;
+        this.temperatura = temperatura;
+    }
 
     public String getNomeTelefone() {
         return nomeTelefone;
-    }
-
-    public objTelefone(String nomeTelefone, String numero, boolean conectividade, boolean energia, boolean temperatura){
-        this.nomeTelefone = nomeTelefone;
-        this.numero=numero;
-        this.conectividade=conectividade;
-        this.energia=energia;
-        this.temperatura=temperatura;
     }
 
     public void setNomeTelefone(String nomeTelefone) {

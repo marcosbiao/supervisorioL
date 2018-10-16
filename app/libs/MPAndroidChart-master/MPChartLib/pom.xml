@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+<?xml version="1.0" encoding="UTF-8"?><!--
  Copyright (c) 2014 Philipp Jahoda <philjay.librarysup@gmail.com>
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,14 +14,18 @@
  limitations under the License.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-	<version>1.4.2-SNAPSHOT</version>
+    <version>1.4.2-SNAPSHOT</version>
     <groupId>com.github.mikephil</groupId>
     <artifactId>MPAndroidChart</artifactId>
     <name>MPAndroidChart</name>
-	<description>A simple Android chart view/graph view library, supporting line- bar- and piecharts as well as scaling, dragging and animations</description>
-	<url>https://github.com/PhilJay/MPAndroidChart</url>
+    <description>A simple Android chart view/graph view library, supporting line- bar- and piecharts
+        as well as scaling, dragging and animations
+    </description>
+    <url>https://github.com/PhilJay/MPAndroidChart</url>
     <packaging>apklib</packaging>
     <!--<packaging>aar</packaging>-->
 
@@ -31,7 +34,7 @@
     </properties>
 
     <build>
-    	<sourceDirectory>src</sourceDirectory>
+        <sourceDirectory>src</sourceDirectory>
         <plugins>
             <plugin>
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
@@ -40,8 +43,8 @@
                 <extensions>true</extensions>
                 <configuration>
                     <!--<sdk>-->
-                        <!--<path>${env.ANDROID_HOME}</path>-->
-                        <!--<platform>16</platform>-->
+                    <!--<path>${env.ANDROID_HOME}</path>-->
+                    <!--<platform>16</platform>-->
                     <!--</sdk>-->
                     <undeployBeforeDeploy>true</undeployBeforeDeploy>
                 </configuration>

@@ -1,4 +1,3 @@
-
 package com.github.mikephil.charting.charts;
 
 import android.content.Context;
@@ -28,32 +27,20 @@ import com.github.mikephil.charting.renderer.CombinedChartRenderer;
 public class CombinedChart extends BarLineChartBase<CombinedData> implements CombinedDataProvider {
 
     /**
+     * flag that indicates whether the highlight should be full-bar oriented, or single-value?
+     */
+    protected boolean mHighlightFullBarEnabled = false;
+    protected DrawOrder[] mDrawOrder;
+    /**
      * if set to true, all values are drawn above their bars, instead of below
      * their top
      */
     private boolean mDrawValueAboveBar = true;
-
-
-    /**
-     * flag that indicates whether the highlight should be full-bar oriented, or single-value?
-     */
-    protected boolean mHighlightFullBarEnabled = false;
-
     /**
      * if set to true, a grey area is drawn behind each bar that indicates the
      * maximum value
      */
     private boolean mDrawBarShadow = false;
-
-    protected DrawOrder[] mDrawOrder;
-
-    /**
-     * enum that allows to specify the order in which the different data objects
-     * for the combined-chart are drawn
-     */
-    public enum DrawOrder {
-        BAR, BUBBLE, LINE, CANDLE, SCATTER
-    }
 
     public CombinedChart(Context context) {
         super(context);
@@ -93,7 +80,7 @@ public class CombinedChart extends BarLineChartBase<CombinedData> implements Com
     public void setData(CombinedData data) {
         super.setData(data);
         setHighlighter(new CombinedHighlighter(this, this));
-        ((CombinedChartRenderer)mRenderer).createRenderers();
+        ((CombinedChartRenderer) mRenderer).createRenderers();
         mRenderer.initBuffers();
     }
 
@@ -178,7 +165,6 @@ public class CombinedChart extends BarLineChartBase<CombinedData> implements Com
         mDrawValueAboveBar = enabled;
     }
 
-
     /**
      * If set to true, a grey area is drawn behind each bar that indicates the
      * maximum value. Enabling his will reduce performance by about 50%.
@@ -190,6 +176,14 @@ public class CombinedChart extends BarLineChartBase<CombinedData> implements Com
     }
 
     /**
+     * @return true the highlight operation is be full-bar oriented, false if single-value
+     */
+    @Override
+    public boolean isHighlightFullBarEnabled() {
+        return mHighlightFullBarEnabled;
+    }
+
+    /**
      * Set this to true to make the highlight operation full-bar oriented,
      * false to make it highlight single values (relevant only for stacked).
      *
@@ -197,14 +191,6 @@ public class CombinedChart extends BarLineChartBase<CombinedData> implements Com
      */
     public void setHighlightFullBarEnabled(boolean enabled) {
         mHighlightFullBarEnabled = enabled;
-    }
-
-    /**
-     * @return true the highlight operation is be full-bar oriented, false if single-value
-     */
-    @Override
-    public boolean isHighlightFullBarEnabled() {
-        return mHighlightFullBarEnabled;
     }
 
     /**
@@ -267,6 +253,14 @@ public class CombinedChart extends BarLineChartBase<CombinedData> implements Com
             // draw the marker
             mMarker.draw(canvas, pos[0], pos[1]);
         }
+    }
+
+    /**
+     * enum that allows to specify the order in which the different data objects
+     * for the combined-chart are drawn
+     */
+    public enum DrawOrder {
+        BAR, BUBBLE, LINE, CANDLE, SCATTER
     }
 
 }

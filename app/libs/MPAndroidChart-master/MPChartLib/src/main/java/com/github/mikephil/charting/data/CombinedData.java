@@ -1,4 +1,3 @@
-
 package com.github.mikephil.charting.data;
 
 import android.util.Log;
@@ -55,7 +54,7 @@ public class CombinedData extends BarLineScatterCandleBubbleData<IBarLineScatter
     @Override
     public void calcMinMax() {
 
-        if(mDataSets == null){
+        if (mDataSets == null) {
             mDataSets = new ArrayList<>();
         }
         mDataSets.clear();

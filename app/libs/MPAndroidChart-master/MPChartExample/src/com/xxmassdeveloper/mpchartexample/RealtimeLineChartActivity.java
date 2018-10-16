@@ -1,4 +1,3 @@
-
 package com.xxmassdeveloper.mpchartexample;
 
 import android.graphics.Color;
@@ -28,6 +27,7 @@ public class RealtimeLineChartActivity extends DemoBase implements
         OnChartValueSelectedListener {
 
     private LineChart mChart;
+    private Thread thread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,8 +165,6 @@ public class RealtimeLineChartActivity extends DemoBase implements
         set.setDrawValues(false);
         return set;
     }
-
-    private Thread thread;
 
     private void feedMultiple() {
 

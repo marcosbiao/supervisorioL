@@ -3,30 +3,20 @@ package com.example.biao.myapplication;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.StrictMode;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -43,84 +33,57 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.listener.ChartTouchListener;
-import com.github.mikephil.charting.listener.OnChartGestureListener;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.utils.Utils;
-import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
-import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
-
-import javax.xml.transform.Result;
-
-import static com.example.biao.myapplication.LeitorServer.getJSONFromAPI;
 
 public class MainActivity extends AppCompatActivity {
-    private int tempoDeColeta=2000;//tempo em milisegundos
-
-    Random numRandomico = new Random();
-    DataPoint ponto;
-    GraphView graph01, graph02, graph03, graphNovo;
-    int x1=0,x2=0,x3=0;
+    static List<objEsp> listaObj = new ArrayList<>();
     private final Handler mHandler01 = new Handler();
     private final Handler mHandler02 = new Handler();
     private final Handler mHandler03 = new Handler();
-    private Runnable mTimer1, mTimer2, mTimer3;
+    Random numRandomico = new Random();
+    DataPoint ponto;
+    GraphView graph01, graph02, graph03, graphNovo;
+    int x1 = 0, x2 = 0, x3 = 0;
     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
     double myDouble = -242528463.775282;
     final long timeReference = System.currentTimeMillis() + ((long) (myDouble * 1000));
-
-    private LineChart mChart;
-
-
     int a1 = 0;
     TextView tv1, tv2, tv3, ap1, ap2, ap3;
     LinearLayout layout1;
     LayoutParams params1 = new LinearLayout.LayoutParams(
-                       /*width*/ ViewGroup.LayoutParams.MATCH_PARENT,
-               /*height*/ 100,
-               /*weight*/ 1.0f
+            /*width*/ ViewGroup.LayoutParams.MATCH_PARENT,
+            /*height*/ 100,
+            /*weight*/ 1.0f
     );
-
-    int toogle1=0,toogle2=0,toogle3=0;
-
+    int toogle1 = 0, toogle2 = 0, toogle3 = 0;
     objEsp[] vetOb = new objEsp[2];
     objEsp ob1 = new objEsp();
     objEsp ob2 = new objEsp();
     String nomeData = " ";
-    static List<objEsp> listaObj = new ArrayList<>();
+    int i = 0, t = 0;
+    private int tempoDeColeta = 2000;//tempo em milisegundos
+    private Runnable mTimer1, mTimer2, mTimer3;
+    private LineChart mChart;
 
-    int i=0,t=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,15 +92,14 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-
         System.out.println(timeReference);
 
         //necessario para permissão à memoria interna
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1000);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1000);
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
-            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1000);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1000);
         }
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -187,19 +149,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
-        switch(requestCode){
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
             case 1000:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //Toast.makeText(this, "Permissão Concedida", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     //Toast.makeText(this, "Permissão negada", Toast.LENGTH_SHORT).show();
                     finish();
                 }
         }
     }
 
-    public void criarNovoGrafico(){
+    public void criarNovoGrafico() {
         // enable description text
         mChart.getDescription().setEnabled(false);
 
@@ -221,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
         LineData data = new LineData();
         data.setValueTextColor(Color.WHITE);
 
-        mChart.setScaleMinima(10f,1f);
+        mChart.setScaleMinima(10f, 1f);
         mChart.centerViewToY(10f, YAxis.AxisDependency.LEFT);
 
 
@@ -252,6 +214,7 @@ public class MainActivity extends AppCompatActivity {
 
         x1.setValueFormatter(new IAxisValueFormatter() {
             private SimpleDateFormat mFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
                 //long timestamp = timeReference + (long) value;
@@ -263,8 +226,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
-        mChart.setVisibleYRange(-50f,50f, YAxis.AxisDependency.LEFT);
+        mChart.setVisibleYRange(-50f, 50f, YAxis.AxisDependency.LEFT);
         mChart.setAutoScaleMinMaxEnabled(false);
 
 
@@ -276,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
         leftAxis.setSpaceTop(50);
         leftAxis.setGranularityEnabled(true);
         leftAxis.setGranularity(10f);
-        leftAxis.calculate(-40f,40f);
+        leftAxis.calculate(-40f, 40f);
         leftAxis.setSpaceBottom(50);
         leftAxis.setTextColor(Color.WHITE);
         leftAxis.setAxisMinValue(-50f);
@@ -288,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
         leftAxis.setDrawZeroLine(false);
 
         //linha limite
-        LimitLine li = new LimitLine(20,"Alarme");
+        LimitLine li = new LimitLine(20, "Alarme");
         leftAxis.addLimitLine(li);
 
 
@@ -296,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
         rightAxis.setEnabled(false);
     }
 
-    private void addEntry(){
+    private void addEntry() {
         LineData data = mChart.getData();
         if (data != null) {
             ILineDataSet set = data.getDataSetByIndex(0);
@@ -311,11 +273,11 @@ public class MainActivity extends AppCompatActivity {
 
             Calendar calendar = Calendar.getInstance();
             //data.addXValue("");
-            System.out.println("calendar: "+new Date().getTime());
-            data.addEntry(new Entry((long) new Date().getTime(), 30.7f),0);
+            System.out.println("calendar: " + new Date().getTime());
+            data.addEntry(new Entry((long) new Date().getTime(), 30.7f), 0);
             mChart.notifyDataSetChanged();
             mChart.invalidate();
-            mChart.setVisibleXRange(5,6);
+            mChart.setVisibleXRange(5, 6);
             mChart.moveViewToX(data.getXMax());
         }
     }
@@ -339,26 +301,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    private void salvarArquivo(double i, String nome){
+    private void salvarArquivo(double i, String nome) {
         //criar pasta
         File folder = new File(Environment.getExternalStorageDirectory() + "/Controle_esp");
-        if(!folder.exists()){
+        if (!folder.exists()) {
             folder.mkdir();
         }
         //salvar arquivo dentro da pasta
-        String nomeArquivo = nome+".txt";
-        File arquivo = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"/Controle_esp/" + nomeArquivo);
+        String nomeArquivo = nome + ".txt";
+        File arquivo = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/Controle_esp/" + nomeArquivo);
         //System.out.println(Environment.getExternalStorageDirectory().getAbsolutePath());
-        try{
-            FileOutputStream salvar = new FileOutputStream(arquivo,true);
-            String conteudo = i + " " + new Date() +"\n";
+        try {
+            FileOutputStream salvar = new FileOutputStream(arquivo, true);
+            String conteudo = i + " " + new Date() + "\n";
             salvar.write(conteudo.getBytes());
             salvar.close();
             //Toast.makeText(this, "",Toast.LENGTH_SHORT).show();
-        }catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             //Toast.makeText(this, "Arquivo não encontrado",Toast.LENGTH_SHORT).show();
-        }catch (IOException ioe){
+        } catch (IOException ioe) {
             //Toast.makeText(this, "Erro",Toast.LENGTH_SHORT).show();
         }
 
@@ -390,20 +351,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     @Override
     public void onResume() {
         super.onResume();
-            mTimer1 = new Runnable() {
-                @Override
-                public void run() {
-                    addEntry();
+        mTimer1 = new Runnable() {
+            @Override
+            public void run() {
+                addEntry();
 
-                    mHandler01.postDelayed(this, tempoDeColeta);
-                }
-            };
-            mHandler01.postDelayed(mTimer1, tempoDeColeta);
+                mHandler01.postDelayed(this, tempoDeColeta);
+            }
+        };
+        mHandler01.postDelayed(mTimer1, tempoDeColeta);
 
     }
 
@@ -414,191 +373,184 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStop(){
+    public void onStop() {
         super.onStop();
 
     }
 
 
-
-
-
     @SuppressLint("WrongConstant")
-    public void chamaTela(View v){
-        if (t==0) {
+    public void chamaTela(View v) {
+        if (t == 0) {
             vetOb[0].getG().setVisibility(0x00000004);
-            t=1;
-        }else{
+            t = 1;
+        } else {
             vetOb[0].getG().setVisibility(0x00000000);
-            t=0;
+            t = 0;
         }
     }
 
-    public void c1(View v){
-        t=1;
-        if (toogle1==0){
+    public void c1(View v) {
+        t = 1;
+        if (toogle1 == 0) {
             //graphNovo.setVisibility(View.VISIBLE);
             layout1.setLayoutParams(new LinearLayout.LayoutParams(
-                       /*width*/ ViewGroup.LayoutParams.MATCH_PARENT,
-               /*height*/ 300
+                    /*width*/ ViewGroup.LayoutParams.MATCH_PARENT,
+                    /*height*/ 300
             ));
-            toogle1=1;
-        }else{
+            toogle1 = 1;
+        } else {
             //graphNovo.setVisibility(View.INVISIBLE);
             layout1.setLayoutParams(new LinearLayout.LayoutParams(
-                       /*width*/ ViewGroup.LayoutParams.MATCH_PARENT,
-               /*height*/ 0
+                    /*width*/ ViewGroup.LayoutParams.MATCH_PARENT,
+                    /*height*/ 0
             ));
-            toogle1=0;
-            toogle2=0;
-            toogle3=0;
+            toogle1 = 0;
+            toogle2 = 0;
+            toogle3 = 0;
         }
     }
 
-    public void c2(View v){
-        t=2;
-        if (toogle2==0){
+    public void c2(View v) {
+        t = 2;
+        if (toogle2 == 0) {
             //graphNovo.setVisibility(View.VISIBLE);
             layout1.setLayoutParams(new LinearLayout.LayoutParams(
-                       /*width*/ ViewGroup.LayoutParams.MATCH_PARENT,
-               /*height*/ 300
+                    /*width*/ ViewGroup.LayoutParams.MATCH_PARENT,
+                    /*height*/ 300
             ));
-            toogle2=1;
-        }else{
+            toogle2 = 1;
+        } else {
             //graphNovo.setVisibility(View.INVISIBLE);
             layout1.setLayoutParams(new LinearLayout.LayoutParams(
-                       /*width*/ ViewGroup.LayoutParams.MATCH_PARENT,
-               /*height*/ 0
+                    /*width*/ ViewGroup.LayoutParams.MATCH_PARENT,
+                    /*height*/ 0
             ));
-            toogle1=0;
-            toogle2=0;
-            toogle3=0;
+            toogle1 = 0;
+            toogle2 = 0;
+            toogle3 = 0;
         }
     }
 
-    public void c3(View v){
-        t=3;
-        if (toogle3==0){
+    public void c3(View v) {
+        t = 3;
+        if (toogle3 == 0) {
             //graphNovo.setVisibility(View.VISIBLE);
             layout1.setLayoutParams(new LinearLayout.LayoutParams(
-                       /*width*/ ViewGroup.LayoutParams.MATCH_PARENT,
-               /*height*/ 300
+                    /*width*/ ViewGroup.LayoutParams.MATCH_PARENT,
+                    /*height*/ 300
             ));
-            toogle3=1;
-        }else{
+            toogle3 = 1;
+        } else {
             //graphNovo.setVisibility(View.INVISIBLE);
             layout1.setLayoutParams(new LinearLayout.LayoutParams(
-                       /*width*/ ViewGroup.LayoutParams.MATCH_PARENT,
-               /*height*/ 0
+                    /*width*/ ViewGroup.LayoutParams.MATCH_PARENT,
+                    /*height*/ 0
             ));
             zerarTudo();
         }
     }
 
 
-    public void alerta(int apelido){
+    public void alerta(int apelido) {
         AlertDialog.Builder ad = new AlertDialog.Builder(MainActivity.this);
         ad.setTitle("Alerta");
-        ad.setMessage("Frezee "+apelido+" está quente");
+        ad.setMessage("Frezee " + apelido + " está quente");
     }
 
-    public void criarObjetos(){
+    public void criarObjetos() {
         objEsp ob1 = new objEsp();
         File folder = new File(Environment.getExternalStorageDirectory() + "/Controle_esp/esps");
-        if(!folder.exists()){
+        if (!folder.exists()) {
             folder.mkdir();
         }
         //salvar arquivo dentro da pasta
         String nomeArquivo = "esp01.txt";
-        File arquivo = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"/Controle_esp/esps/" + nomeArquivo);
-        try{
-            FileOutputStream salvar = new FileOutputStream(arquivo,true);
+        File arquivo = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/Controle_esp/esps/" + nomeArquivo);
+        try {
+            FileOutputStream salvar = new FileOutputStream(arquivo, true);
 
             salvar.close();
-            Toast.makeText(this, "",Toast.LENGTH_SHORT).show();
-        }catch (FileNotFoundException e){
-            Toast.makeText(this, "Arquivo não encontrado",Toast.LENGTH_SHORT).show();
-        }catch (IOException ioe){
-            Toast.makeText(this, "Erro",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
+        } catch (FileNotFoundException e) {
+            Toast.makeText(this, "Arquivo não encontrado", Toast.LENGTH_SHORT).show();
+        } catch (IOException ioe) {
+            Toast.makeText(this, "Erro", Toast.LENGTH_SHORT).show();
         }
 
-        vetOb[0]=ob1;
+        vetOb[0] = ob1;
 
 
     }
 
-    public void gravarObj(objEsp a){
+    public void gravarObj(objEsp a) {
         File folder = new File(Environment.getExternalStorageDirectory() + "/Controle_esp");
-        if(!folder.exists()){
+        if (!folder.exists()) {
             folder.mkdir();
         }
         String nomeArquivo = a.getMac() + ".txt";
-        try{
-            Log.i("NOME",nomeArquivo);
+        try {
+            Log.i("NOME", nomeArquivo);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(nomeArquivo));
             objectOutputStream.writeObject(a);
             objectOutputStream.close();
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void zerarTudo(){
-        toogle1=0;
-        toogle2=0;
-        toogle3=0;
+    public void zerarTudo() {
+        toogle1 = 0;
+        toogle2 = 0;
+        toogle3 = 0;
     }
 
 
-    public void lerConf2(String nome){
+    public void lerConf2(String nome) {
         try {
             String lstrlinha;
-            File arq = new File(Environment.getExternalStorageDirectory(),"/Controle_esp/"+nome+".txt");
+            File arq = new File(Environment.getExternalStorageDirectory(), "/Controle_esp/" + nome + ".txt");
             BufferedReader br = new BufferedReader(new FileReader(arq));
-            while ((lstrlinha = br.readLine()) != null)
-            {
+            while ((lstrlinha = br.readLine()) != null) {
                 System.out.println(lstrlinha);
                 Log.i("teste: ", lstrlinha);
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
 
-
-    public void telaScan(){
+    public void telaScan() {
         Intent intent = new Intent(this, telaOpcao.class);
         startActivity(intent);
     }
 
-    public void telaTeste(){
+    public void telaTeste() {
         Intent intent = new Intent(this, telaPrincipal.class);
         startActivity(intent);
     }
 
-    public void novatela(){
+    public void novatela() {
         Intent intent = new Intent(this, telaOpcao.class);
         startActivity(intent);
     }
 
 
-
-    public class DateAxisValueFormatter implements IAxisValueFormatter
-    {
-        private String[] mValues;
+    public class DateAxisValueFormatter implements IAxisValueFormatter {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        private String[] mValues;
 
         public DateAxisValueFormatter(String[] values) {
-            this.mValues = values; }
+            this.mValues = values;
+        }
 
         //@override
         public String getFormattedValue(float value, AxisBase axis) {
-            return sdf.format(new Date((long)value)); }
+            return sdf.format(new Date((long) value));
+        }
     }
-
-
 
 
     class HourAxisValueFormatter implements IAxisValueFormatter {
@@ -640,7 +592,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
 
 
 }

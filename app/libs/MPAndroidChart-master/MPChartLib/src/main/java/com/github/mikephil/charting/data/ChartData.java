@@ -1,4 +1,3 @@
-
 package com.github.mikephil.charting.data;
 
 import android.graphics.Typeface;
@@ -72,6 +71,16 @@ public abstract class ChartData<T extends IDataSet<? extends Entry>> {
     }
 
     /**
+     * constructor for chart data
+     *
+     * @param sets the dataset array
+     */
+    public ChartData(List<T> sets) {
+        this.mDataSets = sets;
+        notifyDataChanged();
+    }
+
+    /**
      * Created because Arrays.asList(...) does not support modification.
      *
      * @param array
@@ -86,16 +95,6 @@ public abstract class ChartData<T extends IDataSet<? extends Entry>> {
         }
 
         return list;
-    }
-
-    /**
-     * constructor for chart data
-     *
-     * @param sets the dataset array
-     */
-    public ChartData(List<T> sets) {
-        this.mDataSets = sets;
-        notifyDataChanged();
     }
 
     /**
@@ -730,17 +729,6 @@ public abstract class ChartData<T extends IDataSet<? extends Entry>> {
     }
 
     /**
-     * Enables / disables highlighting values for all DataSets this data object
-     * contains. If set to true, this means that values can
-     * be highlighted programmatically or by touch gesture.
-     */
-    public void setHighlightEnabled(boolean enabled) {
-        for (IDataSet set : mDataSets) {
-            set.setHighlightEnabled(enabled);
-        }
-    }
-
-    /**
      * Returns true if highlighting of all underlying values is enabled, false
      * if not.
      *
@@ -752,6 +740,17 @@ public abstract class ChartData<T extends IDataSet<? extends Entry>> {
                 return false;
         }
         return true;
+    }
+
+    /**
+     * Enables / disables highlighting values for all DataSets this data object
+     * contains. If set to true, this means that values can
+     * be highlighted programmatically or by touch gesture.
+     */
+    public void setHighlightEnabled(boolean enabled) {
+        for (IDataSet set : mDataSets) {
+            set.setHighlightEnabled(enabled);
+        }
     }
 
     /**

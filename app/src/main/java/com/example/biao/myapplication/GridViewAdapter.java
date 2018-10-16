@@ -21,14 +21,14 @@ import java.util.List;
 
 public class GridViewAdapter extends ArrayAdapter<objEsp> {
 
+    private final float mSeriesMax = 50f;
     DecoView decoView;
     private int mBackIndex;
     private int mSeries1Index;
-    private final float mSeriesMax = 50f;
 
 
-    public GridViewAdapter(Context context, int resouce, List<objEsp> objects){
-        super(context, resouce,objects);
+    public GridViewAdapter(Context context, int resouce, List<objEsp> objects) {
+        super(context, resouce, objects);
     }
 
 
@@ -37,8 +37,8 @@ public class GridViewAdapter extends ArrayAdapter<objEsp> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
 
-        if(null == v) {
-            LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if (null == v) {
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = inflater.inflate(R.layout.grid_item, null);
         }
         objEsp esp = getItem(position);
@@ -50,8 +50,6 @@ public class GridViewAdapter extends ArrayAdapter<objEsp> {
         //img.setImageResource(esp.getImageId());
         txtTitle.setText(esp.getApelido());
         txtDescription.setText(esp.getTemperatura());
-
-
 
 
         final SeriesItem seriesItem = new SeriesItem.Builder(Color.parseColor("#51c7dd"))
@@ -77,10 +75,6 @@ public class GridViewAdapter extends ArrayAdapter<objEsp> {
 
         return v;
     }
-
-
-
-
 
 
 }

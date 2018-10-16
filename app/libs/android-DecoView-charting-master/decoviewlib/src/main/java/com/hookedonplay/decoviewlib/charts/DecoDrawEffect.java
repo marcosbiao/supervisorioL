@@ -60,6 +60,10 @@ public class DecoDrawEffect {
      */
     private final EffectType mEffectType;
     /**
+     * Bounds used to allow contraction (or expansion) of spiral animations
+     */
+    private final RectF mSpinBounds = new RectF();
+    /**
      * Paint to use for drawing arc item in effect
      */
     private Paint mPaint;
@@ -75,11 +79,6 @@ public class DecoDrawEffect {
      * String to display during EFFECT_EXPLODE and EFFECT_SPIRAL_EXPLODE
      */
     private String mText;
-    /**
-     * Bounds used to allow contraction (or expansion) of spiral animations
-     */
-    private final RectF mSpinBounds = new RectF();
-
     private int mCircuits = 6;
 
     /**

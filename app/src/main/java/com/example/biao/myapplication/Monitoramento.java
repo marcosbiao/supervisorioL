@@ -11,16 +11,15 @@ import java.util.List;
 
 public class Monitoramento {
 
-    static boolean estadoSwitch=true;
+    static boolean estadoSwitch = true;
     static int cont = 0;
     static String numeroFone;
 
 
-
-    static public void monitorar(ArrayList<objEsp> lista){
+    static public void monitorar(ArrayList<objEsp> lista) {
         List<objEsp> auxTemperatura = new ArrayList<>();
         List<objEsp> auxTensao = new ArrayList<>();
-        System.out.println("Valor do cont: "+cont);
+        System.out.println("Valor do cont: " + cont);
         int num;
         for (int i = 0; i < lista.size(); i++) {
             if (Integer.parseInt(lista.get(i).getTemperatura()) < lista.get(i).getAlerta()) {
@@ -31,9 +30,9 @@ public class Monitoramento {
                 }*/
         }
 
-        if((cont==0) ){
+        if ((cont == 0)) {
             cont++;
-            if(estadoSwitch==true) {
+            if (estadoSwitch == true) {
                 if (lista.size() > auxTemperatura.size()) {
                     for (int j = 0; j < auxTemperatura.size(); j++) {
                         mandarMensagem("O freeze " + auxTemperatura.get(j).getApelido() + " está com temperatura elevada", numeroFone);
@@ -49,25 +48,18 @@ public class Monitoramento {
                     cont = 0;
                 }
             }
-        }else{
+        } else {
             //tb.setChecked(false);
         }
 
 
-
     }
 
 
-    static public void mandarMensagem(String msg, String fone){
+    static public void mandarMensagem(String msg, String fone) {
         SmsManager sms = SmsManager.getDefault();
-        sms.sendTextMessage(fone,null, msg,null,null);
+        sms.sendTextMessage(fone, null, msg, null, null);
     }
-
-
-
-
-
-
 
 
 }

@@ -1,4 +1,3 @@
-
 package com.github.mikephil.charting.data;
 
 import com.github.mikephil.charting.interfaces.datasets.IPieDataSet;
@@ -59,6 +58,11 @@ public class PieDataSet extends DataSet<PieEntry> implements IPieDataSet {
         calcMinMaxY(e);
     }
 
+    @Override
+    public float getSliceSpace() {
+        return mSliceSpace;
+    }
+
     /**
      * Sets the space that is left out between the piechart-slices in dp.
      * Default: 0 --> no space, maximum 20f
@@ -73,11 +77,6 @@ public class PieDataSet extends DataSet<PieEntry> implements IPieDataSet {
             spaceDp = 0f;
 
         mSliceSpace = Utils.convertDpToPixel(spaceDp);
-    }
-
-    @Override
-    public float getSliceSpace() {
-        return mSliceSpace;
     }
 
     /**
@@ -101,6 +100,11 @@ public class PieDataSet extends DataSet<PieEntry> implements IPieDataSet {
         return mAutomaticallyDisableSliceSpacing;
     }
 
+    @Override
+    public float getSelectionShift() {
+        return mShift;
+    }
+
     /**
      * sets the distance the highlighted piechart-slice of this DataSet is
      * "shifted" away from the center of the chart, default 12f
@@ -109,11 +113,6 @@ public class PieDataSet extends DataSet<PieEntry> implements IPieDataSet {
      */
     public void setSelectionShift(float shift) {
         mShift = Utils.convertDpToPixel(shift);
-    }
-
-    @Override
-    public float getSelectionShift() {
-        return mShift;
     }
 
     @Override

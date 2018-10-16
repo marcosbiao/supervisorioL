@@ -61,6 +61,7 @@ public class DecoEvent {
     private final int mColor;
     private final Interpolator mInterpolator;
     private final ExecuteEventListener mListener;
+
     /**
      * Construct the DecoEvent using the attributes set by the Builder
      *

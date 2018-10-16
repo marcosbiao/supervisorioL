@@ -1,4 +1,3 @@
-
 package com.github.mikephil.charting.highlight;
 
 import com.github.mikephil.charting.components.YAxis;

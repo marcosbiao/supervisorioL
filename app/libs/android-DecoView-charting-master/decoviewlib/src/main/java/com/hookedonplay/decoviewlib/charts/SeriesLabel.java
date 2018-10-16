@@ -46,17 +46,17 @@ public class SeriesLabel {
     static private Typeface mDefaultTypeFace;
     private final float mBufferX = 15f;
     private final float mBufferY = 15f;
-    private String mLabel;
-    private Paint mPaintBack;
-    private Paint mPaintText;
     private final float mFontSize;
     private final Typeface mTypeface;
-    private Rect mTextBounds;
-    private RectF mTextDraw;
-    private float mTextCenter;
     private final boolean mVisible;
     private final int mColorText;
     private final int mColorBack;
+    private String mLabel;
+    private Paint mPaintBack;
+    private Paint mPaintText;
+    private Rect mTextBounds;
+    private RectF mTextDraw;
+    private float mTextCenter;
 
     private SeriesLabel(Builder builder) {
         mLabel = builder.mLabel;

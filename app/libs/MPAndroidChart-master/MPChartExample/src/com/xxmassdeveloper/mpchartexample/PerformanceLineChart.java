@@ -1,4 +1,3 @@
-
 package com.xxmassdeveloper.mpchartexample;
 
 import android.graphics.Color;
@@ -35,7 +34,7 @@ public class PerformanceLineChart extends DemoBase implements OnSeekBarChangeLis
         mTvCount.setText("500");
 
         mSeekBarValues.setProgress(500);
-        
+
         mSeekBarValues.setOnSeekBarChangeListener(this);
 
         mChart = findViewById(R.id.chart1);
@@ -53,7 +52,7 @@ public class PerformanceLineChart extends DemoBase implements OnSeekBarChangeLis
 
         // if disabled, scaling can be done on x- and y-axis separately
         mChart.setPinchZoom(false);
-              
+
         mChart.getAxisLeft().setDrawGridLines(false);
         mChart.getAxisRight().setEnabled(false);
         mChart.getXAxis().setDrawGridLines(true);
@@ -68,11 +67,11 @@ public class PerformanceLineChart extends DemoBase implements OnSeekBarChangeLis
 
         int count = mSeekBarValues.getProgress() + 1000;
         mTvCount.setText("" + count);
-        
+
         mChart.resetTracking();
 
         setData(count, 500f);
-       
+
         // redraw
         mChart.invalidate();
     }
@@ -96,14 +95,14 @@ public class PerformanceLineChart extends DemoBase implements OnSeekBarChangeLis
         for (int i = 0; i < count; i++) {
             float mult = (range + 1);
             float val = (float) (Math.random() * mult) + 3;// + (float)
-                                                           // ((mult *
-                                                           // 0.1) / 10);
+            // ((mult *
+            // 0.1) / 10);
             yVals.add(new Entry(i * 0.001f, val));
         }
 
         // create a dataset and give it a type
         LineDataSet set1 = new LineDataSet(yVals, "DataSet 1");
-        
+
         set1.setColor(Color.BLACK);
         set1.setLineWidth(0.5f);
         set1.setDrawValues(false);
@@ -116,7 +115,7 @@ public class PerformanceLineChart extends DemoBase implements OnSeekBarChangeLis
 
         // set data
         mChart.setData(data);
-        
+
         // get the legend (only possible after setting data)
         Legend l = mChart.getLegend();
         l.setEnabled(false);

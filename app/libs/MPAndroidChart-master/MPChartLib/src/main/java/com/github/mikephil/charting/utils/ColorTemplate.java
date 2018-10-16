@@ -1,4 +1,3 @@
-
 package com.github.mikephil.charting.utils;
 
 import android.content.res.Resources;

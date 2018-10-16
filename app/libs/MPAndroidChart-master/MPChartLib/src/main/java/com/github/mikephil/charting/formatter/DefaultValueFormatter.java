@@ -1,4 +1,3 @@
-
 package com.github.mikephil.charting.formatter;
 
 import com.github.mikephil.charting.data.Entry;
@@ -12,8 +11,7 @@ import java.text.DecimalFormat;
  *
  * @author Philipp Jahoda
  */
-public class DefaultValueFormatter implements IValueFormatter
-{
+public class DefaultValueFormatter implements IValueFormatter {
 
     /**
      * DecimalFormat for formatting

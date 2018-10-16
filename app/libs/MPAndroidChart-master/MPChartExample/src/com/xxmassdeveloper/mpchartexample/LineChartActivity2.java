@@ -1,4 +1,3 @@
-
 package com.xxmassdeveloper.mpchartexample;
 
 import android.graphics.Color;
@@ -292,7 +291,7 @@ public class LineChartActivity2 extends DemoBase implements OnSeekBarChangeListe
 
         ArrayList<Entry> yVals2 = new ArrayList<Entry>();
 
-        for (int i = 0; i < count-1; i++) {
+        for (int i = 0; i < count - 1; i++) {
             float mult = range;
             float val = (float) (Math.random() * mult) + 450;
             yVals2.add(new Entry(i, val));

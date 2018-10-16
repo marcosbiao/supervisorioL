@@ -1,4 +1,3 @@
-
 package com.github.mikephil.charting.data;
 
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
@@ -29,6 +28,10 @@ public class BarData extends BarLineScatterCandleBubbleData<IBarDataSet> {
         super(dataSets);
     }
 
+    public float getBarWidth() {
+        return mBarWidth;
+    }
+
     /**
      * Sets the width each bar should have on the x-axis (in values, not pixels).
      * Default 0.85f
@@ -37,10 +40,6 @@ public class BarData extends BarLineScatterCandleBubbleData<IBarDataSet> {
      */
     public void setBarWidth(float mBarWidth) {
         this.mBarWidth = mBarWidth;
-    }
-
-    public float getBarWidth() {
-        return mBarWidth;
     }
 
     /**

@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@android:color/black">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:orientation="vertical">
 
     <com.hookedonplay.decoviewlib.DecoView
+        android:id="@+id/dynamicArcView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/dynamicArcView"
         android:layout_margin="8dp">
 
     </com.hookedonplay.decoviewlib.DecoView>
 
     <TextView
+        android:id="@+id/textPercentage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text=""
-        android:textColor="@android:color/white"
-        android:textSize="40sp"
-        android:id="@+id/textPercentage"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        />
+        android:layout_centerVertical="true"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@android:color/white"
+        android:textSize="40sp" />
 
-    <include layout="@layout/layout_replay"/>
+    <include layout="@layout/layout_replay" />
 
 </RelativeLayout>

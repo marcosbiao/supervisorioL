@@ -23,6 +23,7 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.support.annotation.NonNull;
 import android.util.Log;
+
 import com.hookedonplay.decoviewlib.DecoView;
 
 public class LineSeries extends ChartSeries {

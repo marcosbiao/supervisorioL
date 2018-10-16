@@ -1,4 +1,3 @@
-
 package com.xxmassdeveloper.mpchartexample;
 
 import android.graphics.Typeface;
@@ -28,7 +27,7 @@ import java.util.List;
 /**
  * This Activity demonstrates drawing into the Chart with the finger. Both line,
  * bar and scatter charts can be used for drawing.
- * 
+ *
  * @author Philipp Jahoda
  */
 public class DrawChartActivity extends DemoBase implements OnChartValueSelectedListener,
@@ -112,7 +111,7 @@ public class DrawChartActivity extends DemoBase implements OnChartValueSelectedL
                 break;
             }
             case R.id.actionToggleHighlight: {
-                if(mChart.getData() != null) {
+                if (mChart.getData() != null) {
                     mChart.getData().setHighlightEnabled(!mChart.getData().isHighlightEnabled());
                     mChart.invalidate();
                 }
@@ -152,13 +151,17 @@ public class DrawChartActivity extends DemoBase implements OnChartValueSelectedL
     public void onNothingSelected() {
     }
 
-    /** callback for each new entry drawn with the finger */
+    /**
+     * callback for each new entry drawn with the finger
+     */
     @Override
     public void onEntryAdded(Entry entry) {
         Log.i(Chart.LOG_TAG, entry.toString());
     }
 
-    /** callback when a DataSet has been drawn (when lifting the finger) */
+    /**
+     * callback when a DataSet has been drawn (when lifting the finger)
+     */
     @Override
     public void onDrawFinished(DataSet<?> dataSet) {
         Log.i(Chart.LOG_TAG, "DataSet drawn. " + dataSet.toSimpleString());

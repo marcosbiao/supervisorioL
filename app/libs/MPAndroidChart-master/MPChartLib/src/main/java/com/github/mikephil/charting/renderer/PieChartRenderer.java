@@ -1,4 +1,3 @@
-
 package com.github.mikephil.charting.renderer;
 
 import android.graphics.Bitmap;
@@ -44,29 +43,29 @@ public class PieChartRenderer extends DataRenderer {
     protected Paint mHolePaint;
     protected Paint mTransparentCirclePaint;
     protected Paint mValueLinePaint;
-
+    /**
+     * Bitmap for drawing the center hole
+     */
+    protected WeakReference<Bitmap> mDrawBitmap;
+    protected Canvas mBitmapCanvas;
+    protected Path mDrawCenterTextPathBuffer = new Path();
+    protected RectF mDrawHighlightedRectF = new RectF();
     /**
      * paint object for the text that can be displayed in the center of the
      * chart
      */
     private TextPaint mCenterTextPaint;
-
     /**
      * paint object used for drwing the slice-text
      */
     private Paint mEntryLabelsPaint;
-
     private StaticLayout mCenterTextLayout;
     private CharSequence mCenterTextLastValue;
     private RectF mCenterTextLastBounds = new RectF();
     private RectF[] mRectBuffer = {new RectF(), new RectF(), new RectF()};
-
-    /**
-     * Bitmap for drawing the center hole
-     */
-    protected WeakReference<Bitmap> mDrawBitmap;
-
-    protected Canvas mBitmapCanvas;
+    private Path mPathBuffer = new Path();
+    private RectF mInnerRectBuffer = new RectF();
+    private Path mHoleCirclePath = new Path();
 
     public PieChartRenderer(PieChart chart, ChartAnimator animator,
                             ViewPortHandler viewPortHandler) {
@@ -150,9 +149,6 @@ public class PieChartRenderer extends DataRenderer {
                 drawDataSet(c, set);
         }
     }
-
-    private Path mPathBuffer = new Path();
-    private RectF mInnerRectBuffer = new RectF();
 
     protected float calculateMinimumRadiusForSpacedSlice(
             MPPointF center,
@@ -520,7 +516,7 @@ public class PieChartRenderer extends DataRenderer {
 
                         mValuePaint.setTextAlign(Align.RIGHT);
 
-                        if(drawXOutside)
+                        if (drawXOutside)
                             mEntryLabelsPaint.setTextAlign(Align.RIGHT);
 
                         labelPtx = pt2x - offset;
@@ -530,7 +526,7 @@ public class PieChartRenderer extends DataRenderer {
                         pt2y = pt1y;
                         mValuePaint.setTextAlign(Align.LEFT);
 
-                        if(drawXOutside)
+                        if (drawXOutside)
                             mEntryLabelsPaint.setTextAlign(Align.LEFT);
 
                         labelPtx = pt2x + offset;
@@ -611,8 +607,8 @@ public class PieChartRenderer extends DataRenderer {
                     Utils.drawImage(
                             c,
                             icon,
-                            (int)x,
-                            (int)y,
+                            (int) x,
+                            (int) y,
                             icon.getIntrinsicWidth(),
                             icon.getIntrinsicHeight());
                 }
@@ -645,8 +641,6 @@ public class PieChartRenderer extends DataRenderer {
         c.drawBitmap(mDrawBitmap.get(), 0, 0, null);
         drawCenterText(c);
     }
-
-    private Path mHoleCirclePath = new Path();
 
     /**
      * draws the hole in the center of the chart and the transparent circle /
@@ -689,7 +683,6 @@ public class PieChartRenderer extends DataRenderer {
         }
     }
 
-    protected Path mDrawCenterTextPathBuffer = new Path();
     /**
      * draws the description text in the center of the pie chart makes most
      * sense when center-hole is enabled
@@ -762,7 +755,6 @@ public class PieChartRenderer extends DataRenderer {
         }
     }
 
-    protected RectF mDrawHighlightedRectF = new RectF();
     @Override
     public void drawHighlighted(Canvas c, Highlight[] indices) {
 
@@ -782,7 +774,7 @@ public class PieChartRenderer extends DataRenderer {
                 : 0.f;
 
         final RectF highlightedCircleBox = mDrawHighlightedRectF;
-        highlightedCircleBox.set(0,0,0,0);
+        highlightedCircleBox.set(0, 0, 0, 0);
 
         for (int i = 0; i < indices.length; i++) {
 

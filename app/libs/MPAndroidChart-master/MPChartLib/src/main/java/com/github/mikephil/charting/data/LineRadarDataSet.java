@@ -1,4 +1,3 @@
-
 package com.github.mikephil.charting.data;
 
 import android.annotation.TargetApi;
@@ -18,15 +17,13 @@ import java.util.List;
 public abstract class LineRadarDataSet<T extends Entry> extends LineScatterCandleRadarDataSet<T> implements ILineRadarDataSet<T> {
 
     /**
-     * the color that is used for filling the line surface
-     */
-    private int mFillColor = Color.rgb(140, 234, 255);
-
-    /**
      * the drawable to be used for filling the line surface
      */
     protected Drawable mFillDrawable;
-
+    /**
+     * the color that is used for filling the line surface
+     */
+    private int mFillColor = Color.rgb(140, 234, 255);
     /**
      * transparency used for filling line surface
      */
@@ -93,6 +90,11 @@ public abstract class LineRadarDataSet<T extends Entry> extends LineScatterCandl
         mFillAlpha = alpha;
     }
 
+    @Override
+    public float getLineWidth() {
+        return mLineWidth;
+    }
+
     /**
      * set the line width of the chart (min = 0.2f, max = 10f); default 1f NOTE:
      * thinner line == better performance, thicker line == worse performance
@@ -106,11 +108,6 @@ public abstract class LineRadarDataSet<T extends Entry> extends LineScatterCandl
         if (width > 10.0f)
             width = 10.0f;
         mLineWidth = Utils.convertDpToPixel(width);
-    }
-
-    @Override
-    public float getLineWidth() {
-        return mLineWidth;
     }
 
     @Override

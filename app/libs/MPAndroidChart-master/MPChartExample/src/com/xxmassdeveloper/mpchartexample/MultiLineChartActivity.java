@@ -1,4 +1,3 @@
-
 package com.xxmassdeveloper.mpchartexample;
 
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.Legend.LegendPosition;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -31,6 +29,11 @@ public class MultiLineChartActivity extends DemoBase implements OnSeekBarChangeL
     private LineChart mChart;
     private SeekBar mSeekBarX, mSeekBarY;
     private TextView tvX, tvY;
+    private int[] mColors = new int[]{
+            ColorTemplate.VORDIPLOM_COLORS[0],
+            ColorTemplate.VORDIPLOM_COLORS[1],
+            ColorTemplate.VORDIPLOM_COLORS[2]
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,7 @@ public class MultiLineChartActivity extends DemoBase implements OnSeekBarChangeL
 
         mChart = findViewById(R.id.chart1);
         mChart.setOnChartValueSelectedListener(this);
-        
+
         mChart.setDrawGridBackground(false);
         mChart.getDescription().setEnabled(false);
         mChart.setDrawBorders(false);
@@ -119,7 +122,7 @@ public class MultiLineChartActivity extends DemoBase implements OnSeekBarChangeL
                 break;
             }
             case R.id.actionToggleHighlight: {
-                if(mChart.getData() != null) {
+                if (mChart.getData() != null) {
                     mChart.getData().setHighlightEnabled(!mChart.getData().isHighlightEnabled());
                     mChart.invalidate();
                 }
@@ -177,15 +180,9 @@ public class MultiLineChartActivity extends DemoBase implements OnSeekBarChangeL
         return true;
     }
 
-    private int[] mColors = new int[] {
-            ColorTemplate.VORDIPLOM_COLORS[0], 
-            ColorTemplate.VORDIPLOM_COLORS[1],
-            ColorTemplate.VORDIPLOM_COLORS[2]
-    };
-
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        
+
         mChart.resetTracking();
 
         tvX.setText("" + (mSeekBarX.getProgress()));

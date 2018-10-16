@@ -1,4 +1,3 @@
-
 package com.github.mikephil.charting.data;
 
 import android.content.Context;
@@ -126,6 +125,11 @@ public class LineDataSet extends LineRadarDataSet<Entry> implements ILineDataSet
         mMode = mode;
     }
 
+    @Override
+    public float getCubicIntensity() {
+        return mCubicIntensity;
+    }
+
     /**
      * Sets the intensity for cubic lines (if enabled). Max = 1f = very cubic,
      * Min = 0.05f = low cubic effect, Default: 0.2f
@@ -143,10 +147,9 @@ public class LineDataSet extends LineRadarDataSet<Entry> implements ILineDataSet
     }
 
     @Override
-    public float getCubicIntensity() {
-        return mCubicIntensity;
+    public float getCircleRadius() {
+        return mCircleRadius;
     }
-
 
     /**
      * Sets the radius of the drawn circles.
@@ -164,8 +167,8 @@ public class LineDataSet extends LineRadarDataSet<Entry> implements ILineDataSet
     }
 
     @Override
-    public float getCircleRadius() {
-        return mCircleRadius;
+    public float getCircleHoleRadius() {
+        return mCircleHoleRadius;
     }
 
     /**
@@ -183,9 +186,12 @@ public class LineDataSet extends LineRadarDataSet<Entry> implements ILineDataSet
         }
     }
 
-    @Override
-    public float getCircleHoleRadius() {
-        return mCircleHoleRadius;
+    /**
+     * This function is deprecated because of unclarity. Use getCircleRadius instead.
+     */
+    @Deprecated
+    public float getCircleSize() {
+        return getCircleRadius();
     }
 
     /**
@@ -199,14 +205,6 @@ public class LineDataSet extends LineRadarDataSet<Entry> implements ILineDataSet
     @Deprecated
     public void setCircleSize(float size) {
         setCircleRadius(size);
-    }
-
-    /**
-     * This function is deprecated because of unclarity. Use getCircleRadius instead.
-     */
-    @Deprecated
-    public float getCircleSize() {
-        return getCircleRadius();
     }
 
     /**
@@ -279,6 +277,19 @@ public class LineDataSet extends LineRadarDataSet<Entry> implements ILineDataSet
         return mCircleColors;
     }
 
+    /**
+     * Sets the colors that should be used for the circles of this DataSet.
+     * Colors are reused as soon as the number of Entries the DataSet represents
+     * is higher than the size of the colors array. Make sure that the colors
+     * are already prepared (by calling getResources().getColor(...)) before
+     * adding them to the DataSet.
+     *
+     * @param colors
+     */
+    public void setCircleColors(int... colors) {
+        this.mCircleColors = ColorTemplate.createColors(colors);
+    }
+
     @Override
     public int getCircleColor(int index) {
         return mCircleColors.get(index);
@@ -300,19 +311,6 @@ public class LineDataSet extends LineRadarDataSet<Entry> implements ILineDataSet
      */
     public void setCircleColors(List<Integer> colors) {
         mCircleColors = colors;
-    }
-
-    /**
-     * Sets the colors that should be used for the circles of this DataSet.
-     * Colors are reused as soon as the number of Entries the DataSet represents
-     * is higher than the size of the colors array. Make sure that the colors
-     * are already prepared (by calling getResources().getColor(...)) before
-     * adding them to the DataSet.
-     *
-     * @param colors
-     */
-    public void setCircleColors(int... colors) {
-        this.mCircleColors = ColorTemplate.createColors(colors);
     }
 
     /**
@@ -361,6 +359,11 @@ public class LineDataSet extends LineRadarDataSet<Entry> implements ILineDataSet
         mCircleColors.clear();
     }
 
+    @Override
+    public int getCircleHoleColor() {
+        return mCircleHoleColor;
+    }
+
     /**
      * Sets the color of the inner circle of the line-circles.
      *
@@ -368,11 +371,6 @@ public class LineDataSet extends LineRadarDataSet<Entry> implements ILineDataSet
      */
     public void setCircleHoleColor(int color) {
         mCircleHoleColor = color;
-    }
-
-    @Override
-    public int getCircleHoleColor() {
-        return mCircleHoleColor;
     }
 
     /**
@@ -389,6 +387,11 @@ public class LineDataSet extends LineRadarDataSet<Entry> implements ILineDataSet
         return mDrawCircleHole;
     }
 
+    @Override
+    public IFillFormatter getFillFormatter() {
+        return mFillFormatter;
+    }
+
     /**
      * Sets a custom IFillFormatter to the chart that handles the position of the
      * filled-line for each DataSet. Set this to null to use the default logic.
@@ -401,11 +404,6 @@ public class LineDataSet extends LineRadarDataSet<Entry> implements ILineDataSet
             mFillFormatter = new DefaultFillFormatter();
         else
             mFillFormatter = formatter;
-    }
-
-    @Override
-    public IFillFormatter getFillFormatter() {
-        return mFillFormatter;
     }
 
     public enum Mode {

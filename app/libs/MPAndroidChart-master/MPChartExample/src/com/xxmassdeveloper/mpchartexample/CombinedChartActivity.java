@@ -1,4 +1,3 @@
-
 package com.xxmassdeveloper.mpchartexample;
 
 import android.graphics.Color;
@@ -38,8 +37,8 @@ import java.util.ArrayList;
 
 public class CombinedChartActivity extends DemoBase {
 
-    private CombinedChart mChart;
     private final int itemcount = 12;
+    private CombinedChart mChart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

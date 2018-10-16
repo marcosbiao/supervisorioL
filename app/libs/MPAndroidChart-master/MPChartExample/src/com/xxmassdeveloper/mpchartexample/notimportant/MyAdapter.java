@@ -56,7 +56,7 @@ public class MyAdapter extends ArrayAdapter<ContentItem> {
         holder.tvName.setText(c.name);
         holder.tvDesc.setText(c.desc);
 
-        if(c.isNew)
+        if (c.isNew)
             holder.tvNew.setVisibility(View.VISIBLE);
         else
             holder.tvNew.setVisibility(View.GONE);

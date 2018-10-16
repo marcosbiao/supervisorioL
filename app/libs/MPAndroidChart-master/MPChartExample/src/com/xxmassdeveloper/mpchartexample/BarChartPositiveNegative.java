@@ -1,4 +1,3 @@
-
 package com.xxmassdeveloper.mpchartexample;
 
 import android.graphics.Color;
@@ -88,7 +87,7 @@ public class BarChartPositiveNegative extends DemoBase {
         xAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return data.get(Math.min(Math.max((int) value, 0), data.size()-1)).xAxisValue;
+                return data.get(Math.min(Math.max((int) value, 0), data.size() - 1)).xAxisValue;
             }
         });
 
@@ -120,7 +119,7 @@ public class BarChartPositiveNegative extends DemoBase {
 
         if (mChart.getData() != null &&
                 mChart.getData().getDataSetCount() > 0) {
-            set = (BarDataSet)mChart.getData().getDataSetByIndex(0);
+            set = (BarDataSet) mChart.getData().getDataSetByIndex(0);
             set.setValues(values);
             mChart.getData().notifyDataChanged();
             mChart.notifyDataSetChanged();
@@ -156,8 +155,7 @@ public class BarChartPositiveNegative extends DemoBase {
         }
     }
 
-    private class ValueFormatter implements IValueFormatter
-    {
+    private class ValueFormatter implements IValueFormatter {
 
         private DecimalFormat mFormat;
 

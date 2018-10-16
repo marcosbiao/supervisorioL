@@ -1,4 +1,3 @@
-
 package com.github.mikephil.charting.data;
 
 import android.graphics.Color;
@@ -25,6 +24,11 @@ public abstract class BarLineScatterCandleBubbleDataSet<T extends Entry>
         super(yVals, label);
     }
 
+    @Override
+    public int getHighLightColor() {
+        return mHighLightColor;
+    }
+
     /**
      * Sets the color that is used for drawing the highlight indicators. Dont
      * forget to resolve the color using getResources().getColor(...) or
@@ -34,11 +38,6 @@ public abstract class BarLineScatterCandleBubbleDataSet<T extends Entry>
      */
     public void setHighLightColor(int color) {
         mHighLightColor = color;
-    }
-
-    @Override
-    public int getHighLightColor() {
-        return mHighLightColor;
     }
 
     protected void copy(BarLineScatterCandleBubbleDataSet barLineScatterCandleBubbleDataSet) {

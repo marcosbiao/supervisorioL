@@ -1,4 +1,3 @@
-
 package com.xxmassdeveloper.mpchartexample.custom;
 
 import android.content.Context;

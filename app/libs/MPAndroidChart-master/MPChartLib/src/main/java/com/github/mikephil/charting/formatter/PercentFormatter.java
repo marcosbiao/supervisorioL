@@ -1,4 +1,3 @@
-
 package com.github.mikephil.charting.formatter;
 
 import com.github.mikephil.charting.components.AxisBase;
@@ -13,8 +12,7 @@ import java.text.DecimalFormat;
  *
  * @author Philipp Jahoda
  */
-public class PercentFormatter implements IValueFormatter, IAxisValueFormatter
-{
+public class PercentFormatter implements IValueFormatter, IAxisValueFormatter {
 
     protected DecimalFormat mFormat;
 

@@ -19,7 +19,7 @@ import java.net.UnknownHostException;
 public class LeitorServer {
 
     //Responsavel por carregar o Objeto JSON
-    public static String getJSONFromAPI(String url){
+    public static String getJSONFromAPI(String url) {
 
         String retorno = "";
         try {
@@ -35,9 +35,9 @@ public class LeitorServer {
             conexao.connect();
 
             codigoResposta = conexao.getResponseCode();
-            if(codigoResposta < HttpURLConnection.HTTP_BAD_REQUEST){
+            if (codigoResposta < HttpURLConnection.HTTP_BAD_REQUEST) {
                 is = conexao.getInputStream();
-            }else{
+            } else {
                 is = conexao.getErrorStream();
 
             }
@@ -48,36 +48,36 @@ public class LeitorServer {
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
-        }catch (SocketTimeoutException e){
+        } catch (SocketTimeoutException e) {
             e.printStackTrace();
-        }catch (NetworkOnMainThreadException e){
+        } catch (NetworkOnMainThreadException e) {
             e.printStackTrace();
-        } catch (UnknownHostException e){
+        } catch (UnknownHostException e) {
             e.printStackTrace();
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         return retorno;
     }
 
-    private static String converterInputStreamToString(InputStream is){
+    private static String converterInputStreamToString(InputStream is) {
         StringBuffer buffer = new StringBuffer();
-        try{
+        try {
             BufferedReader br;
             String linha;
 
             br = new BufferedReader(new InputStreamReader(is));
-            while((linha = br.readLine())!=null){
+            while ((linha = br.readLine()) != null) {
                 buffer.append(linha);
             }
 
             br.close();
-        }catch (java.net.SocketTimeoutException e){
+        } catch (java.net.SocketTimeoutException e) {
             e.printStackTrace();
-        }catch (MalformedURLException e) {
+        } catch (MalformedURLException e) {
             e.printStackTrace();
-        } catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 

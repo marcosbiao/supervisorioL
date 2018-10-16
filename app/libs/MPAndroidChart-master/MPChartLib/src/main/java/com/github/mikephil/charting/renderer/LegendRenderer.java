@@ -1,4 +1,3 @@
-
 package com.github.mikephil.charting.renderer;
 
 import android.graphics.Canvas;
@@ -40,6 +39,10 @@ public class LegendRenderer extends Renderer {
      * the legend object this renderer renders
      */
     protected Legend mLegend;
+    protected List<LegendEntry> computedEntries = new ArrayList<>(16);
+    protected Paint.FontMetrics legendFontMetrics = new Paint.FontMetrics();
+    private Path mLineFormPath = new Path();
+
 
     public LegendRenderer(ViewPortHandler viewPortHandler, Legend legend) {
         super(viewPortHandler);
@@ -71,9 +74,6 @@ public class LegendRenderer extends Renderer {
     public Paint getFormPaint() {
         return mLegendFormPaint;
     }
-
-
-    protected List<LegendEntry> computedEntries = new ArrayList<>(16);
 
     /**
      * Prepares the legend and calculates all needed forms, labels and colors.
@@ -219,8 +219,6 @@ public class LegendRenderer extends Renderer {
         // calculate all dimensions of the mLegend
         mLegend.calculateDimensions(mLegendLabelPaint, mViewPortHandler);
     }
-
-    protected Paint.FontMetrics legendFontMetrics = new Paint.FontMetrics();
 
     public void renderLegend(Canvas c) {
 
@@ -465,8 +463,6 @@ public class LegendRenderer extends Renderer {
         }
     }
 
-    private Path mLineFormPath = new Path();
-
     /**
      * Draws the Legend-form at the given position with the color at the given
      * index.
@@ -522,8 +518,7 @@ public class LegendRenderer extends Renderer {
                 c.drawRect(x, y - half, x + formSize, y + half, mLegendFormPaint);
                 break;
 
-            case LINE:
-            {
+            case LINE: {
                 final float formLineWidth = Utils.convertDpToPixel(
                         Float.isNaN(entry.formLineWidth)
                                 ? legend.getFormLineWidth()
@@ -540,7 +535,7 @@ public class LegendRenderer extends Renderer {
                 mLineFormPath.lineTo(x + formSize, y);
                 c.drawPath(mLineFormPath, mLegendFormPaint);
             }
-                break;
+            break;
         }
 
         c.restoreToCount(restoreCount);
