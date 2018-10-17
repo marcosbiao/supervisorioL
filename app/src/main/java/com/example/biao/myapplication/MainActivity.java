@@ -1,8 +1,6 @@
 package com.example.biao.myapplication;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -19,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,73 +30,72 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.DataPoint;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
-    static List<objEsp> listaObj = new ArrayList<>();
+//    private final Handler mHandler02 = new Handler();
+//    private final Handler mHandler03 = new Handler();
+
+    //    Random numRandomico = new Random();
+//    DataPoint ponto;
+//    GraphView graph01, graph02, graph03, graphNovo;
+//    int x1 = 0, x2 = 0, x3 = 0;
+//    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+//    int a1 = 0;
+//        LayoutParams params1 = new LinearLayout.LayoutParams(
+//                /*width*/ ViewGroup.LayoutParams.MATCH_PARENT,
+//                /*height*/ 100,
+//                /*weight*/ 1.0f
+//        );
+//    objEsp[] vetOb = new objEsp[2];
+//    objEsp ob1 = new objEsp();
+//    objEsp ob2 = new objEsp();
+//    String nomeData = " ";
+
+    public static List<objEsp> listaObj = new ArrayList<>();
     private final Handler mHandler01 = new Handler();
-    private final Handler mHandler02 = new Handler();
-    private final Handler mHandler03 = new Handler();
-    Random numRandomico = new Random();
-    DataPoint ponto;
-    GraphView graph01, graph02, graph03, graphNovo;
-    int x1 = 0, x2 = 0, x3 = 0;
-    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-    double myDouble = -242528463.775282;
-    final long timeReference = System.currentTimeMillis() + ((long) (myDouble * 1000));
-    int a1 = 0;
-    TextView tv1, tv2, tv3, ap1, ap2, ap3;
-    LinearLayout layout1;
-    LayoutParams params1 = new LinearLayout.LayoutParams(
-            /*width*/ ViewGroup.LayoutParams.MATCH_PARENT,
-            /*height*/ 100,
-            /*weight*/ 1.0f
-    );
+    private double myDouble = -242528463.775282;
+    private final long timeReference = System.currentTimeMillis() + ((long) (myDouble * 1000));
+    private TextView tv1, tv2, tv3, ap1, ap2, ap3;
+    private LinearLayout layout1;
+
     int toogle1 = 0, toogle2 = 0, toogle3 = 0;
-    objEsp[] vetOb = new objEsp[2];
-    objEsp ob1 = new objEsp();
-    objEsp ob2 = new objEsp();
-    String nomeData = " ";
+
     int i = 0, t = 0;
-    private int tempoDeColeta = 2000;//tempo em milisegundos
-    private Runnable mTimer1, mTimer2, mTimer3;
+    private int tempoDeColeta = 2000; //tempoMilis em milisegundos
+    private Runnable mTimer1;
+//    private Runnable mTimer2;
+//    private Runnable mTimer3;
     private LineChart mChart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         System.out.println(timeReference);
 
         //necessario para permissão à memoria interna
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1000);
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1000);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1000);
+            }
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1000);
+            }
         }
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -108,20 +104,9 @@ public class MainActivity extends AppCompatActivity {
 
         //telaScan();
 
-        //graph01 = findViewById(R.id.graph01);
-        //graph02 = findViewById(R.id.graph02);
-        //graph03 = findViewById(R.id.graph03);
-        //graphNovo = findViewById(R.id.graph);
-        tv1 = findViewById(R.id.textView1);
-        tv2 = findViewById(R.id.textView2);
-        tv3 = findViewById(R.id.textView3);
-        ap1 = findViewById(R.id.ap1);
-        ap2 = findViewById(R.id.ap2);
-        ap3 = findViewById(R.id.ap3);
-        layout1 = findViewById(R.id.layout1);
-        mChart = findViewById(R.id.chart1);
-
-
+        //atribuindo os componentes da interface
+        componentesInterface();
+        //criando novo gráfico
         criarNovoGrafico();
 
 /*
@@ -145,20 +130,44 @@ public class MainActivity extends AppCompatActivity {
 */
         ap3.setText("Nome teste 3");
         lerConf2("Esp1");
-    }
 
+        mTimer1 = new Runnable() {
+            @Override
+            public void run() {
+                addEntry();
+                mHandler01.postDelayed(this, tempoDeColeta);
+            }
+        };
+        mHandler01.postDelayed(mTimer1, tempoDeColeta);
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case 1000:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //Toast.makeText(this, "Permissão Concedida", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Permissão Concedida", Toast.LENGTH_SHORT).show();
                 } else {
-                    //Toast.makeText(this, "Permissão negada", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Permissão negada", Toast.LENGTH_SHORT).show();
                     finish();
                 }
+                break;
         }
+    }
+
+    private void componentesInterface() {
+        //graph01 = findViewById(R.id.graph01);
+        //graph02 = findViewById(R.id.graph02);
+        //graph03 = findViewById(R.id.graph03);
+        //graphNovo = findViewById(R.id.graph);
+        tv1 = findViewById(R.id.textView1);
+        tv2 = findViewById(R.id.textView2);
+        tv3 = findViewById(R.id.textView3);
+        ap1 = findViewById(R.id.ap1);
+        ap2 = findViewById(R.id.ap2);
+        ap3 = findViewById(R.id.ap3);
+        layout1 = findViewById(R.id.layout1);
+        mChart = findViewById(R.id.chart1);
     }
 
     public void criarNovoGrafico() {
@@ -180,12 +189,16 @@ public class MainActivity extends AppCompatActivity {
         // set an alternative background color
         mChart.setBackgroundColor(Color.LTGRAY);
 
-        LineData data = new LineData();
-        data.setValueTextColor(Color.WHITE);
-
         mChart.setScaleMinima(10f, 1f);
         mChart.centerViewToY(10f, YAxis.AxisDependency.LEFT);
 
+        mChart.setVisibleYRange(-50f, 50f, YAxis.AxisDependency.LEFT);
+        mChart.setAutoScaleMinMaxEnabled(false);
+
+        LineData data = new LineData();
+        data.setValueTextColor(Color.WHITE);
+        //data set
+        data.addDataSet(createSet());
 
         // add empty data
         mChart.setData(data);
@@ -197,7 +210,6 @@ public class MainActivity extends AppCompatActivity {
         l.setForm(Legend.LegendForm.LINE);
         //l.setTypeface(Typeface.DEFAULT);
         l.setTextColor(Color.WHITE);
-
 
         //eixo X
         XAxis x1 = mChart.getXAxis();
@@ -220,14 +232,10 @@ public class MainActivity extends AppCompatActivity {
                 //long timestamp = timeReference + (long) value;
                 //long millis = TimeUnit.HOURS.toMillis(timestamp);
                 //return mFormat.format(new Date(millis));
-                Date s = new Date(new Float(value).longValue() * 1000L);
+                Date s = new Date((long) (value * 1000L));
                 return mFormat.format(s);
             }
         });
-
-
-        mChart.setVisibleYRange(-50f, 50f, YAxis.AxisDependency.LEFT);
-        mChart.setAutoScaleMinMaxEnabled(false);
 
 
         YAxis leftAxis = mChart.getAxisLeft();
@@ -253,7 +261,6 @@ public class MainActivity extends AppCompatActivity {
         LimitLine li = new LimitLine(20, "Alarme");
         leftAxis.addLimitLine(li);
 
-
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setEnabled(false);
     }
@@ -261,29 +268,31 @@ public class MainActivity extends AppCompatActivity {
     private void addEntry() {
         LineData data = mChart.getData();
         if (data != null) {
-            ILineDataSet set = data.getDataSetByIndex(0);
-            if (set == null) {
-                set = createSet();
-                data.addDataSet(set);
-            }
+//            ILineDataSet set = data.getDataSetByIndex(0);
+//            if (set == null) {
+//                set = createSet();
+//                data.addDataSet(set);
+//            }
 
             double myDouble = -242528463.775282;
-            final long now = System.currentTimeMillis() + ((long) (myDouble * 1000));
+            long now = System.currentTimeMillis() + ((long) (myDouble * 1000));
             System.out.println(now);
+            System.out.println(new Date().getTime());
+            System.out.println(Calendar.getInstance().getTimeInMillis());
 
-            Calendar calendar = Calendar.getInstance();
+//            Calendar calendar = Calendar.getInstance().getTimeInMillis();
             //data.addXValue("");
-            System.out.println("calendar: " + new Date().getTime());
-            data.addEntry(new Entry((long) new Date().getTime(), 30.7f), 0);
+//            System.out.println("calendar: " + new Date().getTime());
+            data.addEntry(new Entry(new Date().getTime(), 30.7f), 0);
+
             mChart.notifyDataSetChanged();
-            mChart.invalidate();
             mChart.setVisibleXRange(5, 6);
             mChart.moveViewToX(data.getXMax());
+            mChart.invalidate();
         }
     }
 
     private LineDataSet createSet() {
-
         LineDataSet set = new LineDataSet(null, "Dynamic Data");
         set.setDrawCircles(true);
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
@@ -300,31 +309,11 @@ public class MainActivity extends AppCompatActivity {
         return set;
     }
 
-
-    private void salvarArquivo(double i, String nome) {
-        //criar pasta
-        File folder = new File(Environment.getExternalStorageDirectory() + "/Controle_esp");
-        if (!folder.exists()) {
-            folder.mkdir();
-        }
-        //salvar arquivo dentro da pasta
-        String nomeArquivo = nome + ".txt";
-        File arquivo = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/Controle_esp/" + nomeArquivo);
-        //System.out.println(Environment.getExternalStorageDirectory().getAbsolutePath());
-        try {
-            FileOutputStream salvar = new FileOutputStream(arquivo, true);
-            String conteudo = i + " " + new Date() + "\n";
-            salvar.write(conteudo.getBytes());
-            salvar.close();
-            //Toast.makeText(this, "",Toast.LENGTH_SHORT).show();
-        } catch (FileNotFoundException e) {
-            //Toast.makeText(this, "Arquivo não encontrado",Toast.LENGTH_SHORT).show();
-        } catch (IOException ioe) {
-            //Toast.makeText(this, "Erro",Toast.LENGTH_SHORT).show();
-        }
-
+    @Override
+    public void onBackPressed() {
+        mHandler01.removeCallbacks(mTimer1);
+        super.onBackPressed();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -350,22 +339,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mTimer1 = new Runnable() {
-            @Override
-            public void run() {
-                addEntry();
-
-                mHandler01.postDelayed(this, tempoDeColeta);
-            }
-        };
-        mHandler01.postDelayed(mTimer1, tempoDeColeta);
-
-    }
-
     @Override
     public void onPause() {
         mHandler01.removeCallbacks(mTimer1);
@@ -374,21 +347,43 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onStop() {
+        mHandler01.removeCallbacks(mTimer1);
         super.onStop();
-
     }
 
+//    private void salvarArquivo(double i, String nome) {
+//        //criar pasta
+//        File folder = new File(Environment.getExternalStorageDirectory() + "/Controle_esp");
+//        if (!folder.exists()) {
+//            folder.mkdir();
+//        }
+//        //salvar arquivo dentro da pasta
+//        String nomeArquivo = nome + ".txt";
+//        File arquivo = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/Controle_esp/" + nomeArquivo);
+//        //System.out.println(Environment.getExternalStorageDirectory().getAbsolutePath());
+//        try {
+//            FileOutputStream salvar = new FileOutputStream(arquivo, true);
+//            String conteudo = i + " " + new Date() + "\n";
+//            salvar.write(conteudo.getBytes());
+//            salvar.close();
+//            //Toast.makeText(this, "",Toast.LENGTH_SHORT).show();
+//        } catch (FileNotFoundException e) {
+//            //Toast.makeText(this, "Arquivo não encontrado",Toast.LENGTH_SHORT).show();
+//        } catch (IOException ioe) {
+//            //Toast.makeText(this, "Erro",Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
-    @SuppressLint("WrongConstant")
-    public void chamaTela(View v) {
-        if (t == 0) {
-            vetOb[0].getG().setVisibility(0x00000004);
-            t = 1;
-        } else {
-            vetOb[0].getG().setVisibility(0x00000000);
-            t = 0;
-        }
-    }
+//    @SuppressLint("WrongConstant")
+//    public void chamaTela(View v) {
+//        if (t == 0) {
+//            vetOb[0].getG().setVisibility(0x00000004);
+//            t = 1;
+//        } else {
+//            vetOb[0].getG().setVisibility(0x00000000);
+//            t = 0;
+//        }
+//    }
 
     public void c1(View v) {
         t = 1;
@@ -452,60 +447,56 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void alerta(int apelido) {
-        AlertDialog.Builder ad = new AlertDialog.Builder(MainActivity.this);
-        ad.setTitle("Alerta");
-        ad.setMessage("Frezee " + apelido + " está quente");
-    }
+//    public void alerta(int apelido) {
+//        AlertDialog.Builder ad = new AlertDialog.Builder(MainActivity.this);
+//        ad.setTitle("Alerta");
+//        ad.setMessage("Frezee " + apelido + " está quente");
+//    }
 
-    public void criarObjetos() {
-        objEsp ob1 = new objEsp();
-        File folder = new File(Environment.getExternalStorageDirectory() + "/Controle_esp/esps");
-        if (!folder.exists()) {
-            folder.mkdir();
-        }
-        //salvar arquivo dentro da pasta
-        String nomeArquivo = "esp01.txt";
-        File arquivo = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/Controle_esp/esps/" + nomeArquivo);
-        try {
-            FileOutputStream salvar = new FileOutputStream(arquivo, true);
+//    public void criarObjetos() {
+//        objEsp ob1 = new objEsp();
+//        File folder = new File(Environment.getExternalStorageDirectory() + "/Controle_esp/esps");
+//        if (!folder.exists()) {
+//            folder.mkdir();
+//        }
+//        //salvar arquivo dentro da pasta
+//        String nomeArquivo = "esp01.txt";
+//        File arquivo = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/Controle_esp/esps/" + nomeArquivo);
+//        try {
+//            FileOutputStream salvar = new FileOutputStream(arquivo, true);
+//            salvar.close();
+//            Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
+//        } catch (FileNotFoundException e) {
+//            Toast.makeText(this, "Arquivo não encontrado", Toast.LENGTH_SHORT).show();
+//        } catch (IOException ioe) {
+//            Toast.makeText(this, "Erro", Toast.LENGTH_SHORT).show();
+//        }
+//
+//        vetOb[0] = ob1;
+//    }
 
-            salvar.close();
-            Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
-        } catch (FileNotFoundException e) {
-            Toast.makeText(this, "Arquivo não encontrado", Toast.LENGTH_SHORT).show();
-        } catch (IOException ioe) {
-            Toast.makeText(this, "Erro", Toast.LENGTH_SHORT).show();
-        }
-
-        vetOb[0] = ob1;
-
-
-    }
-
-    public void gravarObj(objEsp a) {
-        File folder = new File(Environment.getExternalStorageDirectory() + "/Controle_esp");
-        if (!folder.exists()) {
-            folder.mkdir();
-        }
-        String nomeArquivo = a.getMac() + ".txt";
-        try {
-            Log.i("NOME", nomeArquivo);
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(nomeArquivo));
-            objectOutputStream.writeObject(a);
-            objectOutputStream.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    public void gravarObj(objEsp a) {
+//        File folder = new File(Environment.getExternalStorageDirectory() + "/Controle_esp");
+//        if (!folder.exists()) {
+//            folder.mkdir();
+//        }
+//        String nomeArquivo = a.getMac() + ".txt";
+//        try {
+//            Log.i("NOME", nomeArquivo);
+//            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(nomeArquivo));
+//            objectOutputStream.writeObject(a);
+//            objectOutputStream.close();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public void zerarTudo() {
         toogle1 = 0;
         toogle2 = 0;
         toogle3 = 0;
     }
-
 
     public void lerConf2(String nome) {
         try {
@@ -521,77 +512,71 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+//    public void telaScan() {
+//        Intent intent = new Intent(this, telaOpcao.class);
+//        startActivity(intent);
+//    }
+//
+//    public void telaTeste() {
+//        Intent intent = new Intent(this, telaPrincipal.class);
+//        startActivity(intent);
+//    }
+//
+//    public void novatela() {
+//        Intent intent = new Intent(this, telaOpcao.class);
+//        startActivity(intent);
+//    }
 
-    public void telaScan() {
-        Intent intent = new Intent(this, telaOpcao.class);
-        startActivity(intent);
-    }
+//    public class DateAxisValueFormatter implements IAxisValueFormatter {
+//        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+//        private String[] mValues;
+//
+//        public DateAxisValueFormatter(String[] values) {
+//            this.mValues = values;
+//        }
+//
+//        //@override
+//        public String getFormattedValue(float value, AxisBase axis) {
+//            return sdf.format(new Date((long) value));
+//        }
+//    }
 
-    public void telaTeste() {
-        Intent intent = new Intent(this, telaPrincipal.class);
-        startActivity(intent);
-    }
-
-    public void novatela() {
-        Intent intent = new Intent(this, telaOpcao.class);
-        startActivity(intent);
-    }
-
-
-    public class DateAxisValueFormatter implements IAxisValueFormatter {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-        private String[] mValues;
-
-        public DateAxisValueFormatter(String[] values) {
-            this.mValues = values;
-        }
-
-        //@override
-        public String getFormattedValue(float value, AxisBase axis) {
-            return sdf.format(new Date((long) value));
-        }
-    }
-
-
-    class HourAxisValueFormatter implements IAxisValueFormatter {
-
-        private long referenceTimestamp; // minimum timestamp in your data set
-        private DateFormat mDataFormat;
-        private Date mDate;
-
-        public HourAxisValueFormatter(long referenceTimestamp) {
-            this.referenceTimestamp = referenceTimestamp;
-            this.mDataFormat = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
-            this.mDate = new Date();
-        }
-
-        /**
-         * Called when a value from an axis is to be formatted
-         * before being drawn. For performance reasons, avoid excessive calculations
-         * and memory allocations inside this method.
-         */
-
-        @Override
-        public String getFormattedValue(float value, AxisBase axis) {
-            // convertedTimestamp = originalTimestamp - referenceTimestamp
-            long convertedTimestamp = (long) value;
-
-            // Retrieve original timestamp
-            long originalTimestamp = referenceTimestamp + convertedTimestamp;
-
-            // Convert timestamp to hour:minute
-            return getHour(originalTimestamp);
-        }
-
-        private String getHour(long timestamp) {
-            try {
-                mDate.setTime(timestamp * 1000);
-                return mDataFormat.format(mDate);
-            } catch (Exception ex) {
-                return "xx";
-            }
-        }
-    }
-
-
+//    class HourAxisValueFormatter implements IAxisValueFormatter {
+//        private long referenceTimestamp; // minimum timestamp in your data set
+//        private DateFormat mDataFormat;
+//        private Date mDate;
+//
+//        public HourAxisValueFormatter(long referenceTimestamp) {
+//            this.referenceTimestamp = referenceTimestamp;
+//            this.mDataFormat = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
+//            this.mDate = new Date();
+//        }
+//
+//        /**
+//         * Called when a value from an axis is to be formatted
+//         * before being drawn. For performance reasons, avoid excessive calculations
+//         * and memory allocations inside this method.
+//         */
+//
+//        @Override
+//        public String getFormattedValue(float value, AxisBase axis) {
+//            // convertedTimestamp = originalTimestamp - referenceTimestamp
+//            long convertedTimestamp = (long) value;
+//
+//            // Retrieve original timestamp
+//            long originalTimestamp = referenceTimestamp + convertedTimestamp;
+//
+//            // Convert timestamp to hour:minute
+//            return getHour(originalTimestamp);
+//        }
+//
+//        private String getHour(long timestamp) {
+//            try {
+//                mDate.setTime(timestamp * 1000);
+//                return mDataFormat.format(mDate);
+//            } catch (Exception ex) {
+//                return "xx";
+//            }
+//        }
+//    }
 }
