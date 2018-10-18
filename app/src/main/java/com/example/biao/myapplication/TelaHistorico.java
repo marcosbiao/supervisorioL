@@ -22,7 +22,6 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -34,9 +33,9 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class TelaHistorico extends AppCompatActivity {
-
     List<String> nomes = new ArrayList<>();
     List<String> listMes = new ArrayList<>();
     List<String> listAno = new ArrayList<>();
@@ -48,10 +47,12 @@ public class TelaHistorico extends AppCompatActivity {
     String selectNome, selectMes, selectAno, selectDia;
     GraphView gv;
     int posicao;
-    private LineGraphSeries<DataPoint> series = new LineGraphSeries<>(getDataPoint());
+
+    //    private LineGraphSeries<DataPoint> series = new LineGraphSeries<>(getDataPoint());
     private LineChart mChart;
     private LineDataSet dataset;
     private double startingSample = 0;
+    private SimpleDateFormat mFormat = new SimpleDateFormat("HH:mm:ss", new Locale("pt_BR", "Brazil"));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +66,7 @@ public class TelaHistorico extends AppCompatActivity {
         btAbrir = findViewById(R.id.buttonAbrir);
         //gv = findViewById(R.id.graphHistorico);
         //gv.setVisibility(View.INVISIBLE);
-        mChart = (LineChart) findViewById(R.id.chartHistorico);
+        mChart = findViewById(R.id.chartHistorico);
 
         Calendar calendario1 = Calendar.getInstance();
         calendario1.set(2017, 10, 3, 0, 0, 0);
@@ -75,7 +76,6 @@ public class TelaHistorico extends AppCompatActivity {
         mostradorDeNomes();
         carregarSpinners();
         criarGrafico();
-
 
         btAbrir.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,16 +90,10 @@ public class TelaHistorico extends AppCompatActivity {
                 //gv.removeAllSeries();
                 //gv.refreshDrawableState();
                 buscador(selectNome, selectMes, selectAno, selectDia, posicao);
-
-
-                criarGrafico();
-
+//                criarGrafico();
             }
         });
-
-
     }
-
 
     public void carregarNomes() {
         File folder = new File(Environment.getExternalStorageDirectory() + "/Controle_esp/Dados");
@@ -111,33 +105,30 @@ public class TelaHistorico extends AppCompatActivity {
             Toast.makeText(this, "Sem dados para resgatar", Toast.LENGTH_SHORT).show();
             finish();
         }
-        for (int i = 0; i < aux.length; i++) {
-            String[] temp = new String[4];
-            temp = aux[i].split("_", 4);
+        for (String anAux : aux) {
+            String[] temp;
+            temp = anAux.split("_", 4);
             System.out.println(temp[0]);
-            if (verificadorNomes(temp[0], macs) == true) {
-
+            if (verificadorNomes(temp[0], macs)) {
                 macs.add(temp[0]);
                 objEsp novo = buscadorApelido(temp[0]);
                 nomes.add(novo.getApelido());
-
             }
-            if (verificadorNomes(temp[1], listAno) == true) {
+            if (verificadorNomes(temp[1], listAno)) {
                 listAno.add(temp[1]);
             }
-            if (verificadorNomes(temp[2], listMes) == true) {
+            if (verificadorNomes(temp[2], listMes)) {
                 listMes.add(temp[2]);
             }
         }
         organizadorMes(listMes);
-
     }
 
     public boolean verificadorNomes(String nome, List<String> lista) {
         boolean b = true;
         if (lista.size() > 0) {
             for (int i = 0; i < lista.size(); i++) {
-                if (nome.equals(lista.get(i)) == true) {
+                if (nome.equals(lista.get(i))) {
                     System.out.println(nome + " - " + lista.get(i) + " -> ");
                     b = false;
                     break;
@@ -148,7 +139,6 @@ public class TelaHistorico extends AppCompatActivity {
         }
         return b;
     }
-
 
     public void mostradorDeNomes() {
         for (int i = 0; i < nomes.size(); i++) {
@@ -208,43 +198,44 @@ public class TelaHistorico extends AppCompatActivity {
         Collections.sort(listMes);
     }
 
-
     public void carregarSpinners() {
         // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, nomes);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, nomes);
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // attaching data adapter to spinner
         spNome.setAdapter(dataAdapter);
 
         // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapterMes = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listMes);
+        ArrayAdapter<String> dataAdapterMes = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, listMes);
         // Drop down layout style - list view with radio button
         dataAdapterMes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // attaching data adapter to spinner
         spMes.setAdapter(dataAdapterMes);
 
         // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapterAno = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listAno);
+        ArrayAdapter<String> dataAdapterAno = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, listAno);
         // Drop down layout style - list view with radio button
         dataAdapterAno.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // attaching data adapter to spinner
         spAno.setAdapter(dataAdapterAno);
 
-        ArrayAdapter<String> dataAdapterDia = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arraySpinerDia);
+        ArrayAdapter<String> dataAdapterDia = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, arraySpinerDia);
         dataAdapterDia.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spDia.setAdapter(dataAdapterDia);
-
     }
 
     public void criarGrafico() {
+        XAxis xAxis = mChart.getXAxis();
+        YAxis yAxis = mChart.getAxisLeft();
+
         mChart.getDescription().setEnabled(true);
         // enable touch gestures
         mChart.setTouchEnabled(true);
-
-        //mChart.setDragDecelerationFrictionCoef(0.9f);
+        mChart.setDragDecelerationFrictionCoef(0.9f);
 
         // enable scaling and dragging
+        mChart.setAutoScaleMinMaxEnabled(true);
         mChart.setDragEnabled(true);
         mChart.setScaleEnabled(true);
         mChart.setDrawGridBackground(false);
@@ -254,7 +245,6 @@ public class TelaHistorico extends AppCompatActivity {
         mChart.setBackgroundColor(Color.WHITE);
         mChart.setViewPortOffsets(0f, 0f, 0f, 0f);
 
-
         dataset = new LineDataSet(new ArrayList<Entry>(), "Temperatura");
         dataset.setAxisDependency(YAxis.AxisDependency.LEFT);
         dataset.setColor(ColorTemplate.getHoloBlue());
@@ -262,17 +252,12 @@ public class TelaHistorico extends AppCompatActivity {
         dataset.setLineWidth(1.5f);
         dataset.setDrawCircles(true);
         dataset.setDrawValues(false);
-        dataset.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+        dataset.setMode(LineDataSet.Mode.LINEAR);
         dataset.setFillAlpha(65);
         dataset.setFillColor(ColorTemplate.getHoloBlue());
         dataset.setHighLightColor(Color.rgb(244, 117, 117));
         dataset.setDrawCircleHole(false);
-        // add data
-        // setData(100, 30);
-        mChart.invalidate();
 
-
-        XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
         xAxis.setTextSize(14f);
         xAxis.setTextColor(Color.WHITE);
@@ -282,32 +267,28 @@ public class TelaHistorico extends AppCompatActivity {
         xAxis.setCenterAxisLabels(true);
         // xAxis.setGranularity(1f); // one hour
         xAxis.setValueFormatter(new IAxisValueFormatter() {
-
-            private SimpleDateFormat mFormat = new SimpleDateFormat("HH:mm:ss");
-
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
                 System.out.println("Valor formatado: " + value);
-                return mFormat.format(new Date((long) (value + startingSample)));
+                String format = mFormat.format(new Date((long) (value + startingSample)));
+                return format;
             }
         });
 
-        YAxis leftAxis = mChart.getAxisLeft();
-        leftAxis.setTypeface(Typeface.DEFAULT);
-        leftAxis.setTextSize(14f);
-        leftAxis.setTextColor(Color.BLACK);
-        leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
-        leftAxis.setTextColor(ColorTemplate.getHoloBlue());
-        leftAxis.setDrawGridLines(true);
-        leftAxis.setGranularityEnabled(true);
-        leftAxis.setAxisMaximum(100f);
-        leftAxis.setAxisMinimum(-100f);
-        leftAxis.setGranularityEnabled(true);
-        leftAxis.setGranularity(1f);
-        leftAxis.setLabelCount(6, true);
-        leftAxis.setTextColor(Color.rgb(255, 192, 56));
+        yAxis.setTypeface(Typeface.DEFAULT);
+        yAxis.setTextSize(14f);
+        yAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+        yAxis.setTextColor(ColorTemplate.getHoloBlue());
+        yAxis.setDrawGridLines(true);
+        yAxis.setGranularityEnabled(true);
+        yAxis.setGranularity(1f);
+        yAxis.setLabelCount(6);
+        yAxis.setUseAutoScaleMaxRestriction(true);
+        yAxis.setTextColor(Color.rgb(255, 192, 56));
+        yAxis.setCenterAxisLabels(true);
 
-
+        //atualizando os dados
+        mChart.invalidate();
     }
 
     public long tempo() {
@@ -322,7 +303,7 @@ public class TelaHistorico extends AppCompatActivity {
         objEsp ativo = new objEsp();
         String lstrlinha;
         try {
-            File arq = new File(Environment.getExternalStorageDirectory(), "/Controle_esp/" + macs.get(pos).toString() + ".txt");
+            File arq = new File(Environment.getExternalStorageDirectory(), "/Controle_esp/" + macs.get(pos) + ".txt");
             BufferedReader br = new BufferedReader(new FileReader(arq));
             lstrlinha = br.readLine();
             //System.out.println(lstrlinha);
@@ -337,7 +318,7 @@ public class TelaHistorico extends AppCompatActivity {
 
             mes = voltadorDeMes(mes);
 
-            String nomeArquivo = macs.get(pos).toString() + "_" + ano + "_" + mes + "_" + dia;
+            String nomeArquivo = macs.get(pos) + "_" + ano + "_" + mes + "_" + dia;
             File arq2 = new File(Environment.getExternalStorageDirectory(), "/Controle_esp/Dados/" + nomeArquivo + ".txt");
             BufferedReader br2 = new BufferedReader(new FileReader(arq2));
             if (!arq2.exists()) {
@@ -345,30 +326,23 @@ public class TelaHistorico extends AppCompatActivity {
                 Toast.makeText(TelaHistorico.this, "Não existe dados para " + nome + " nesse dia", Toast.LENGTH_SHORT).show();
                 gv.setVisibility(View.INVISIBLE);
             }
-            String[] temp = new String[2];
-            String hora, minuto;
-            String numb;
-            DataPoint ponto;
-            int x1 = 0;
             System.out.println("ANTES DO WHILE");
             //series.resetData(new DataPoint[]{});
-
-
-            int cont = 0;
+            dataset.clear();
+            String[] temp;
+            float temperatura;
+            float tempo;
             while ((lstrlinha = br2.readLine()) != null) {
-                System.out.println("DENTRO DO WHILE");
                 temp = lstrlinha.split(";", 2);
-                float temperatura = Float.parseFloat(temp[0]);
-                float tempo = Float.parseFloat(temp[1]);
-                Entry entry = new Entry((float) (tempo - startingSample), temperatura);
+                temperatura = Float.parseFloat(temp[0]);
+                tempo = Float.parseFloat(temp[1]);
+                Entry entry = new Entry(tempo, temperatura);
                 dataset.addEntry(entry);
-
             }
-            LineData data = new LineData(dataset);
-            mChart.setData(data);
+            System.out.println("FIM DO WHILE");
+
+            mChart.setData(new LineData(dataset));
             mChart.invalidate();
-
-
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(TelaHistorico.this, "Não existe dados para " + nome + " nesse dia", Toast.LENGTH_SHORT).show();
@@ -377,16 +351,13 @@ public class TelaHistorico extends AppCompatActivity {
         return ativo;
     }
 
-
     public DataPoint[] getDataPoint() {
-        DataPoint[] dp = new DataPoint[]{
+        return new DataPoint[]{
                 new DataPoint(0, 0.0)
         };
-        return dp;
     }
 
     public String voltadorDeMes(String mes) {
-
         switch (mes) {
             case "Janeiro":
                 mes = "1";
@@ -430,7 +401,6 @@ public class TelaHistorico extends AppCompatActivity {
         return mes;
     }
 
-
     public objEsp buscadorApelido(String mac) {
         objEsp ativo = new objEsp();
         String lstrlinha;
@@ -447,6 +417,4 @@ public class TelaHistorico extends AppCompatActivity {
         }
         return ativo;
     }
-
-
 }

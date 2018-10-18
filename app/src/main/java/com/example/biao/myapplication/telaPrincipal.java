@@ -36,7 +36,6 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -120,15 +119,15 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
                 } else if (espList.get(position).getStatus() == 4) {
                     Toast.makeText(getApplicationContext(), espList.get(position).getApelido() + " está sem tensão", Toast.LENGTH_SHORT).show();
                 }
-//                if (espList.size() > 0) {
-//                    // mChart.setVisibility(View.VISIBLE);
-//                    //g.setVisibility(View.VISIBLE);
-//                    // g.setTitle(espList.get(position).getApelido());
-//                    // g.removeAllSeries();
-//                    // g.addSeries(espList.get(position).getSeries());
-//                    // g.addSeries(espList.get(position).getSeriesAlarme());
-//                    // setData(100, 30);
-//                }
+                if (espList.size() > 0) {
+                    // mChart.setVisibility(View.VISIBLE);
+                    //g.setVisibility(View.VISIBLE);
+                    // g.setTitle(espList.get(position).getApelido());
+                    // g.removeAllSeries();
+                    // g.addSeries(espList.get(position).getSeries());
+                    // g.addSeries(espList.get(position).getSeriesAlarme());
+                    // setData(100, 30);
+                }
             }
         }
     };
@@ -364,7 +363,6 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
 
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
         xAxis.setTextSize(14f);
-        xAxis.setTextColor(Color.WHITE);
         xAxis.setDrawAxisLine(false);
         xAxis.setDrawGridLines(true);
         xAxis.setTextColor(Color.rgb(255, 192, 56));
@@ -381,14 +379,12 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
         yAxis.setTypeface(Typeface.DEFAULT);
         yAxis.setTextSize(14f);
         yAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
-        yAxis.setTextColor(ColorTemplate.getHoloBlue());
         yAxis.setDrawGridLines(true);
         yAxis.setGranularityEnabled(true);
 //        yAxis.setAxisMaxValue(100f);
 //        yAxis.setAxisMinValue(-10f);
 //        yAxis.setAxisMaximum(100f);
 //        yAxis.setAxisMinimum(-10f);
-        yAxis.setGranularityEnabled(true);
         yAxis.setGranularity(1f);
         yAxis.setLabelCount(6);
         yAxis.setUseAutoScaleMaxRestriction(true);
@@ -401,8 +397,6 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
 
     public void buscarDados() {
         int samples = 20;
-        float maxTime = 0;
-        float maxY = 0;
         Random gerador = new Random();
 
         for (int i = 0; i < espList.size(); i++) {
@@ -450,14 +444,6 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
 
                 float auxY = temp + gerador.nextInt(10);
                 float time = (float) (sampleTime - startingSample);
-
-                if (time > maxTime) {
-                    maxTime = time;
-                }
-
-                if (auxY > maxY) {
-                    maxY = auxY;
-                }
 
                 Entry entry = new Entry(time, auxY);
                 LineDataSet dataset = objEsp.getDataset();
@@ -1000,8 +986,9 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
             FileOutputStream salvar = new FileOutputStream(arquivo, true);
             String conteudo = temperatura + ";" + time + "\n"; //c.get(Calendar.HOUR_OF_DAY)+ ";" + c.get(Calendar.MINUTE)
             salvar.write(conteudo.getBytes());
+            salvar.flush();
             salvar.close();
-            System.out.println("Gravando");
+            System.out.println("Gravando: " + conteudo);
             //Toast.makeText(this, "Gravando",Toast.LENGTH_SHORT).show();
         } catch (FileNotFoundException e) {
             //Toast.makeText(this, "Arquivo não encontrado",Toast.LENGTH_SHORT).show();
