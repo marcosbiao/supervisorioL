@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -138,8 +139,8 @@ public class TelaConfiguracao extends AppCompatActivity {
             fos.write(dados);
             fos.flush();
             fos.close();
-            //System.out.println("GRAVEI!!!!!");
-            //Log.i("teste: ", "GRAVEI!!!!!");
+            System.out.println("GRAVEI!!!!!");
+            Log.i("teste: ", "GRAVEI!!!!!");
         } catch (Exception e) {
             Toast.makeText(this, "Erro", Toast.LENGTH_SHORT).show();
         }

@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -95,6 +96,20 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
                     mChart.setVisibility(View.INVISIBLE);
                     toogleAntes = 1;
                 }
+
+
+                mChart.getAxisLeft().removeAllLimitLines();
+                objEsp temp = espList.get(position);
+
+                if(temp.isLiMax()==true){
+                    LimitLine limitMax = new LimitLine(temp.getLimiteMax(),"Max");
+                    mChart.getAxisLeft().addLimitLine(limitMax);
+                }
+                if(temp.isLiMin() == true){
+                    LimitLine limitMin = new LimitLine(temp.getLimiteMin(),"Min");
+                    mChart.getAxisLeft().addLimitLine(limitMin);
+                }
+
 
                 // g.getViewport().setMinY((int) (Double.parseDouble(espList.get(position).getTemperatura()) -15)   );
                 // g.getViewport().setMaxY((int) (Double.parseDouble(espList.get(position).getTemperatura()) +15)   );
