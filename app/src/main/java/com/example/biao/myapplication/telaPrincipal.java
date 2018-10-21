@@ -81,6 +81,8 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
 
     private Calendar calendario1 = Calendar.getInstance();
 
+    private int espSelecionado;
+
     private AdapterView.OnItemClickListener onItemClick = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -88,6 +90,7 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
             //Toast.makeText(getApplicationContext(), espList.get(position).getApelido(), Toast.LENGTH_SHORT).show();
             //toogle = position;
             if (!espList.isEmpty()) {
+                espSelecionado = position;
                 if (toogleAntes == 1) {
                     mChart.setVisibility(View.VISIBLE);
                     toogleAntes = 2;
@@ -184,6 +187,7 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
     }
 
     private void startBuscarDados() {
+        System.out.println("Iniciando");
         Toast.makeText(this, "Iniciando.", Toast.LENGTH_SHORT).show();
         mChart.setVisibility(View.VISIBLE);
 
@@ -191,13 +195,13 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
             @Override
             public void run() {
                 if (flag == 1) {
-                    criarGrid(espList, false);
+                    //criarGrid(espList, false);
                     System.out.println("espList: " + espList.size());
                     //flag=2;
                 }
 
-                Collections.sort(espList, objEsp.POR_STATUS);
-
+                //Collections.sort(espList, objEsp.POR_STATUS);
+                criarGrid(espList,true);
                 System.out.println("Controle monitoramento: " + controleMonitoramento);
 
                 buscarDados();
@@ -425,9 +429,18 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
                         // se não tiver tensão
                         objEsp.setStatus(4);
                     }
-                    if (getFloat(temperatura) > (objEsp.getAlerta())) {
-                        // temperatura elevada
-                        objEsp.setStatus(2);
+                    if(objEsp.isLiMax()==true){
+                        if(getFloat(temperatura) > objEsp.getSp()+objEsp.getAlerta()){
+                            // temperatura elevada
+                            objEsp.setStatus(2);
+                        }
+                    }
+
+                    if(objEsp.isLiMin()==true){
+                        if(getFloat(temperatura) < objEsp.getSp()-objEsp.getAlerta()){
+                            // temperatura elevada
+                            objEsp.setStatus(2);
+                        }
                     }
                 }
 
@@ -442,19 +455,21 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
 
                 System.out.println("Sample time: " + sampleTime);
 
-                float auxY = temp + gerador.nextInt(10);
+                float auxY = temp; // + gerador.nextInt(10);
                 float time = (float) (sampleTime - startingSample);
 
                 Entry entry = new Entry(time, auxY);
-                LineDataSet dataset = objEsp.getDataset();
+                //LineDataSet dataset;
 
-                dataset.addEntry(entry);
 
-                if (dataset.getEntryCount() > samples) {
-                    dataset.removeEntry(dataset.getEntryForIndex(0));
-                }
+                    LineDataSet dataset = objEsp.getDataset();
+                    dataset.addEntry(entry);
 
-                System.out.println("Valores: " + dataset.getValues());
+                    if (dataset.getEntryCount() > samples) {
+                        dataset.removeEntry(dataset.getEntryForIndex(0));
+                    }
+
+                    System.out.println("Valores: " + dataset.getValues());
 
                 // g.getViewport().setMinX(sampleTime - samples * 0.5 * tempoDeColeta);
                 // g.getViewport().setMaxX(sampleTime);
@@ -566,9 +581,6 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
                 item.setTitle("Desativar monitoramento");
                 controleMonitoramento = true;
             }
-        } else if (id == R.id.nav_item) {
-            Intent intent = new Intent(telaPrincipal.this, telaOpcao.class);
-            startActivity(intent);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -578,6 +590,7 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
 
     private void limparArquivo(String t) {
         //criar pasta
+        System.out.println("Limpando o arquivo: "+ t);
         File folder = new File(Environment.getExternalStorageDirectory() + "/Controle_esp");
         if (!folder.exists()) {
             folder.mkdir();
@@ -713,22 +726,28 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
         if (espList.size() == 0) {
             espList = preListaEsp;
         }
-
-        for (int a1 = 0; a1 < espList.size(); a1++) {
+        int tamanho = espList.size();
+        System.out.println("Pre: "+preListaEsp.size()+"  esplist: "+espList.size());
+        for (int a1 = 0; a1 < tamanho; a1++) {
             for (int b1 = 0; b1 < preListaEsp.size(); b1++) {
-                System.out.println(b1 + " preList: " + preListaEsp.get(b1).getMac());
-                if (espList.get(a1).getMac().equals(preListaEsp.get(b1).getMac())) {
+                System.out.println(a1 +"  - " +b1 + " preList: " + preListaEsp.get(b1).getMac());
+                String mac1 = espList.get(a1).getMac().toString();
+                String mac2 = preListaEsp.get(b1).getMac().toString();
+                if (mac1.equals(mac2)) {
                     System.out.println("Igual, não adicionar");
                 } else {
+                    System.out.println("Adicionando: "+ preListaEsp.get(b1).getMac());
                     preListaEsp.get(b1).setIp("192.168.100.100");
                     espList.add(preListaEsp.get(b1));
                 }
             }
         }
+        System.out.println("Depoisssss esplist: "+espList.size());
 
         for (int k = 0; k < espList.size(); k++) {
             int cont = 0;
             for (int a = 0; a < listaMacs.size(); a++) {
+
                 if (espList.get(k).getMac().equals(listaMacs.get(a))) {
                     cont++;
                 }
@@ -767,7 +786,14 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
         objEsp temp = new objEsp();
         String retorno = getJSONFromAPI("http://" + ip);
         System.out.println(retorno);
+        System.out.println("LER OBJETOS: "+retorno);
         String[] sp = retorno.split(";", 3);
+
+
+        System.out.println("LER OBJETOS sp: "+sp[0]);
+        System.out.println("LER OBJETOS sp: "+sp[1]);
+        System.out.println("LER OBJETOS sp: "+sp[2]);
+        System.out.println("LER OBJETOS sp IP: "+ip);
 
         temp.setTemperatura(sp[0]);
         temp.setTensao(Integer.parseInt(sp[1]));
@@ -795,8 +821,8 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
         try {
             File arq = new File(Environment.getExternalStorageDirectory(), "/Controle_esp/" + ob.getMac() + ".txt");
             BufferedReader br = new BufferedReader(new FileReader(arq));
-//            lstrlinha = br.readLine(); //MAC
-//            lstrlinha = br.readLine();  //IP
+            lstrlinha = br.readLine(); //MAC
+            lstrlinha = br.readLine();  //IP
             lstrlinha = br.readLine();   //Apelido
             ativo.setApelido(lstrlinha);
             lstrlinha = br.readLine();  //Alerta
@@ -928,7 +954,7 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            criarGrid(espList, false);
+                            //criarGrid(espList, false);
                         }
                     });
 

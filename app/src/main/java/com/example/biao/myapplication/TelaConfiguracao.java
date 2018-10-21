@@ -95,6 +95,7 @@ public class TelaConfiguracao extends AppCompatActivity {
                 ob.setApelido(etApelido.getText().toString());
                 ob.setAlerta(Float.parseFloat(etAlerta.getText().toString()));
                 ob.setSp(Float.parseFloat(etSP.getText().toString()));
+                System.out.println("SALVANDO NOVAS INFORMAÇÕES DO ESP");
                 salvarDadosEsp(ob);
                 espList.remove(position);
                 espList.add(ob);

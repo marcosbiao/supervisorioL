@@ -33,20 +33,21 @@
             android:id="@+id/checkBoxMin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/textViewSP"
-            android:layout_toLeftOf="@+id/textView8"
-            android:layout_toStartOf="@+id/textView8"
+            android:layout_below="@+id/editTextAlerta"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="37dp"
             android:text="MIN." />
 
         <CheckBox
             android:id="@+id/checkBoxMax"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/textViewSP"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="69dp"
-            android:layout_marginStart="69dp"
+            android:layout_alignBaseline="@+id/checkBoxMin"
+            android:layout_alignBottom="@+id/checkBoxMin"
+            android:layout_alignLeft="@+id/editTextAlerta"
+            android:layout_alignStart="@+id/editTextAlerta"
+            android:layout_marginLeft="29dp"
+            android:layout_marginStart="29dp"
             android:text="MAX." />
 
         <Button

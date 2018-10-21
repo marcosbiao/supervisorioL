@@ -20,9 +20,6 @@
             android:id="@+id/nav_ativar"
             android:icon="@android:drawable/star_off"
             android:title="Desativar monitoramento" />
-        <item
-            android:id="@+id/nav_item"
-            android:title="Item" />
     </group>
 
 </menu>

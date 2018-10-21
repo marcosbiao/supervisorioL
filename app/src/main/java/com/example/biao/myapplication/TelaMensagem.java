@@ -230,7 +230,7 @@ public class TelaMensagem extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 salvarNumero(numeroMensagem.getText().toString(), nomeTelefone.getText().toString());
-                listAdapter.notifyDataSetChanged();
+                //listAdapter.notifyDataSetChanged();
 
             }
         });
