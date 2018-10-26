@@ -7,16 +7,15 @@
         android:id="@+id/mygridview"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:columnWidth="100dp"
         android:gravity="center"
         android:numColumns="2"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:stretchMode="spacingWidthUniform"
         android:verticalSpacing="20dp"
-        android:visibility="visible"></GridView>
-
+        android:visibility="visible" />
 
 </FrameLayout>

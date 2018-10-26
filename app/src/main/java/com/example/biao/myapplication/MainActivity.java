@@ -58,12 +58,12 @@ public class MainActivity extends AppCompatActivity {
 //                /*height*/ 100,
 //                /*weight*/ 1.0f
 //        );
-//    objEsp[] vetOb = new objEsp[2];
-//    objEsp ob1 = new objEsp();
-//    objEsp ob2 = new objEsp();
+//    ObjEsp[] vetOb = new ObjEsp[2];
+//    ObjEsp ob1 = new ObjEsp();
+//    ObjEsp ob2 = new ObjEsp();
 //    String nomeData = " ";
 
-    public static List<objEsp> listaObj = new ArrayList<>();
+    public static List<ObjEsp> listaObj = new ArrayList<>();
     private final Handler mHandler01 = new Handler();
     private double myDouble = -242528463.775282;
     private final long timeReference = System.currentTimeMillis() + ((long) (myDouble * 1000));
@@ -454,7 +454,7 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
 //    public void criarObjetos() {
-//        objEsp ob1 = new objEsp();
+//        ObjEsp ob1 = new ObjEsp();
 //        File folder = new File(Environment.getExternalStorageDirectory() + "/Controle_esp/esps");
 //        if (!folder.exists()) {
 //            folder.mkdir();
@@ -475,7 +475,7 @@ public class MainActivity extends AppCompatActivity {
 //        vetOb[0] = ob1;
 //    }
 
-//    public void gravarObj(objEsp a) {
+//    public void gravarObj(ObjEsp a) {
 //        File folder = new File(Environment.getExternalStorageDirectory() + "/Controle_esp");
 //        if (!folder.exists()) {
 //            folder.mkdir();
@@ -518,7 +518,7 @@ public class MainActivity extends AppCompatActivity {
 //    }
 //
 //    public void telaTeste() {
-//        Intent intent = new Intent(this, telaPrincipal.class);
+//        Intent intent = new Intent(this, TelaPrincipal.class);
 //        startActivity(intent);
 //    }
 //

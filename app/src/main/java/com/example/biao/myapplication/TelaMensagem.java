@@ -49,11 +49,11 @@ public class TelaMensagem extends AppCompatActivity {
     ViewStub stubList;
     CheckBox cbConect;
 
-    public static void monitorar(List<objEsp> lista) {
+    public static void monitorar(List<ObjEsp> lista) {
         lerNumero();
-        List<objEsp> auxTemperatura = new ArrayList<>();
-        List<objEsp> auxTensao = new ArrayList<>();
-        List<objEsp> auxConectividade = new ArrayList<>();
+        List<ObjEsp> auxTemperatura = new ArrayList<>();
+        List<ObjEsp> auxTensao = new ArrayList<>();
+        List<ObjEsp> auxConectividade = new ArrayList<>();
         System.out.println("Valor do cont: " + cont);
         int num;
         for (int i = 0; i < lista.size(); i++) {

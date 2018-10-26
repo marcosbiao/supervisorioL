@@ -31,7 +31,7 @@ public class TelaScan extends AppCompatActivity {
 
     byte[] ipBytes;
     ArrayList<String> listaIps = new ArrayList<>();
-    //List<objEsp> listaObj = new ArrayList<>();
+    //List<ObjEsp> listaObj = new ArrayList<>();
 
     //InetAddress localhost;
 
@@ -129,7 +129,7 @@ public class TelaScan extends AppCompatActivity {
         }
     }
 
-    public void salvarDadosEsp(objEsp oe) {
+    public void salvarDadosEsp(ObjEsp oe) {
         try {
             byte[] dados;
             File arq = new File(Environment.getExternalStorageDirectory(), "/Controle_esp/" + oe.getMac() + ".txt");
@@ -164,8 +164,8 @@ public class TelaScan extends AppCompatActivity {
         }
     }
 
-    public objEsp lerObjeto(String ip) {
-        objEsp temp = new objEsp();
+    public ObjEsp lerObjeto(String ip) {
+        ObjEsp temp = new ObjEsp();
         String retorno = getJSONFromAPI("http://" + ip);
 
         String[] sp = retorno.split(";", 4);
@@ -189,11 +189,11 @@ public class TelaScan extends AppCompatActivity {
     public void criarObjetos() {
 
         //listaObj.clear();
-        List<objEsp> listaTemporariaObj = new ArrayList<>();
+        List<ObjEsp> listaTemporariaObj = new ArrayList<>();
         System.out.println("Quantidade de IPS: " + listaIps.size());
         for (i = 0; i < listaIps.size(); i++) {
 
-            objEsp temp = lerObjeto(listaIps.get(i));
+            ObjEsp temp = lerObjeto(listaIps.get(i));
             File arq = new File(Environment.getExternalStorageDirectory() + "/Controle_esp/" + temp.getMac() + ".txt");
 
             if (comparador(temp)) {
@@ -210,15 +210,15 @@ public class TelaScan extends AppCompatActivity {
 
         }
 
-        telaPrincipal.espList = listaTemporariaObj;
+        TelaPrincipal.espList = listaTemporariaObj;
         for (int k = 0; k < MainActivity.listaObj.size(); k++) {
             System.out.println(MainActivity.listaObj.get(k).getMac() + " " + MainActivity.listaObj.get(k).getApelido());
         }
 
     }
 
-    public objEsp buscador(objEsp ob) {
-        objEsp ativo = new objEsp();
+    public ObjEsp buscador(ObjEsp ob) {
+        ObjEsp ativo = new ObjEsp();
         String lstrlinha;
         try {
             File arq = new File(Environment.getExternalStorageDirectory(), "/Controle_esp/" + ob.getMac() + ".txt");
@@ -242,7 +242,7 @@ public class TelaScan extends AppCompatActivity {
     }
 
 
-    public boolean comparador(objEsp ob) {
+    public boolean comparador(ObjEsp ob) {
         boolean a = false;
         File arq = new File(Environment.getExternalStorageDirectory(), "/Controle_esp/" + ob.getMac() + ".txt");
         if (arq.exists()) {

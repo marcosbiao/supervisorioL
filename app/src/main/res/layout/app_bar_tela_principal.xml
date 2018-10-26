@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#D8D8D8"
-    tools:context="com.example.biao.myapplication.telaPrincipal">
+    tools:context="com.example.biao.myapplication.TelaPrincipal">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -20,32 +20,13 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
-    <!--
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="60dp"
-            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <SearchView
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    />
-
-            </LinearLayout>
-        </LinearLayout>
-
-    -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:layout_marginVertical="70dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_marginTop="70dp"
+        android:orientation="vertical"
+        android:scrollbars="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -62,45 +43,30 @@
 
         </LinearLayout>
 
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:scrollbars="vertical">
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/tv_dispositivo_selecionado"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:scrollbars="vertical">
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            tools:text="Exibindo dispositivo 1" />
 
-            <!--      <com.jjoe64.graphview.GraphView
-                      android:id="@+id/graphTela"
-                      android:layout_marginVertical="220dp"
-                      android:layout_width="match_parent"
-                      android:scrollbars="vertical"
+        <ProgressBar
+            android:id="@+id/progress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
-                      android:layout_height="300dip"
-                      android:layout_marginLeft="25dp"
-                      android:layout_marginRight="25dp"
-                      android:paddingBottom="15dp"
-                      android:paddingTop="15dp"/>  -->
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chart1"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="16dp"
+            android:paddingBottom="36dp" />
 
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/chart1"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginVertical="220dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginRight="25dp"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp" />
-
-        </LinearLayout>
     </LinearLayout>
-
 
 </android.support.design.widget.CoordinatorLayout>

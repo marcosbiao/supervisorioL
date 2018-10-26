@@ -16,9 +16,9 @@ public class Monitoramento {
     static String numeroFone;
 
 
-    static public void monitorar(ArrayList<objEsp> lista) {
-        List<objEsp> auxTemperatura = new ArrayList<>();
-        List<objEsp> auxTensao = new ArrayList<>();
+    static public void monitorar(ArrayList<ObjEsp> lista) {
+        List<ObjEsp> auxTemperatura = new ArrayList<>();
+        List<ObjEsp> auxTensao = new ArrayList<>();
         System.out.println("Valor do cont: " + cont);
         int num;
         for (int i = 0; i < lista.size(); i++) {

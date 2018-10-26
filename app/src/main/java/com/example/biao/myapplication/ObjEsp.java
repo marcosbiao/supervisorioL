@@ -20,13 +20,13 @@ import java.util.Date;
  * Created by biao on 13/06/2018.
  */
 
-public class objEsp {
-
-    public static final Comparator<objEsp> POR_STATUS = new Comparator<objEsp>() {
-        public int compare(objEsp a1, objEsp a2) {
+public class ObjEsp {
+    public static final Comparator<ObjEsp> POR_STATUS = new Comparator<ObjEsp>() {
+        public int compare(ObjEsp a1, ObjEsp a2) {
             return compare(a1, a2);
         }
     };
+
     private String mac;
     private String ip;
     private String apelido;
@@ -46,16 +46,16 @@ public class objEsp {
     private LineGraphSeries<DataPoint> seriesAlarme = new LineGraphSeries<>(getDataPoint());
 
     //Construtores
-    public objEsp() {
+    public ObjEsp() {
         adicionar();
     }
 
-    public objEsp(String mac) {
+    public ObjEsp(String mac) {
         this.mac = mac;
         adicionar();
     }
 
-    public objEsp(String apelido, GraphView g) {
+    public ObjEsp(String apelido, GraphView g) {
         this.apelido = apelido;
         this.g = g;
         adicionar();
@@ -63,7 +63,7 @@ public class objEsp {
 
     //Metodos
 
-    public objEsp(String apelido, String temperatura) {
+    public ObjEsp(String apelido, String temperatura) {
         this.apelido = apelido;
         this.temperatura = temperatura;
         adicionar();

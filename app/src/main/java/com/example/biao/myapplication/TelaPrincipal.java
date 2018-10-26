@@ -25,6 +25,8 @@ import android.view.View;
 import android.view.ViewStub;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -45,10 +47,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -56,9 +58,9 @@ import java.util.Random;
 
 import static com.example.biao.myapplication.LeitorServer.getJSONFromAPI;
 
-public class telaPrincipal extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    static List<objEsp> espList = new ArrayList<>();
-    //    static List<objEsp> listaObj = new ArrayList<>();
+public class TelaPrincipal extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    static List<ObjEsp> espList = new ArrayList<>();
+    //    static List<ObjEsp> listaObj = new ArrayList<>();
     static int flag = 0, x1 = 0;
 
     private final Handler mHandler01 = new Handler();
@@ -68,73 +70,105 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
     private ArrayList<String> listaMacs = new ArrayList<>();
     boolean controleMonitoramento = true;
 
+    private TextView tvDispositivoSelecionado;
+    private ProgressBar progress;
     private LineChart mChart;
     private ViewStub stubGrid;
     private GridView gridView;
     private GridViewAdapter2 gridViewAdapter;
-    private List<objEsp> preListaEsp = new ArrayList<>();
+    private List<ObjEsp> preListaEsp = new ArrayList<>();
+
+    private boolean graficoVisivel;
+    private boolean verSomenteUm;
+    private int dispositivoSelecionado;
 
     private SimpleDateFormat mFormat = new SimpleDateFormat("HH:mm:ss", new Locale("pt_BR", "Brazil"));
-    private int toogleAntes = 1;
     private int tempoDeColeta = 3 * 1000;//tempoMilis em milisegundos
     private double startingSample = 0;
 
     private Calendar calendario1 = Calendar.getInstance();
 
-    private int espSelecionado;
-
     private AdapterView.OnItemClickListener onItemClick = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            //Do any thing when user click to item
-            //Toast.makeText(getApplicationContext(), espList.get(position).getApelido(), Toast.LENGTH_SHORT).show();
-            //toogle = position;
+            //todo
+            //esse IF é só para testes, pode ser apagado
+            if (espList.size() < 2) {
+                ObjEsp e = new ObjEsp();
+                e.setApelido("Teste " + espList.size());
+                e.setStatus(1);
+                Random n = new Random();
+                List<Entry> dataset = new ArrayList<>();
+                for (int i = 0; i < 10; i++) {
+                    float temp = n.nextInt(10) + ((float) n.nextInt(10)/100f);
+
+                    long sampleTime = tempoMilis() + 20000 * i;
+                    if (startingSample == 0.0) {
+                        startingSample = sampleTime;
+                    }
+
+                    System.out.println("Sample time: " + sampleTime);
+
+                    float time = (float) (sampleTime - startingSample);
+                    dataset.add(new Entry(time, temp));
+                }
+                e.setDataset(new LineDataSet(dataset, e.getApelido()));
+                espList.add(e);
+            }
+            //pode apagar até aqui
+
             if (!espList.isEmpty()) {
-                espSelecionado = position;
-                if (toogleAntes == 1) {
+                tvDispositivoSelecionado.setVisibility(View.VISIBLE);
+
+                if (!graficoVisivel) {
                     mChart.setVisibility(View.VISIBLE);
-                    toogleAntes = 2;
-                } else {
-                    mChart.setVisibility(View.INVISIBLE);
-                    toogleAntes = 1;
+                    graficoVisivel = true;
                 }
 
-
+                ObjEsp objEsp = espList.get(position);
                 mChart.getAxisLeft().removeAllLimitLines();
-                objEsp temp = espList.get(position);
 
-                if(temp.isLiMax()==true){
-                    LimitLine limitMax = new LimitLine(temp.getLimiteMax(),"Max");
+                if (verSomenteUm && position == dispositivoSelecionado) {
+                    verSomenteUm = false;
+                    String text = "Exibindo dados de todos os Dispositivos";
+                    Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+                    tvDispositivoSelecionado.setText(text);
+                } else if (!verSomenteUm || position != dispositivoSelecionado) {
+                    dispositivoSelecionado = position;
+                    verSomenteUm = true;
+                    String text = "Exibindo dados somente de: " + objEsp.getApelido();
+                    Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+                    tvDispositivoSelecionado.setText(text);
+                }
+
+                if (objEsp.isLiMax()) {
+                    LimitLine limitMax = new LimitLine(objEsp.getLimiteMax(), "Max");
                     mChart.getAxisLeft().addLimitLine(limitMax);
                 }
-                if(temp.isLiMin() == true){
-                    LimitLine limitMin = new LimitLine(temp.getLimiteMin(),"Min");
+
+                if (objEsp.isLiMin()) {
+                    LimitLine limitMin = new LimitLine(objEsp.getLimiteMin(), "Min");
                     mChart.getAxisLeft().addLimitLine(limitMin);
                 }
 
+                mChart.setData(new LineData(objEsp.getDataset()));
+                mChart.setVisibleYRange( -1*(mChart.getYMin()/2), mChart.getYMax()/2, YAxis.AxisDependency.RIGHT);
+                mChart.invalidate();
 
                 // g.getViewport().setMinY((int) (Double.parseDouble(espList.get(position).getTemperatura()) -15)   );
                 // g.getViewport().setMaxY((int) (Double.parseDouble(espList.get(position).getTemperatura()) +15)   );
-                if (espList.get(position).getStatus() == 2) {
-                    Toast.makeText(getApplicationContext(), espList.get(position).getApelido() + " está com temperatura elevada", Toast.LENGTH_SHORT).show();
-                } else if (espList.get(position).getStatus() == 3) {
-                    Toast.makeText(getApplicationContext(), espList.get(position).getApelido() + " está sem conexão", Toast.LENGTH_SHORT).show();
-                } else if (espList.get(position).getStatus() == 4) {
-                    Toast.makeText(getApplicationContext(), espList.get(position).getApelido() + " está sem tensão", Toast.LENGTH_SHORT).show();
-                }
-                if (espList.size() > 0) {
-                    // mChart.setVisibility(View.VISIBLE);
-                    //g.setVisibility(View.VISIBLE);
-                    // g.setTitle(espList.get(position).getApelido());
-                    // g.removeAllSeries();
-                    // g.addSeries(espList.get(position).getSeries());
-                    // g.addSeries(espList.get(position).getSeriesAlarme());
-                    // setData(100, 30);
+                if (objEsp.getStatus() == 2) {
+                    Toast.makeText(getApplicationContext(), objEsp.getApelido() + " está com temperatura elevada", Toast.LENGTH_SHORT).show();
+                } else if (objEsp.getStatus() == 3) {
+                    Toast.makeText(getApplicationContext(), objEsp.getApelido() + " está sem conexão", Toast.LENGTH_SHORT).show();
+                } else if (objEsp.getStatus() == 4) {
+                    Toast.makeText(getApplicationContext(), objEsp.getApelido() + " está sem tensão", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), objEsp.getApelido() + " está normal", Toast.LENGTH_SHORT).show();
                 }
             }
         }
     };
-
 
 //    public static String getDate(long milliSeconds, String dateFormat) {
 //        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
@@ -153,9 +187,15 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        // g = (GraphView) findViewById(R.id.graphTela);
+        //pegando o gráfico
         mChart = findViewById(R.id.chart1);
         mChart.setVisibility(View.GONE);
+        tvDispositivoSelecionado = findViewById(R.id.tv_dispositivo_selecionado);
+        tvDispositivoSelecionado.setVisibility(View.GONE);
+        progress = findViewById(R.id.progress);
+        progress.setIndeterminate(true);
+        progress.setVisibility(View.GONE);
+        graficoVisivel = false;
 
         calendario1.set(2017, 10, 3, 0, 0, 0);
         startingSample = calendario1.getTimeInMillis();
@@ -200,8 +240,8 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
                     //flag=2;
                 }
 
-                //Collections.sort(espList, objEsp.POR_STATUS);
-                criarGrid(espList,true);
+                //Collections.sort(espList, ObjEsp.POR_STATUS);
+                criarGrid(espList, true);
                 System.out.println("Controle monitoramento: " + controleMonitoramento);
 
                 buscarDados();
@@ -232,8 +272,8 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
                     builder.setMessage("O que deseja?");
                     builder.setPositiveButton("Configurar", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface arg0, int arg1) {
-                            //Toast.makeText(telaPrincipal.this, "Configurar=" + arg1, Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(telaPrincipal.this, TelaConfiguracao.class);
+                            //Toast.makeText(TelaPrincipal.this, "Configurar=" + arg1, Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(TelaPrincipal.this, TelaConfiguracao.class);
                             Bundle bundle = new Bundle();
                             bundle.putString("mac", espList.get(position).getMac());
                             bundle.putString("ip", espList.get(position).getIp());
@@ -250,8 +290,8 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
                     //define um botão como negativo.
                     builder.setNegativeButton("Excluir", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface arg0, int arg1) {
-                            //Toast.makeText(telaPrincipal.this, "excluir=" + arg1, Toast.LENGTH_SHORT).show();
-                            AlertDialog.Builder builder = new AlertDialog.Builder(telaPrincipal.this);
+                            //Toast.makeText(TelaPrincipal.this, "excluir=" + arg1, Toast.LENGTH_SHORT).show();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(TelaPrincipal.this);
                             //define o titulo
                             builder.setTitle(espList.get(position).getApelido());
                             //define a mensagem
@@ -304,7 +344,7 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
         return timeSecs;
     }
 
-    public void criarGrid(List<objEsp> lista, boolean force) {
+    public void criarGrid(List<ObjEsp> lista, boolean force) {
         System.out.println("CRIANDO GRID: " + lista.size());
 
         if (force || gridViewAdapter == null) {
@@ -348,7 +388,7 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
         YAxis yAxis = mChart.getAxisLeft();
 
         mChart.getDescription().setEnabled(true);
-        //mChart.setData(new LineData());
+        mChart.getDescription().setYOffset(10);
 
         // enable touch gestures
         mChart.setTouchEnabled(true);
@@ -380,18 +420,21 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
             }
         });
 
+        final DecimalFormat mFormat2 = new DecimalFormat("###,###.###");
+        yAxis.setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return mFormat2.format(value); // e.g. append a dollar-sign
+            }
+        });
         yAxis.setTypeface(Typeface.DEFAULT);
         yAxis.setTextSize(14f);
         yAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
         yAxis.setDrawGridLines(true);
         yAxis.setGranularityEnabled(true);
-//        yAxis.setAxisMaxValue(100f);
-//        yAxis.setAxisMinValue(-10f);
-//        yAxis.setAxisMaximum(100f);
-//        yAxis.setAxisMinimum(-10f);
         yAxis.setGranularity(1f);
         yAxis.setLabelCount(6);
-        yAxis.setUseAutoScaleMaxRestriction(true);
+        //yAxis.setUseAutoScaleMaxRestriction(true);
         yAxis.setTextColor(Color.rgb(255, 192, 56));
         yAxis.setCenterAxisLabels(true);
 
@@ -401,101 +444,104 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
 
     public void buscarDados() {
         int samples = 20;
-        Random gerador = new Random();
-
-        for (int i = 0; i < espList.size(); i++) {
-            String temperatura;
-            int tensao;
-
-            try {
-                objEsp objEsp = espList.get(i);
-                String url = ("http://" + objEsp.getIp());
-                temperatura = getJSONFromAPI(url);
-
-                Log.i("teste url: " + i, "http://" + objEsp.getIp());
-
-                if (temperatura.equals("") || temperatura.isEmpty()) {
-                    temperatura = "0";
-                    objEsp.setStatus(3);//se não tiver conexão
-                } else {
-                    String[] aux2;
-                    aux2 = temperatura.split(";", 3);
-                    temperatura = aux2[0];
-                    tensao = Integer.parseInt(aux2[1]);
-                    objEsp.setStatus(0);
-                    objEsp.setTensao(tensao);
-
-                    if (tensao == 0) {
-                        // se não tiver tensão
-                        objEsp.setStatus(4);
-                    }
-                    if(objEsp.isLiMax()==true){
-                        if(getFloat(temperatura) > objEsp.getSp()+objEsp.getAlerta()){
-                            // temperatura elevada
-                            objEsp.setStatus(2);
-                        }
-                    }
-
-                    if(objEsp.isLiMin()==true){
-                        if(getFloat(temperatura) < objEsp.getSp()-objEsp.getAlerta()){
-                            // temperatura elevada
-                            objEsp.setStatus(2);
-                        }
-                    }
-                }
-
-                float temp = getFloat(temperatura);
-                objEsp.setTemperatura(temperatura);
-                x1++;
-
-                long sampleTime = tempoMilis();
-                if (startingSample == 0.0) {
-                    startingSample = sampleTime;
-                }
-
-                System.out.println("Sample time: " + sampleTime);
-
-                float auxY = temp; // + gerador.nextInt(10);
-                float time = (float) (sampleTime - startingSample);
-
-                Entry entry = new Entry(time, auxY);
-                //LineDataSet dataset;
-
-
-                    LineDataSet dataset = objEsp.getDataset();
-                    dataset.addEntry(entry);
-
-                    if (dataset.getEntryCount() > samples) {
-                        dataset.removeEntry(dataset.getEntryForIndex(0));
-                    }
-
-                    System.out.println("Valores: " + dataset.getValues());
-
-                // g.getViewport().setMinX(sampleTime - samples * 0.5 * tempoDeColeta);
-                // g.getViewport().setMaxX(sampleTime);
-                // g.onDataChanged(false, false);
-                // DataPoint pontoAlarme;
-                // pontoAlarme = new DataPoint(x1,espList.get(i).getFloat());
-                // espList.get(i).getSeriesAlarme().appendData(pontoAlarme,true,20);
-
-                salvarArquivo(time, auxY, objEsp.getMac());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        //criando novo data
         LineData data = new LineData();
-        for (objEsp e : espList) {
-            //adicionando os valores aos dados
-            data.addDataSet(e.getDataset());
+
+        if (verSomenteUm) {
+            ObjEsp objEsp = espList.get(dispositivoSelecionado);
+            buscarValor(samples, objEsp);
+            data.addDataSet(objEsp.getDataset());
+        } else {
+            for (ObjEsp objEsp : espList) {
+                buscarValor(samples, objEsp);
+            }
+            for (ObjEsp objEsp : espList) {
+                //adicionando os valores aos dados
+                data.addDataSet(objEsp.getDataset());
+            }
         }
 
         //setando o data
         mChart.setData(data);
         //movendo a visualização
-        mChart.setVisibleYRange(-5, 5, YAxis.AxisDependency.LEFT);
+        //mChart.setVisibleYRangeMaximum(mChart.getYMax()+2, YAxis.AxisDependency.RIGHT);
+        mChart.setVisibleYRange( -1*(mChart.getYMin()/2), mChart.getYMax()/2, YAxis.AxisDependency.RIGHT);
         mChart.invalidate();
+    }
+
+    private void buscarValor(int samples, ObjEsp objEsp) {
+        String temperatura;
+        int tensao;
+
+        try {
+            String url = ("http://" + objEsp.getIp());
+            temperatura = getJSONFromAPI(url);
+
+            Log.i("URL", "http://" + objEsp.getIp());
+
+            if (temperatura.equals("") || temperatura.isEmpty()) {
+                temperatura = "0";
+                objEsp.setStatus(3);//se não tiver conexão
+            } else {
+                String[] aux2;
+                aux2 = temperatura.split(";", 3);
+                temperatura = aux2[0];
+                tensao = Integer.parseInt(aux2[1]);
+                objEsp.setStatus(0);
+                objEsp.setTensao(tensao);
+
+                if (tensao == 0) {
+                    // se não tiver tensão
+                    objEsp.setStatus(4);
+                }
+                if (objEsp.isLiMax()) {
+                    if (getFloat(temperatura) > objEsp.getSp() + objEsp.getAlerta()) {
+                        // temperatura elevada
+                        objEsp.setStatus(2);
+                    }
+                }
+
+                if (objEsp.isLiMin()) {
+                    if (getFloat(temperatura) < objEsp.getSp() - objEsp.getAlerta()) {
+                        // temperatura elevada
+                        objEsp.setStatus(2);
+                    }
+                }
+            }
+
+            float temp = getFloat(temperatura);
+            objEsp.setTemperatura(temperatura);
+            x1++;
+
+            long sampleTime = tempoMilis();
+            if (startingSample == 0.0) {
+                startingSample = sampleTime;
+            }
+
+            System.out.println("Sample time: " + sampleTime);
+
+            float time = (float) (sampleTime - startingSample);
+
+            Entry entry = new Entry(time, temp);
+            LineDataSet dataset = objEsp.getDataset();
+            dataset.addEntry(entry);
+
+            if (dataset.getEntryCount() > samples) {
+                dataset.removeEntry(dataset.getEntryForIndex(0));
+            }
+
+            System.out.println("Valores: " + dataset.getValues());
+
+            // g.getViewport().setMinX(sampleTime - samples * 0.5 * tempoDeColeta);
+            // g.getViewport().setMaxX(sampleTime);
+            // g.onDataChanged(false, false);
+            // DataPoint pontoAlarme;
+            // pontoAlarme = new DataPoint(x1,espList.get(i).getFloat());
+            // espList.get(i).getSeriesAlarme().appendData(pontoAlarme,true,20);
+
+            salvarArquivo(time, temp, objEsp.getMac());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -508,18 +554,15 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
     @Override
     protected void onStop() {
         super.onStop();
-        mHandler01.removeCallbacks(mTimer1);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mHandler01.removeCallbacks(mTimer1);
     }
 
     @Override
     public void onBackPressed() {
-        mHandler01.removeCallbacks(mTimer1);
         /*
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -567,10 +610,10 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
             }).start();
             // Handle the camera action
         } else if (id == R.id.nav_mensagem) {
-            Intent intent = new Intent(telaPrincipal.this, TelaMensagem.class);
+            Intent intent = new Intent(TelaPrincipal.this, TelaMensagem.class);
             startActivity(intent);
         } else if (id == R.id.nav_historico) {
-            Intent intent = new Intent(telaPrincipal.this, TelaHistorico.class);
+            Intent intent = new Intent(TelaPrincipal.this, TelaHistorico.class);
             startActivity(intent);
         } else if (id == R.id.nav_ativar) {
             if (item.getTitle().equals("Desativar monitoramento")) {
@@ -590,7 +633,7 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
 
     private void limparArquivo(String t) {
         //criar pasta
-        System.out.println("Limpando o arquivo: "+ t);
+        System.out.println("Limpando o arquivo: " + t);
         File folder = new File(Environment.getExternalStorageDirectory() + "/Controle_esp");
         if (!folder.exists()) {
             folder.mkdir();
@@ -644,7 +687,7 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(telaPrincipal.this, "Erro ao salvar IP", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TelaPrincipal.this, "Erro ao salvar IP", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -697,11 +740,11 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
 
     public void criarObjetos() {
         //listaObj.clear();
-        List<objEsp> listaTemporariaObj = new ArrayList<>();
+        List<ObjEsp> listaTemporariaObj = new ArrayList<>();
         listaTemporariaObj.clear();
         System.out.println("Quantidade de IPS: " + listaIps.size());
         for (int i = 0; i < listaIps.size(); i++) {
-            objEsp temp = lerObjeto(listaIps.get(i));
+            ObjEsp temp = lerObjeto(listaIps.get(i));
 
             if (comparador(temp)) {
                 salvarDadosEsp(buscador(temp));
@@ -727,22 +770,23 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
             espList = preListaEsp;
         }
         int tamanho = espList.size();
-        System.out.println("Pre: "+preListaEsp.size()+"  esplist: "+espList.size());
+        System.out.println("Pre: " + preListaEsp.size() + "  esplist: " + espList.size());
         for (int a1 = 0; a1 < tamanho; a1++) {
             for (int b1 = 0; b1 < preListaEsp.size(); b1++) {
-                System.out.println(a1 +"  - " +b1 + " preList: " + preListaEsp.get(b1).getMac());
-                String mac1 = espList.get(a1).getMac().toString();
-                String mac2 = preListaEsp.get(b1).getMac().toString();
+                System.out.println(a1 + "  - " + b1 + " preList: " + preListaEsp.get(b1).getMac());
+                String mac1 = espList.get(a1).getMac();
+                String mac2 = preListaEsp.get(b1).getMac();
                 if (mac1.equals(mac2)) {
                     System.out.println("Igual, não adicionar");
                 } else {
-                    System.out.println("Adicionando: "+ preListaEsp.get(b1).getMac());
+                    System.out.println("Adicionando: " + preListaEsp.get(b1).getMac());
                     preListaEsp.get(b1).setIp("192.168.100.100");
                     espList.add(preListaEsp.get(b1));
                 }
             }
         }
-        System.out.println("Depoisssss esplist: "+espList.size());
+
+        System.out.println("Depois esplist: " + espList.size());
 
         for (int k = 0; k < espList.size(); k++) {
             int cont = 0;
@@ -762,6 +806,12 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
         runOnUiThread(new Runnable() {
             public void run() {
                 Toast.makeText(getApplicationContext(), "Fim do escaneamento", Toast.LENGTH_SHORT).show();
+                progress.setVisibility(View.GONE);
+                tvDispositivoSelecionado.setVisibility(View.GONE);
+                mChart.setVisibility(View.VISIBLE);
+                gridView.setVisibility(View.VISIBLE);
+                stubGrid.setVisibility(View.VISIBLE);
+
                 if (espList.size() == 1) {
                     runOnUiThread(new Runnable() {
                         @Override
@@ -782,18 +832,18 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
         });
     }
 
-    public objEsp lerObjeto(String ip) {
-        objEsp temp = new objEsp();
+    public ObjEsp lerObjeto(String ip) {
+        ObjEsp temp = new ObjEsp();
         String retorno = getJSONFromAPI("http://" + ip);
         System.out.println(retorno);
-        System.out.println("LER OBJETOS: "+retorno);
+        System.out.println("LER OBJETOS: " + retorno);
         String[] sp = retorno.split(";", 3);
 
 
-        System.out.println("LER OBJETOS sp: "+sp[0]);
-        System.out.println("LER OBJETOS sp: "+sp[1]);
-        System.out.println("LER OBJETOS sp: "+sp[2]);
-        System.out.println("LER OBJETOS sp IP: "+ip);
+        System.out.println("LER OBJETOS sp: " + sp[0]);
+        System.out.println("LER OBJETOS sp: " + sp[1]);
+        System.out.println("LER OBJETOS sp: " + sp[2]);
+        System.out.println("LER OBJETOS sp IP: " + ip);
 
         temp.setTemperatura(sp[0]);
         temp.setTensao(Integer.parseInt(sp[1]));
@@ -804,7 +854,7 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
         return temp;
     }
 
-    public boolean comparador(objEsp ob) {
+    public boolean comparador(ObjEsp ob) {
         boolean a = false;
         File arq = new File(Environment.getExternalStorageDirectory(), "/Controle_esp/" + ob.getMac() + ".txt");
         if (arq.exists()) {
@@ -815,8 +865,8 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
         return a;
     }
 
-    public objEsp buscador(objEsp ob) {
-        objEsp ativo = new objEsp();
+    public ObjEsp buscador(ObjEsp ob) {
+        ObjEsp ativo = new ObjEsp();
         String lstrlinha;
         try {
             File arq = new File(Environment.getExternalStorageDirectory(), "/Controle_esp/" + ob.getMac() + ".txt");
@@ -873,7 +923,7 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
         }
     }
 
-    public void salvarDadosEsp(objEsp oe) {
+    public void salvarDadosEsp(ObjEsp oe) {
         try {
             byte[] dados;
             File arq = new File(Environment.getExternalStorageDirectory(), "/Controle_esp/" + oe.getMac() + ".txt");
@@ -900,6 +950,12 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
     public void fazerScan3() {
         try {
             System.out.println("FAZENDO SCAN");
+            tvDispositivoSelecionado.setText("Carregando");
+            tvDispositivoSelecionado.setVisibility(View.VISIBLE);
+            progress.setVisibility(View.VISIBLE);
+            mChart.setVisibility(View.GONE);
+            gridView.setVisibility(View.GONE);
+            stubGrid.setVisibility(View.GONE);
 
             new Thread(new Runnable() {
                 public void run() {
@@ -980,11 +1036,11 @@ public class telaPrincipal extends AppCompatActivity implements NavigationView.O
                 //Log.i("teste: ","Lendo lista"+ listaIps.get(i));
             }
             for (int i = 0; i < listaMacs.size(); i++) {
-                preListaEsp.add(buscador(new objEsp(listaMacs.get(i))));
+                preListaEsp.add(buscador(new ObjEsp(listaMacs.get(i))));
                 preListaEsp.get(i).setIp("");
             }
 
-            //objEsp aux = new objEsp();
+            //ObjEsp aux = new ObjEsp();
             //aux.setMac("18:FE:34:D8:28:BE");
             //aux.setApelido("Vacina");
             //aux.setSp(70);

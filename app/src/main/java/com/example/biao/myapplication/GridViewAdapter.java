@@ -19,7 +19,7 @@ import java.util.List;
  * Created by biao on 11/08/2018.
  */
 
-public class GridViewAdapter extends ArrayAdapter<objEsp> {
+public class GridViewAdapter extends ArrayAdapter<ObjEsp> {
 
     private final float mSeriesMax = 50f;
     DecoView decoView;
@@ -27,7 +27,7 @@ public class GridViewAdapter extends ArrayAdapter<objEsp> {
     private int mSeries1Index;
 
 
-    public GridViewAdapter(Context context, int resouce, List<objEsp> objects) {
+    public GridViewAdapter(Context context, int resouce, List<ObjEsp> objects) {
         super(context, resouce, objects);
     }
 
@@ -41,7 +41,7 @@ public class GridViewAdapter extends ArrayAdapter<objEsp> {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = inflater.inflate(R.layout.grid_item, null);
         }
-        objEsp esp = getItem(position);
+        ObjEsp esp = getItem(position);
         //decoView = v.findViewById(R.id.dynamicArcView);
         ImageView img = (ImageView) v.findViewById(R.id.imageView2);
         TextView txtTitle = (TextView) v.findViewById(R.id.textViewTeste);

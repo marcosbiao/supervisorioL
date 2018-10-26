@@ -27,6 +27,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -111,7 +112,7 @@ public class TelaHistorico extends AppCompatActivity {
             System.out.println(temp[0]);
             if (verificadorNomes(temp[0], macs)) {
                 macs.add(temp[0]);
-                objEsp novo = buscadorApelido(temp[0]);
+                ObjEsp novo = buscadorApelido(temp[0]);
                 nomes.add(novo.getApelido());
             }
             if (verificadorNomes(temp[1], listAno)) {
@@ -275,7 +276,15 @@ public class TelaHistorico extends AppCompatActivity {
             }
         });
 
+        final DecimalFormat mFormat2 = new DecimalFormat("###,###.###");
+        yAxis.setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return mFormat2.format(value); // e.g. append a dollar-sign
+            }
+        });
         yAxis.setTypeface(Typeface.DEFAULT);
+        yAxis.setDrawZeroLine(true); // draw a zero line
         yAxis.setTextSize(14f);
         yAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
         yAxis.setTextColor(ColorTemplate.getHoloBlue());
@@ -299,8 +308,8 @@ public class TelaHistorico extends AppCompatActivity {
         return time;
     }
 
-    public objEsp buscador(String nome, String mes, String ano, String dia, int pos) {
-        objEsp ativo = new objEsp();
+    public ObjEsp buscador(String nome, String mes, String ano, String dia, int pos) {
+        ObjEsp ativo = new ObjEsp();
         String lstrlinha;
         try {
             File arq = new File(Environment.getExternalStorageDirectory(), "/Controle_esp/" + macs.get(pos) + ".txt");
@@ -352,9 +361,7 @@ public class TelaHistorico extends AppCompatActivity {
     }
 
     public DataPoint[] getDataPoint() {
-        return new DataPoint[]{
-                new DataPoint(0, 0.0)
-        };
+        return new DataPoint[]{new DataPoint(0, 0.0)};
     }
 
     public String voltadorDeMes(String mes) {
@@ -401,8 +408,8 @@ public class TelaHistorico extends AppCompatActivity {
         return mes;
     }
 
-    public objEsp buscadorApelido(String mac) {
-        objEsp ativo = new objEsp();
+    public ObjEsp buscadorApelido(String mac) {
+        ObjEsp ativo = new ObjEsp();
         String lstrlinha;
         try {
             File arq = new File(Environment.getExternalStorageDirectory(), "/Controle_esp/" + mac + ".txt");

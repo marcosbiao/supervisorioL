@@ -22,7 +22,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import static com.example.biao.myapplication.telaPrincipal.espList;
+import static com.example.biao.myapplication.TelaPrincipal.espList;
 
 
 public class TelaConfiguracao extends AppCompatActivity {
@@ -34,7 +34,7 @@ public class TelaConfiguracao extends AppCompatActivity {
     float alerta;
     int position;
     CheckBox cbMax, cbMin;
-    objEsp ob = new objEsp();
+    ObjEsp ob = new ObjEsp();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +99,7 @@ public class TelaConfiguracao extends AppCompatActivity {
                 salvarDadosEsp(ob);
                 espList.remove(position);
                 espList.add(ob);
-                telaPrincipal.flag = 1;
+                TelaPrincipal.flag = 1;
                 finish();
             }
         });
@@ -129,7 +129,7 @@ public class TelaConfiguracao extends AppCompatActivity {
         }
     }
 
-    public void salvarDadosEsp(objEsp oe) {
+    public void salvarDadosEsp(ObjEsp oe) {
         try {
             byte[] dados;
             File arq = new File(Environment.getExternalStorageDirectory(), "/Controle_esp/" + oe.getMac() + ".txt");

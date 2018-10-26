@@ -16,10 +16,10 @@ import java.util.List;
  * Created by biao on 16/08/2018.
  */
 
-public class GridViewAdapter2 extends ArrayAdapter<objEsp> {
+public class GridViewAdapter2 extends ArrayAdapter<ObjEsp> {
 
 
-    public GridViewAdapter2(Context context, int resouce, List<objEsp> objects) {
+    public GridViewAdapter2(Context context, int resouce, List<ObjEsp> objects) {
         super(context, resouce, objects);
     }
 
@@ -32,7 +32,7 @@ public class GridViewAdapter2 extends ArrayAdapter<objEsp> {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = inflater.inflate(R.layout.grid_item2, null);
         }
-        objEsp esp = getItem(position);
+        ObjEsp esp = getItem(position);
         ImageView circulo = (ImageView) v.findViewById(R.id.imageViewCirculo);
 
         TextView txtTemperatura = (TextView) v.findViewById(R.id.textViewTemperatura);
